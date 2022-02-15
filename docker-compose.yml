@@ -1,0 +1,10 @@
+version: '3'
+services:
+  back:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.back
+    ports:
+      - 3001:8080
+    volumes:
+      - .:/app:z
