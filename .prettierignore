@@ -1,0 +1,6 @@
+*.js
+*.md
+*.yml
+*.json
+.prettierignore
+/dist/

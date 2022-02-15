@@ -8,3 +8,12 @@ services:
       - 3001:8080
     volumes:
       - .:/app:z
+
+  front:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.front
+    ports:
+      - 3000:3000
+    volumes:
+      - ./ui:/app/ui:z
