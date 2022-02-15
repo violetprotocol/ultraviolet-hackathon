@@ -1,9 +1,33 @@
 import type { NextPage } from "next";
+import Router from "next/router";
+import { useEffect } from "react";
+import { useConnect, useAccount } from "wagmi";
 
 const Home: NextPage = () => {
+  const [{ data, error }, connect] = useConnect();
+  const [{ data: accountData }] = useAccount();
+
+  useEffect(() => {
+    if (accountData?.address) {
+      Router.push("/borrow");
+    }
+  }, [accountData?.address]);
+
   return (
     <>
-      <h1>Home</h1>
+      <h1 className="mb-5">Connect to UltraViolet borrow</h1>
+      {data.connectors.map((connector) => (
+        <button
+          key={connector.id}
+          onClick={() => connect(connector)}
+          className="btn btn-primary"
+        >
+          Connect with {connector.name}
+          {!connector.ready && " (unsupported)"}
+        </button>
+      ))}
+
+      {error && <div>{error?.message ?? "Failed to connect"}</div>}
     </>
   );
 };
