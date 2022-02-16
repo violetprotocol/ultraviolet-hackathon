@@ -9,6 +9,13 @@ interface InputProps {
   placeholder;
 }
 
+export const ErrorDisplay = ({ error, inputName }) => {
+  if (error && error.type === "required") {
+    return <div className="invalid-feedback">{inputName} is required</div>;
+  }
+  return null;
+};
+
 const FormInput: FC<InputProps> = ({
   register,
   error,
@@ -16,13 +23,6 @@ const FormInput: FC<InputProps> = ({
   inputName,
   placeholder,
 }) => {
-  const ErrorDisplay = ({ error, inputName }) => {
-    if (error && error.type === "required") {
-      return <div className="invalid-feedback">{inputName} is required</div>;
-    }
-    return null;
-  };
-
   return (
     <div className="form-group my-4" style={{ maxWidth: "300px" }}>
       <input
