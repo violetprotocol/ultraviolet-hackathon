@@ -59,7 +59,7 @@ const Borrow: NextPage = () => {
           <code>@TODO</code>
         </p>
 
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary btn-lg">
           Submit
         </button>
       </form>

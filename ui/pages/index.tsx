@@ -25,7 +25,7 @@ const Home: NextPage = () => {
         <button
           key={connector.id}
           onClick={() => connect(connector)}
-          className="btn btn-primary"
+          className="btn btn-primary btn-lg"
         >
           Connect with {connector.name}
           {!connector.ready && " (unsupported)"}
