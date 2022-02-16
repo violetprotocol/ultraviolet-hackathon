@@ -28,8 +28,13 @@ const Confirm: NextPage = () => {
       <div style={{ fontSize: "20px" }}>
         <p>
           You will borrow <span className={importantTxt}>{loan.amount}</span>{" "}
-          until <span className={importantTxt}>{loan.maturity}</span>
+          until the{" "}
+          <span className={importantTxt}>
+            {new Date(loan.maturity).toLocaleString()}
+          </span>
+          .
         </p>
+
         <p>
           At this date, you will owe <span className={importantTxt}>{due}</span>
           .

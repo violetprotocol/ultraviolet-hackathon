@@ -50,7 +50,7 @@ const Borrow: NextPage = () => {
           register={register}
           error={errors.maturity}
           inputName="maturity"
-          type="date"
+          type="datetime-local"
           placeholder=""
         />
 
