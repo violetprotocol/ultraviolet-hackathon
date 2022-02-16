@@ -1,48 +1,8 @@
 import type { NextPage } from "next";
-import { FC } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-interface FormData {
-  amount: number;
-  maturity: string;
-}
-
-interface InputProps {
-  register;
-  error;
-
-  type: string;
-  inputName: string;
-  placeholder;
-}
-
-const Input: FC<InputProps> = ({
-  register,
-  error,
-  type,
-  inputName,
-  placeholder,
-}) => {
-  const ErrorDisplay = ({ error, inputName }) => {
-    if (error && error.type === "required") {
-      return <div className="invalid-feedback">{inputName} is required</div>;
-    }
-    return null;
-  };
-
-  return (
-    <div className="form-group my-4" style={{ maxWidth: "300px" }}>
-      <input
-        id={inputName}
-        type={type ? type : "text"}
-        className={`form-control ${error ? "is-invalid" : ""}`}
-        {...register(inputName, { required: true })}
-        placeholder={placeholder}
-      />
-      <ErrorDisplay error={error} inputName={inputName} />
-    </div>
-  );
-};
+import FormData from "../interfaces/formData";
+import FormInput from "../components/formInput";
 
 const Borrow: NextPage = () => {
   const {
@@ -64,7 +24,7 @@ const Borrow: NextPage = () => {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <h3>1. How much do you want to borrow?</h3>
-        <Input
+        <FormInput
           register={register}
           error={errors.amount}
           inputName="amount"
@@ -73,7 +33,7 @@ const Borrow: NextPage = () => {
         />
 
         <h3>2. Select the maturity of your loan.</h3>
-        <Input
+        <FormInput
           register={register}
           error={errors.maturity}
           inputName="maturity"

@@ -3,7 +3,7 @@ import { AppProps } from "next/app";
 import { Provider } from "wagmi";
 import "bootstrap/dist/css/bootstrap.css";
 
-import ConnectorProviders from "../services/connectorProviders";
+import ConnectorProviders from "../lib/connectorProviders";
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
   return (
