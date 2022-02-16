@@ -3,7 +3,7 @@ import Router from "next/router";
 import { useState, useEffect, useContext } from "react";
 
 import { LoanContext } from "../lib/context";
-import computeDue from "../lib/computeDue";
+import { isValidDate, computeDue } from "../lib/computeDue";
 
 const importantTxt = "text-danger font-weight-bold";
 
@@ -21,6 +21,10 @@ const Confirm: NextPage = () => {
     const dueNumber: number = computeDue(loan);
     setDue(dueNumber.toFixed(3));
   }, [loan]);
+
+  if (!isValidDate(loan)) {
+    return <p>Invalid loan maturity</p>;
+  }
 
   return (
     <>

@@ -3,7 +3,7 @@ import Router from "next/router";
 import { useEffect, useContext } from "react";
 
 import { LoanContext } from "../lib/context";
-import computeDue from "../lib/computeDue";
+import { computeDue } from "../lib/computeDue";
 
 const SentenceToType = "I consent to the terms outlined above";
 
