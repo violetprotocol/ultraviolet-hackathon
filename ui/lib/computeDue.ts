@@ -20,8 +20,10 @@ export const isValidDate = (loan: LoanInterface): boolean => {
 
 export const computeDue = (loan: LoanInterface): number => {
   const yearsFromNow: number = getInterval(loan);
-  const interest = 1 + apy;
-  const due = loan.amount ** (yearsFromNow * interest);
+  const interest: number = 1 + apy;
+
+  const amount: number = +loan.amount;
+  const due: number = amount * interest ** yearsFromNow;
   return due;
 };
 

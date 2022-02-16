@@ -58,7 +58,7 @@ const ContractBullets = ({ loan }) => {
           <>
             Party B shall pay{" "}
             <ColorText text={`${computeDue(loan).toFixed(3)} DAI`} /> to Party A
-            before the loan ends on {loan.maturity.toLocaleString()}.
+            before the loan ends on {new Date(loan.maturity).toLocaleString()}.
           </>
         }
       />
