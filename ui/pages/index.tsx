@@ -13,9 +13,9 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     if (accountData?.address) {
-      //fetch("http://localhost:3001/nonce").then(async (data) => {
-      //  console.log(await data.text());
-      //});
+      fetch("http://localhost:8080/nonce").then(async (data) => {
+        console.log(await data.text());
+      });
       loan.borrowerAddr = accountData.address;
       setLoan(loan);
       Router.push("/borrow");
