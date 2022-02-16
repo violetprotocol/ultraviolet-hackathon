@@ -1,11 +1,12 @@
 import { FC, useState } from "react";
 import { AppProps } from "next/app";
 import { Provider } from "wagmi";
-import "bootstrap/dist/css/bootstrap.css";
 import Head from "next/head";
 import Image from "next/image";
 
 import "../styles/index.css";
+import "bootstrap/dist/css/bootstrap.css";
+
 import { LoanInterface, LoanContext, InitContextValue } from "../lib/context";
 import ConnectorProviders from "../lib/connectorProviders";
 
