@@ -35,7 +35,7 @@ const Home: NextPage = () => {
       </div>
       <h1 className="title">Borrow Dai for 10% APY</h1>
       <div className="px-6 py-4 border-t border-purple-200">
-        <div className="border rounded-lg p-4 bg-purple-200">
+        <div className="border rounded-lg p-4 bg-gradient-to-r from-pink-300 to-purple-400">
           Fully anonymous if paid back in full.
         </div>
       </div>
