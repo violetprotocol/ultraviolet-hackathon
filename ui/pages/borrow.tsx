@@ -1,10 +1,22 @@
 import type { NextPage } from "next";
+import Router from "next/router";
+import { useEffect, useContext } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-import FormData from "../interfaces/formData";
+import FormData from "../lib/formData";
 import FormInput from "../components/formInput";
+import { LoanContext } from "../lib/context";
 
 const Borrow: NextPage = () => {
+  const { loan, setLoan } = useContext(LoanContext);
+  useEffect(() => {
+    if (!loan.borrowerAddr) {
+      // Go to index and force user to connect.
+      // Once we have a session, shouldn't need this trick.
+      Router.push("/");
+    }
+  }, [loan]);
+
   const {
     register,
     handleSubmit,
@@ -12,10 +24,11 @@ const Borrow: NextPage = () => {
   } = useForm<FormData>();
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    // @TODO: this should:
-    // 1. Send a post to the back
-    // 2. Route to the contract page
-    console.log("the data we submit:", data);
+    // @TODO: this should: Send a post to the back
+    loan.amount = data.amount;
+    loan.maturity = data.maturity;
+    setLoan(loan);
+    Router.push("/confirm");
   };
 
   return (

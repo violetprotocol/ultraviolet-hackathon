@@ -1,14 +1,19 @@
 import type { NextPage } from "next";
 import Router from "next/router";
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { useConnect, useAccount } from "wagmi";
+
+import { LoanContext } from "../lib/context";
 
 const Home: NextPage = () => {
   const [{ data, error }, connect] = useConnect();
   const [{ data: accountData }] = useAccount();
+  const { loan, setLoan } = useContext(LoanContext);
 
   useEffect(() => {
     if (accountData?.address) {
+      loan.borrowerAddr = accountData.address;
+      setLoan(loan);
       Router.push("/borrow");
     }
   }, [accountData?.address]);
