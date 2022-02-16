@@ -34,3 +34,11 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Brownie
+.web3/__pycache__
+.web3/.env
+.web3/.history
+.web3/.hypothesis/
+.web3/build/
+.web3/reports/

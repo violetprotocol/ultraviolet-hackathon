@@ -1,4 +1,4 @@
-pragma solidity ^0.6.0;
+pragma solidity ^0.8.11;
 
 interface tokenRecipient { 
     function receiveApproval(address _from, uint256 _value, address _token, bytes calldata _extraData) external; 
@@ -19,7 +19,7 @@ contract TokenERC20 {
     // This generates a public event on the blockchain that will notify clients
     event Transfer(address indexed from, address indexed to, uint256 value);
     
-    // This enerates a public event on the blockchain that will notify clients
+    // Thisenerates a public event on the blockchain that will notify clients
     event Approval(address indexed _owner, address indexed _spender, uint256 _value);
 
     // This notifies clients about the amount burnt
@@ -158,3 +158,4 @@ contract TokenERC20 {
         return true;
     }
 }
+ 
