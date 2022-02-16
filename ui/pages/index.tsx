@@ -1,26 +1,72 @@
 import type { NextPage } from "next";
 import Router from "next/router";
-import { useEffect, useContext } from "react";
-import { useConnect, useAccount } from "wagmi";
+import { useEffect, useContext, useState } from "react";
+import { useConnect, useAccount, useSignMessage } from "wagmi";
 import Image from "next/image";
+import { SiweMessage } from "siwe";
 
 import { LoanContext } from "../lib/context";
 
 const Home: NextPage = () => {
   const [{ data, error }, connect] = useConnect();
   const [{ data: accountData }] = useAccount();
+  const [siweNonce, setSiweNonce] = useState<string>();
+  const [siweMessage, setSiweMessage] = useState<SiweMessage>();
+  const [{ data: signature, error: errorSigning, loading }, signMessage] =
+    useSignMessage();
   const { loan, setLoan } = useContext(LoanContext);
 
   useEffect(() => {
     if (accountData?.address) {
-      fetch("http://localhost:8080/nonce").then(async (data) => {
-        console.log(await data.text());
+      fetch("http://localhost:8080/nonce", {
+        headers: { "Content-Type": "application/json" },
+        credentials: "include" as RequestCredentials,
+      }).then(async (data) => {
+        const receivedNonce = await data.text();
+        setSiweNonce(receivedNonce);
+        const message = new SiweMessage({
+          domain: document.location.host,
+          address: accountData.address,
+          chainId: await accountData.connector.getChainId(),
+          uri: document.location.origin,
+          version: "1",
+          statement: "UltraViolet Login",
+          nonce: receivedNonce,
+        });
+        setSiweMessage(message);
+        const preparedMessage = message.prepareMessage();
+        await signMessage({ message: preparedMessage });
       });
       loan.borrowerAddr = accountData.address;
       setLoan(loan);
-      Router.push("/borrow");
+      // Should router only after siwe message
+      // Router.push("/borrow");
     }
   }, [accountData?.address]);
+
+  useEffect(() => {
+    if (signature && siweMessage) {
+      fetch("http://localhost:8080/api/sign-in", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include" as RequestCredentials,
+        body: JSON.stringify({
+          signature: signature,
+          siweMessage: siweMessage,
+        }),
+      }).then((response) => {
+        console.log(response.text());
+      });
+    }
+  }, [signature]);
+
+  // if (siweMessage) {
+  //   return (
+  //     <div>
+  //       <p> test</p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="bg-white p-10 rounded-lg shadow-md">
