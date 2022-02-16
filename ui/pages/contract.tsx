@@ -58,9 +58,14 @@ const Contract: NextPage = () => {
           />
           <ErrorDisplay error={errors.consent} inputName="Consent" />
 
-          <button type="submit" className="btn btn-danger btn-lg mt-2">
-            Sign
-          </button>
+          <div className="centerContent pt-0 mt-0">
+            <button
+              type="submit"
+              className="btn btn-danger btn-lg mt-3 px-5 py-3"
+            >
+              Sign
+            </button>
+          </div>
         </form>
       </div>
     </>

@@ -33,7 +33,7 @@ const Borrow: NextPage = () => {
 
   return (
     <>
-      <h1>Borrow page</h1>
+      <h1 className="mb-4">Borrow page</h1>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <h3>1. How much do you want to borrow?</h3>
@@ -59,9 +59,11 @@ const Borrow: NextPage = () => {
           <code>@TODO</code>
         </p>
 
-        <button type="submit" className="btn btn-primary btn-lg">
-          Submit
-        </button>
+        <div className="centerContent pt-0 mt-0">
+          <button type="submit" className="btn btn-primary btn-lg">
+            Submit
+          </button>
+        </div>
       </form>
     </>
   );

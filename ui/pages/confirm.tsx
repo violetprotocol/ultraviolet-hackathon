@@ -28,7 +28,7 @@ const Confirm: NextPage = () => {
 
   return (
     <>
-      <h1>Confirm your loan parameters</h1>
+      <h1 className="mb-4">Confirm your loan parameters</h1>
       <div style={{ fontSize: "20px" }}>
         <p>
           You will borrow <span className={importantTxt}>{loan.amount}</span>{" "}
