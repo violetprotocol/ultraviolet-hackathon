@@ -22,8 +22,10 @@ const Home: NextPage = () => {
         headers: { "Content-Type": "application/json" },
         credentials: "include" as RequestCredentials,
       }).then(async (data) => {
+
         const receivedNonce = await data.text();
         setSiweNonce(receivedNonce);
+
         const message = new SiweMessage({
           domain: document.location.host,
           address: accountData.address,
@@ -33,6 +35,7 @@ const Home: NextPage = () => {
           statement: "UltraViolet Login",
           nonce: receivedNonce,
         });
+
         setSiweMessage(message);
         const preparedMessage = message.prepareMessage();
         await signMessage({ message: preparedMessage });
@@ -54,6 +57,7 @@ const Home: NextPage = () => {
         }),
       }).then((response) => {
         console.log(response.text());
+        Router.push("/borrow");
       });
       // Should router only after siwe message
       Router.push("/borrow");
