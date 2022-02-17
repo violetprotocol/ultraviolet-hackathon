@@ -12,6 +12,7 @@ import { AppService } from "./app.service";
 import { Request, Response } from "express";
 import { generateNonce, SiweMessage } from "siwe";
 import { SignedMessageDto } from "./signedMessageDto";
+import { UserDataDto } from "./userDataDto";
 
 declare module "express-session" {
   interface SessionData {
@@ -62,5 +63,23 @@ export class AppController {
     } catch (_) {
       throw new HttpException("", HttpStatus.BAD_REQUEST);
     }
+  }
+
+  @Post("/api/store")
+  async storeUserData(
+    @Req() request: Request,
+    @Body() userDataDto: UserDataDto,
+    @Res() response: Response,
+  ): Promise<Response> {
+    
+  }
+
+  @Post("/api/retrieve")
+  async retrieveUserData(
+    @Req() request: Request,
+    @Body() signedMessageDto: SignedMessageDto,
+    @Res() response: Response,
+  ): Promise<Response> {
+
   }
 }
