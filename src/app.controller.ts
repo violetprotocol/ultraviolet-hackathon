@@ -65,21 +65,20 @@ export class AppController {
     }
   }
 
-  @Post("/api/store")
-  async storeUserData(
-    @Req() request: Request,
-    @Body() userDataDto: UserDataDto,
-    @Res() response: Response,
-  ): Promise<Response> {
-    
-  }
-
-  @Post("/api/retrieve")
-  async retrieveUserData(
-    @Req() request: Request,
-    @Body() signedMessageDto: SignedMessageDto,
-    @Res() response: Response,
-  ): Promise<Response> {
-
-  }
+  // @Post("/api/store")
+  // async storeUserData(
+  //   @Req() request: Request,
+  //   @Body() userDataDto: UserDataDto,
+  //   @Res() response: Response,
+  // ): Promise<Response> {
+  // }
+  //
+  // @Post("/api/retrieve")
+  // async retrieveUserData(
+  //   @Req() request: Request,
+  //   @Body() signedMessageDto: SignedMessageDto,
+  //   @Res() response: Response,
+  // ): Promise<Response> {
+  //
+  // }
 }
