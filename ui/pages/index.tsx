@@ -4,6 +4,7 @@ import { useEffect, useContext, useState } from "react";
 import { useConnect, useAccount, useSignMessage } from "wagmi";
 import Image from "next/image";
 import { SiweMessage } from "siwe";
+import LitJsSdk from "lit-js-sdk";
 
 import { LoanContext } from "../lib/context";
 
@@ -22,7 +23,6 @@ const Home: NextPage = () => {
         headers: { "Content-Type": "application/json" },
         credentials: "include" as RequestCredentials,
       }).then(async (data) => {
-
         const receivedNonce = await data.text();
         setSiweNonce(receivedNonce);
 
@@ -55,22 +55,18 @@ const Home: NextPage = () => {
           signature: signature,
           siweMessage: siweMessage,
         }),
-      }).then((response) => {
+      }).then(async (response) => {
         console.log(response.text());
+        const client = new LitJsSdk.LitNodeClient();
+        await client.connect();
+        console.log(client);
         Router.push("/borrow");
       });
       // Should router only after siwe message
+
       Router.push("/borrow");
     }
   }, [signature]);
-
-  // if (siweMessage) {
-  //   return (
-  //     <div>
-  //       <p> test</p>
-  //     </div>
-  //   );
-  // }
 
   return (
     <div className="bg-white p-10 rounded-lg shadow-md">
