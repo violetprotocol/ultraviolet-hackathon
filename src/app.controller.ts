@@ -17,6 +17,7 @@ import { UserDataDto } from "./userDataDto";
 declare module "express-session" {
   interface SessionData {
     nonce?: string;
+    logged?: boolean;
   }
 }
 
@@ -57,28 +58,45 @@ export class AppController {
       );
       if (!validated) {
         console.log("not validated");
+        request.session.logged = false;
         return response.status(HttpStatus.BAD_REQUEST).send("");
       }
+      request.session.logged = true;
       return response.status(HttpStatus.OK).send("");
     } catch (_) {
       throw new HttpException("", HttpStatus.BAD_REQUEST);
     }
   }
 
-  // @Post("/api/store")
-  // async storeUserData(
-  //   @Req() request: Request,
-  //   @Body() userDataDto: UserDataDto,
-  //   @Res() response: Response,
-  // ): Promise<Response> {
-  // }
-  //
-  // @Post("/api/retrieve")
-  // async retrieveUserData(
-  //   @Req() request: Request,
-  //   @Body() signedMessageDto: SignedMessageDto,
-  //   @Res() response: Response,
-  // ): Promise<Response> {
-  //
-  // }
+  @Post("/api/store")
+  async storeUserData(
+    @Req() request: Request,
+    @Body() userDataDto: UserDataDto,
+    @Res() response: Response,
+  ): Promise<Response> {
+    try {
+      if (!request.session.logged) {
+        throw new HttpException("You must login first", HttpStatus.FORBIDDEN);
+      }
+      return response.status(HttpStatus.OK).send("");
+    } catch (e) {
+      throw new HttpException("", HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Post("/api/retrieve")
+  async retrieveUserData(
+    @Req() request: Request,
+    @Body() signedMessageDto: SignedMessageDto,
+    @Res() response: Response,
+  ): Promise<Response> {
+    try {
+      if (!request.session.logged) {
+        throw new HttpException("You must login first", HttpStatus.FORBIDDEN);
+      }
+      return response.status(HttpStatus.OK).send("");
+    } catch (e) {
+      throw new HttpException("", HttpStatus.BAD_REQUEST);
+    }
+  }
 }

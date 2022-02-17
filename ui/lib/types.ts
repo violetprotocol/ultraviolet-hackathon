@@ -9,4 +9,3 @@ export interface AccessControlConditions {
     value: string;
   };
 }
-

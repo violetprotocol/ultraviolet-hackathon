@@ -4,7 +4,7 @@ import { EntityRepository, Repository } from "typeorm";
 import { ConflictException } from "@nestjs/common";
 
 @EntityRepository(SiweLogin)
-export class UserRepository extends Repository<SiweLogin> {
+export class SiweLoginRepository extends Repository<SiweLogin> {
   createSiweLogin = async (SiweLoginDto: SiweLoginDto) => {
     return await this.save(SiweLoginDto).catch((err: any) => {
       throw new ConflictException(err);
