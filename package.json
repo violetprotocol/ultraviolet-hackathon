@@ -7,7 +7,11 @@
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "build": "nest build",
+    "migration:generate": "ts-node node_modules/.bin/typeorm migration:generate",
+    "migration:run": "ts-node node_modules/.bin/typeorm migration:run",
+    "migration:revert": "ts-node node_modules/.bin/typeorm migration:revert",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
@@ -32,6 +36,7 @@
     "express-session": "^1.17.2",
     "lit-js-sdk": "^1.1.121",
     "next": "^12.0.10",
+    "@nestjs/typeorm": "^8.0.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.27.0",
@@ -39,6 +44,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
     "siwe": "^1.1.0",
+    "typeorm": "^0.2.38",
     "wagmi": "^0.2.12"
   },
   "devDependencies": {

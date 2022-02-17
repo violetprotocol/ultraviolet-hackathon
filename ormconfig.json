@@ -1,0 +1,17 @@
+{
+    "type": "postgres",
+    "host": "violet_db_1",
+    "port": 5432,
+    "username": "postgres",
+    "password": "postgres",
+    "database": "postgres",
+    "entities": ["dist/**/*.entity{.ts,.js}"],
+    "synchronize": true,
+    "migrations": [
+        "dist/migration/*.{ts,js}"
+    ],
+    "cli": {
+        "migrationsDir": "migration"
+    }
+}
+
