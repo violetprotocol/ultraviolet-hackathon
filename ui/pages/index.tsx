@@ -39,8 +39,6 @@ const Home: NextPage = () => {
       });
       loan.borrowerAddr = accountData.address;
       setLoan(loan);
-      // Should router only after siwe message
-      // Router.push("/borrow");
     }
   }, [accountData?.address]);
 
@@ -57,6 +55,8 @@ const Home: NextPage = () => {
       }).then((response) => {
         console.log(response.text());
       });
+      // Should router only after siwe message
+      Router.push("/borrow");
     }
   }, [signature]);
 
