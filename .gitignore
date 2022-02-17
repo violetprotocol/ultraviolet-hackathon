@@ -2,10 +2,9 @@
 /dist
 /node_modules
 /ui/.next
-/data/*
-/data
-data
-*/data/*
+data/*
+pg-volume/*
+data/pg-volume/*
 
 # Logs
 logs
