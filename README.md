@@ -26,6 +26,31 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+
+# HACKATON ULTRAVIOLET
+
+WE ARE NOT USING DOCKER, SO IF YOU RUN DOCKER YOU MIGHT GET INTO ERRORS.
+(THE INTERNET ON THE CASTLE SUCKS, SO WE COULDN'T DOWNLOAD THE IMAGES)
+
+## Installing
+
+On the root directory
+
+``` yarn install ```
+
+
+The POSTGRES DATABASE IS RUNNING ON DOCKER (THE ONLY ONE)
+
+``` docker-compose up db ```
+
+
+Then to run the backend:
+```yarn start dev```
+
+To run the fronend:
+``` yarn dev:ui  ```
+
+
 ## Installation
 
 ```bash
