@@ -41,9 +41,9 @@ export class AppService {
 
   async getUserData(nftId: string) {
     try {
-      const foundUserData = await this.userDataRepository.findOneUserDataById(
-        nftId,
-      );
+      const foundUserData =
+        await this.userDataRepository.findOneUserDataByNftId(nftId);
+      console.log(foundUserData.access_control_conditions);
       return foundUserData;
     } catch (e) {
       console.log("didn't found nftId on user data table");
@@ -75,7 +75,6 @@ export class AppService {
       returnValueTestValue:
         userDataDto.accessControlConditions[0].returnValueTest.comparator,
     };
-    console.log(accessControlConditionDto);
     const createdAccessControlConditions =
       await this.accessControlConditionsRepository.createAccessControl(
         accessControlConditionDto,

@@ -5,7 +5,6 @@ import { useConnect, useAccount, useSignMessage } from "wagmi";
 import Image from "next/image";
 import { SiweMessage } from "siwe";
 import LitJsSdk from "lit-js-sdk";
-import NavBar from "../components/Navbars/AuthNavbar";
 
 import { LoanContext } from "../lib/context";
 
@@ -61,11 +60,11 @@ const Home: NextPage = () => {
         const client = new LitJsSdk.LitNodeClient();
         await client.connect();
         window.litNodeClient = client;
-        Router.push("/dashboard");
+        Router.push("/reveal");
       });
       // Should router only after siwe message
 
-      Router.push("/dashboard");
+      Router.push("/reveal");
     }
   }, [signature]);
 

@@ -12,14 +12,33 @@ export class UserDataRepository extends Repository<UserData> {
   };
 
   findOneUserDataById = async (id: string) => {
-    return await this.findOneOrFail(id).catch();
+    return await this.findOne(id).catch();
   };
+  //
+  // findOneByNft = async (nftId: string) => {
+  //   return await this.findOneOrFail({
+  //     where: { nftId: nftId },
+  //   })
+  //     .leftJoinAndSelect(
+  //       "user_data.access_control_conditions",
+  //       "access_control_conditions",
+  //     )
+  //     .catch((err: any) => {
+  //       console.log("notfoundException");
+  //       throw new NotFoundException(err);
+  //     });
+  //   // const foundUserData = await this.createQueryBuilder("user_data")
+  //   //   .leftJoinAndSelect("user_data.access_control_conditions", "access_control_conditions")
+  //   //   .getResults();
+  // };
 
   findOneUserDataByNftId = async (nftId: string) => {
-    return await this.findOneOrFail({ where: { nftId: nftId } }).catch(
-      (err: any) => {
-        throw new NotFoundException(err);
-      },
-    );
+    return await this.findOneOrFail({
+      where: { nftId: nftId },
+      relations: ["access_control_conditions"],
+    }).catch((err: any) => {
+      console.log("notfoundException");
+      throw new NotFoundException(err);
+    });
   };
 }

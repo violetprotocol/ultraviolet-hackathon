@@ -22,6 +22,12 @@ export class UserData {
   encryptedFile: string;
 
   @OneToOne((type) => AccessControlConditions)
-  @JoinColumn()
-  accessControlConditions: AccessControlConditions;
+  @JoinColumn({ name: "access_control_conditions" })
+  access_control_conditions: AccessControlConditions;
+
+  toJSON() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, ...other } = this;
+    return other;
+  }
 }

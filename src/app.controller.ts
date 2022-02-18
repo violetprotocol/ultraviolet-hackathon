@@ -96,7 +96,7 @@ export class AppController {
       if (!request.session.logged) {
         throw new HttpException("You must login first", HttpStatus.FORBIDDEN);
       }
-      const foundUserData = this.appService.getUserData(nftId);
+      const foundUserData = await this.appService.getUserData(nftId);
       return response.status(HttpStatus.OK).send(foundUserData);
     } catch (e) {
       throw new HttpException("", HttpStatus.BAD_REQUEST);
