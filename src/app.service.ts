@@ -42,7 +42,9 @@ export class AppService {
 
   async getUserData(nftId: string) {
     try {
-      const foundUserData = await this.userDataRepository.findOneUserDataById(nftId);
+      const foundUserData = await this.userDataRepository.findOneUserDataById(
+        nftId,
+      );
       return foundUserData;
     } catch (e) {
       console.log("didn't found nftId on user data table");
@@ -85,7 +87,7 @@ export class AppService {
     accessControl: AccessControlConditions,
   ): Promise<UserData> {
     const userDataDtoToSave: UserDataDbDto = {
-      signature: userDataDto.signature,
+      nftId: userDataDto.nftId,
       encryptedFile: userDataDto.encryptedFile,
       encryptedSymmetricKey: userDataDto.encryptedSymmetricKey,
       accessControlConditions: accessControl,
