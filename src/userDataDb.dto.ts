@@ -1,6 +1,6 @@
-import { AccessControlConditions } from "ui/lib/types";
+import { AccessControlConditions } from "./accessControlConditions.entity";
 
-export class UserDataDto {
+export class UserDataDbDto {
   readonly signature: string;
 
   readonly encryptedFile: Buffer;

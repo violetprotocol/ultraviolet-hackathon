@@ -78,6 +78,7 @@ export class AppController {
       if (!request.session.logged) {
         throw new HttpException("You must login first", HttpStatus.FORBIDDEN);
       }
+      await this.appService.saveEncryptedData(userDataDto);
       return response.status(HttpStatus.OK).send("");
     } catch (e) {
       throw new HttpException("", HttpStatus.BAD_REQUEST);

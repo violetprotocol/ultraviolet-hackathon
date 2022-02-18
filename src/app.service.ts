@@ -1,14 +1,25 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { SiweMessage } from "siwe";
+import { AccessControlConditionsDto } from "./accessControlConditions.dto";
+import { AccessControlConditions } from "./accessControlConditions.entity";
+import { AccessControlConditionsRepository } from "./accessControlConditions.repository";
 import { SiweLoginDto } from "./siweLogin.dto";
 import { SiweLoginRepository } from "./siweLogin.repository";
+import { UserData } from "./userData.entity";
+import { UserDataRepository } from "./userData.repository";
+import { UserDataDbDto } from "./userDataDb.dto";
+import { UserDataDto } from "./userDataDto";
 
 @Injectable()
 export class AppService {
   constructor(
     @InjectRepository(SiweLoginRepository)
     private readonly siweLoginRepository: SiweLoginRepository,
+    @InjectRepository(AccessControlConditionsRepository)
+    private readonly accessControlConditionsRepository: AccessControlConditionsRepository,
+    @InjectRepository(UserDataRepository)
+    private readonly userDataRepository: UserDataRepository,
   ) {}
 
   async validateMessageSignature(
@@ -35,6 +46,62 @@ export class AppService {
       userNonce: userNonce,
     };
     return await this.siweLoginRepository.createSiweLogin(siweLoginDto);
+  }
+
+  async saveAccessControlConditions(
+    userDataDto: UserDataDto,
+  ): Promise<AccessControlConditions> {
+    const accessControlConditionDto: AccessControlConditionsDto = {
+      contractAddress: userDataDto.accessControlConditions.contractAddress,
+      standardContractType:
+        userDataDto.accessControlConditions.standardContractType,
+      chain: userDataDto.accessControlConditions.chain,
+      method: userDataDto.accessControlConditions.method,
+      parameters: userDataDto.accessControlConditions.parameters,
+      returnValueTestComparator:
+        userDataDto.accessControlConditions.returnValueTest.value,
+      returnValueTestValue:
+        userDataDto.accessControlConditions.returnValueTest.comparator,
+    };
+    const createdAccessControlConditions =
+      await this.accessControlConditionsRepository.createAccessControl(
+        accessControlConditionDto,
+      );
+    return createdAccessControlConditions;
+  }
+
+  async saveUserData(
+    userDataDto: UserDataDto,
+    accessControl: AccessControlConditions,
+  ): Promise<UserData> {
+    const userDataDtoToSave: UserDataDbDto = {
+      signature: userDataDto.signature,
+      encryptedFile: userDataDto.encryptedFile,
+      encryptedSymmetricKey: userDataDto.encryptedSymmetricKey,
+      accessControlConditions: accessControl,
+    };
+    const createdUserDataDto = await this.userDataRepository.createUserData(
+      userDataDtoToSave,
+    );
+    return createdUserDataDto;
+  }
+
+  async saveEncryptedData(userDataDto: UserDataDto) {
+    try {
+      const savedAccessControlConditions =
+        await this.saveAccessControlConditions(userDataDto);
+      const savedUserDataDto = await this.saveUserData(
+        userDataDto,
+        savedAccessControlConditions,
+      );
+      console.log(
+        "UserDataDto saved successfuly with id " + savedUserDataDto.id,
+      );
+      return savedUserDataDto;
+    } catch (err) {
+      console.log("Error saving on database");
+      throw err;
+    }
   }
 
   getHello(): string {
