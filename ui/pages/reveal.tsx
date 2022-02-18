@@ -13,7 +13,7 @@ const Reveal: NextPage = () => {
   ] = useNetwork();
   const contract = useContract({
     addressOrName: contracts.nft,
-    contractInterface: nftABI,
+    contractInterface: nftABI.abi,
     signerOrProvider: data,
   });
 

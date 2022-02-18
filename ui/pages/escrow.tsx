@@ -1,13 +1,16 @@
-import LitJsSdk from "lit-js-sdk";
 import type { NextPage } from "next";
 import Router from "next/router";
-import { useContext, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useContract, useNetwork, useSigner } from "wagmi";
+import { useState, useEffect, useContext } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { useContract, useAccount, useSigner, useNetwork } from "wagmi";
+
+import FormData from "../lib/formData";
+import FormInput from "../components/formInput";
+import { LoanContext, PassportContext } from "../lib/context";
 import contracts from "../constants/contracts";
 import nftABI from "../constants/nftABI.json";
-import { LoanContext, PassportContext } from "../lib/context";
-import FormData from "../lib/formData";
+
+import LitJsSdk from "lit-js-sdk";
 
 const Escrow: NextPage = () => {
   const { loan, setLoan } = useContext(LoanContext);
@@ -25,11 +28,22 @@ const Escrow: NextPage = () => {
     signerOrProvider: data,
   });
 
-  const [sending, setSending] = useState(false);
+  const [nftId, setNftId] = useState();
+  const [needsApproval, setNeedsApproval] = useState(true);
 
   function handleFile(event) {
     setFile(event.target.files[0]);
   }
+
+  useEffect(() => {
+    checkApproval();
+  })
+
+  useEffect(() => {
+    if (nftId && !needsApproval) {
+      Router.push("/borrow");
+    }
+  }, [nftId, needsApproval])
 
   useEffect(() => {
     if (!loan.borrowerAddr) {
@@ -39,21 +53,29 @@ const Escrow: NextPage = () => {
     }
   }, [loan]);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>();
+  const checkApproval = async () => {
+    if (nftId) {
+      const approved = await contract.callStatic.getApproved(nftId);
+      setNeedsApproval(approved != contracts.lendingPool);
+    }
+  }
 
   const onMint = async () => {
-    setSending(true);
     const address = await (await getSigner()).getAddress();
     const index = await contract.callStatic.totalSupply();
-    await contract.safeMint(address);
+    const res = await contract.safeMint(address);
+    await res.wait();
+
+    setNftId(index);
 
     await submitPassport(address, index);
+  };
 
-    setSending(false);
+  const onApprove = async () => {
+    const res = await contract.approve(contracts.lendingPool, nftId);
+    await res.wait();
+
+    await checkApproval();
   };
 
   const submitPassport = async (owner: string, id: number) => {
@@ -105,37 +127,9 @@ const Escrow: NextPage = () => {
       }),
     }).then(async (response) => {
       console.log(response.text());
-      Router.push("/borrow");
+
     });
   };
-
-  // const onReveal = async (id: number) => {
-  //   // retrieve encryptedZip, encryptedSymmetricKey and accessControlConditions
-
-  //   const authSig = await LitJsSdk.checkAndSignAuthMessage({chain: networkData.chain?.name.toLowerCase()})
-
-  //   fetch(`http://localhost:8080/api/retrieve/${id}`, {
-  //     method: "GET",
-  //     headers: { "Content-Type": "application/json" },
-  //     credentials: "include" as RequestCredentials
-  //   }).then(async (response) => {
-  //     console.log(response.json());
-  //     Router.push("/borrow");
-  //   });
-
-  // const symmetricKey = await window.litNodeClient.getEncryptionKey({
-  //   accessControlConditions,
-  //   // Note, below we convert the encryptedSymmetricKey from a UInt8Array to a hex string.  This is because we obtained the encryptedSymmetricKey from "saveEncryptionKey" which returns a UInt8Array.  But the getEncryptionKey method expects a hex string.
-  //   toDecrypt: LitJsSdk.uint8arrayToString(encryptedSymmetricKey, "base16"),
-  //   chain,
-  //   authSig
-  // })
-
-  // const decryptedFile = await LitJsSdk.decryptZip(
-  //   encryptedZip,
-  //   symmetricKey
-  // );
-  // }
 
   return (
     <>
@@ -152,16 +146,30 @@ const Escrow: NextPage = () => {
       <br />
       <br />
       <br />
-      <h3>Upload your passport.</h3>
+      {!nftId && <><h3>Upload your passport.</h3>
       <div className="centerContent pt-0 mt-0">
         <input type="file" onChange={handleFile} />
-      </div>
+      </div></>}
 
-      <div className="centerContent pt-0 mt-0">
+      {!nftId && <div className="centerContent pt-0 mt-0">
         <button onClick={onMint} className="btn btn-primary btn-lg">
           Mint ID NFT
         </button>
-      </div>
+      </div>}
+
+      {nftId && <div className="centerContent pt-0 mt-0">
+        <h3>Minted with ID {nftId.toString()}!</h3>
+      </div>}
+
+      {nftId && needsApproval && <div className="centerContent pt-0 mt-0">
+        <button onClick={onApprove} className="btn btn-primary btn-lg">
+          Approve Lending Pool to escrow your NFT
+        </button>
+      </div>}
+
+      {nftId && !needsApproval && <div className="centerContent pt-0 mt-0">
+        <h3>Approved for escrow!</h3>
+      </div>}
     </>
   );
 };
