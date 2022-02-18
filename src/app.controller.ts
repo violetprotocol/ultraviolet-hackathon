@@ -88,7 +88,6 @@ export class AppController {
   @Get("/api/retrieve")
   async retrieveUserData(
     @Req() request: Request,
-    @Body() signedMessageDto: SignedMessageDto,
     @Res() response: Response,
   ): Promise<Response> {
     try {

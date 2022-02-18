@@ -31,6 +31,53 @@ const Borrow: NextPage = () => {
     Router.push("/confirm");
   };
 
+  // const onSubmitPassport = async (passportFile) => {
+  //   const { symmetricKey, encryptedZip } = await LitJsSdk.zipAndEncryptFiles([passportFile])
+  //   const accessControlConditions = [
+  //     {
+  //       contractAddress: '0x3110c39b428221012934A7F617913b095BC1078C',
+  //       standardContractType: 'ERC721',
+  //       chain,
+  //       method: 'balanceOf',
+  //       parameters: [
+  //         ':userAddress',
+  //         '9541'
+  //       ],
+  //       returnValueTest: {
+  //         comparator: '>',
+  //         value: '0'
+  //       }
+  //     }
+  //   ]
+    
+  //   const encryptedSymmetricKey = await window.litNodeClient.saveEncryptionKey({
+  //     accessControlConditions,
+  //     symmetricKey,
+  //     authSig,
+  //     chain
+  //   })
+    
+  //   // persist encryptedZip, encryptedSymmetricKey and accessControlConditions
+  // }
+
+  // const onReveal = () => {
+  //   // retrieve encryptedZip, encryptedSymmetricKey and accessControlConditions
+  //   const authSig = await LitJsSdk.checkAndSignAuthMessage({chain: 'ethereum'})
+    
+  //   const symmetricKey = await window.litNodeClient.getEncryptionKey({
+  //     accessControlConditions,
+  //     // Note, below we convert the encryptedSymmetricKey from a UInt8Array to a hex string.  This is because we obtained the encryptedSymmetricKey from "saveEncryptionKey" which returns a UInt8Array.  But the getEncryptionKey method expects a hex string.
+  //     toDecrypt: LitJsSdk.uint8arrayToString(encryptedSymmetricKey, "base16"),
+  //     chain,
+  //     authSig
+  //   })
+
+  //   const decryptedFile = await LitJsSdk.decryptZip(
+  //     encryptedZip,
+  //     symmetricKey
+  //   );
+  // }
+
   return (
     <>
       <h1 className="mb-4">Borrow page</h1>
@@ -56,7 +103,8 @@ const Borrow: NextPage = () => {
 
         <h3>3. Upload your passport.</h3>
         <p>
-          <code>@TODO</code>
+          <input type="file" />
+          <button type="submit">Upload</button>
         </p>
 
         <div className="centerContent pt-0 mt-0">

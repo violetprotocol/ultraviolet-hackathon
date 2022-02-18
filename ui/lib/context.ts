@@ -7,9 +7,18 @@ export interface LoanInterface {
   maturity: string;
 }
 
+export interface PassportInterface {
+  passportFile: Buffer
+}
+
 export interface LoanContextInterface {
   loan: LoanInterface;
   setLoan: (l: LoanInterface) => void;
+}
+
+export interface PassportContextInterface {
+  passport: PassportInterface;
+  setPassport: (p: PassportInterface) => void;
 }
 
 export const InitContextValue: LoanInterface = {
@@ -22,4 +31,9 @@ export const InitContextValue: LoanInterface = {
 export const LoanContext = createContext<LoanContextInterface>({
   loan: InitContextValue,
   setLoan: null,
+});
+
+export const PassportContext = createContext<PassportContextInterface>({
+  passport: { passportFile: Buffer.from("") },
+  setPassport: null,
 });

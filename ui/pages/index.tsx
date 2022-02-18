@@ -59,14 +59,12 @@ const Home: NextPage = () => {
         console.log(response.text());
         const client = new LitJsSdk.LitNodeClient();
         await client.connect();
-        console.log(client);
-        const encrypted = await LitJsSdk.zipAndEncryptFiles("test");
-        console.log(encrypted);
-        Router.push("/borrow");
+        window.litNodeClient = client;
+        Router.push("/escrow");
       });
       // Should router only after siwe message
 
-      Router.push("/borrow");
+      Router.push("/escrow");
     }
   }, [signature]);
 
