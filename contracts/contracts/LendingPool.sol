@@ -3,6 +3,7 @@ pragma solidity >=0.8.4;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 
@@ -12,7 +13,7 @@ struct Loan {
     uint256 tokenId; // reference to the NFT token id used to grant access to the user's conditional data vault
 }
 
-contract LendingPool is Ownable {
+contract LendingPool is Ownable, IERC721Receiver {
     uint256 private SECONDS_IN_A_YEAR = 31556952;
 
     IERC20 public asset;
@@ -22,6 +23,9 @@ contract LendingPool is Ownable {
     uint256 public MAX_LOAN_DURATION = 31556926 * 2; // 2 years
 
     mapping(address => Loan) public loans;
+
+    // Emitted when an ERC721 NFT is received
+    event Received(address operator, address from, uint256 tokenId, bytes data);
 
     // Pass the address of the ERC20 token that will be lent.
     // This contract must be funded with these tokens so they can be lent.
@@ -108,6 +112,17 @@ contract LendingPool is Ownable {
         if(loan.totalAmountDue == 0) {
             uvNFT.safeTransferFrom(address(this), sender, loan.tokenId);
         }
+    }
+
+    function onERC721Received(
+        address operator,
+        address from,
+        uint256 tokenId,
+        bytes memory data
+    ) public override returns (bytes4) {
+        emit Received(operator, from, tokenId, data);
+        
+        return IERC721Receiver.onERC721Received.selector;
     }
 
     // Returns x * y / z

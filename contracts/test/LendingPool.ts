@@ -1,19 +1,32 @@
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
 import { expect } from "chai";
+import { BigNumber } from "ethers";
 import { artifacts, ethers, waffle } from "hardhat";
 import type { Artifact } from "hardhat/types";
 import type { LendingPool } from "../src/types/LendingPool";
 import type { MyToken } from "../src/types/MyToken";
+import type { UVNFT } from "../src/types/UVNFT";
 import { toBN } from "./utils";
 
 const SECONDS_IN_A_YEAR = 31556952;
 const INITIAL_LENDING_POOL_BALANCE = toBN("1000000"); // 1 million
 
+const oneYearFromNow = Math.ceil(Date.now() / 1000 + SECONDS_IN_A_YEAR);
+
+const increaseEVMTime = async (time: number) => {
+  await ethers.provider.send("evm_increaseTime", [time]);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  await ethers.provider.send("evm_mine");
+};
+
 describe("LendingPool", function () {
   let lendingPool: LendingPool;
   let assetToken: MyToken;
+  let uvNFT: UVNFT;
   let owner: SignerWithAddress;
   let borrower: SignerWithAddress;
+  let tokenId: BigNumber;
 
   before(async function () {
     const signers: SignerWithAddress[] = await ethers.getSigners();
@@ -25,10 +38,20 @@ describe("LendingPool", function () {
     const MyTokenArtifact: Artifact = await artifacts.readArtifact("MyToken");
     assetToken = <MyToken>await waffle.deployContract(owner, MyTokenArtifact);
 
+    const UVNFTArtifact: Artifact = await artifacts.readArtifact("UVNFT");
+    uvNFT = <UVNFT>await waffle.deployContract(owner, UVNFTArtifact);
     const LendingPoolArtifact: Artifact = await artifacts.readArtifact("LendingPool");
-    lendingPool = <LendingPool>await waffle.deployContract(owner, LendingPoolArtifact, [assetToken.address]);
+    lendingPool = <LendingPool>(
+      await waffle.deployContract(owner, LendingPoolArtifact, [assetToken.address, uvNFT.address])
+    );
 
     await assetToken.mint(lendingPool.address, INITIAL_LENDING_POOL_BALANCE);
+
+    await uvNFT.connect(owner).safeMint(borrower.address);
+
+    tokenId = await uvNFT.tokenOfOwnerByIndex(borrower.address, toBN("0"));
+
+    await uvNFT.connect(borrower).approve(lendingPool.address, tokenId);
   });
 
   describe("getTotalAmountDue", () => {
@@ -70,12 +93,12 @@ describe("LendingPool", function () {
   });
 
   describe("borrow", () => {
-    it("should compute the right amount due with interest", async () => {
+    it("should register the right total amount due with interest", async () => {
       const borrowedAmount = toBN("100");
       // Maturity is 1 year from now
       const maturity = Math.ceil(Date.now() / 1000 + SECONDS_IN_A_YEAR);
 
-      await lendingPool.connect(borrower).borrow(borrowedAmount, maturity);
+      await lendingPool.connect(borrower).borrow(borrowedAmount, maturity, tokenId);
 
       const loan = await lendingPool.loans(borrower.address);
 
@@ -96,7 +119,7 @@ describe("LendingPool", function () {
     it("should let users partially repay", async () => {
       const repaidAmount = toBN("477");
       // borrow
-      await lendingPool.connect(borrower).borrow(borrowedAmount, maturity);
+      await lendingPool.connect(borrower).borrow(borrowedAmount, maturity, tokenId);
 
       const loan = await lendingPool.loans(borrower.address);
       const totalAmountDueBeforePartialRepayment = loan.totalAmountDue;
@@ -114,7 +137,7 @@ describe("LendingPool", function () {
       await assetToken.mint(borrower.address, toBN("2000"));
 
       // borrow
-      await lendingPool.connect(borrower).borrow(borrowedAmount, maturity);
+      await lendingPool.connect(borrower).borrow(borrowedAmount, maturity, tokenId);
 
       const loan = await lendingPool.loans(borrower.address);
       const totalAmountDueBeforeRepayment = loan.totalAmountDue;
@@ -130,7 +153,7 @@ describe("LendingPool", function () {
       await assetToken.mint(borrower.address, toBN("2000"));
 
       // borrow
-      await lendingPool.connect(borrower).borrow(borrowedAmount, maturity);
+      await lendingPool.connect(borrower).borrow(borrowedAmount, maturity, tokenId);
 
       const loan = await lendingPool.loans(borrower.address);
       const totalAmountDueBeforeRepayment = loan.totalAmountDue;
@@ -143,5 +166,24 @@ describe("LendingPool", function () {
       expect(balanceAfterRepayment).to.eq(balanceBeforeRepayment.sub(totalAmountDueBeforeRepayment));
       expect((await lendingPool.loans(borrower.address)).totalAmountDue).to.eq(0);
     });
+  });
+
+  describe("NFT transfers", () => {
+    const borrowedAmount = toBN("100");
+    it("should transfer a UV NFT when taking out a loan", async () => {
+      await lendingPool.connect(borrower).borrow(borrowedAmount, oneYearFromNow, tokenId);
+
+      expect(await uvNFT.ownerOf(tokenId)).to.eq(lendingPool.address);
+    });
+
+    // it("should transfer the NFT to the contract owner in case of default", async () => {
+    //   const aboutOneMinuteFromNow = Math.ceil((Date.now() + 6000) / 1000);
+    //   const twoMinutes = 120;
+    //   await lendingPool.connect(borrower).borrow(borrowedAmount, aboutOneMinuteFromNow, tokenId);
+
+    //   await increaseEVMTime(twoMinutes);
+
+    //   expect(await lendingPool.hasDefaulted(borrower.address)).to.be.true;
+    // });
   });
 });
