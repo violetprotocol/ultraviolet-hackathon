@@ -18,10 +18,8 @@ export class UserData {
   @Column({ unique: true })
   encryptedSymmetricKey: string;
 
-  @Column({
-    type: "bytea",
-  })
-  encryptedFile: Uint8Array;
+  @Column({})
+  encryptedFile: string;
 
   @OneToOne((type) => AccessControlConditions)
   @JoinColumn()
