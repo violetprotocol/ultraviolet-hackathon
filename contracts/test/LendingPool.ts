@@ -9,6 +9,7 @@ import type { UVNFT } from "../src/types/UVNFT";
 import { toBN } from "./utils";
 
 const SECONDS_IN_A_YEAR = 31556952;
+const FOUR_WEEKS_IN_SECS = 2419200;
 const INITIAL_LENDING_POOL_BALANCE = toBN("1000000"); // 1 million
 
 const oneYearFromNow = Math.ceil(Date.now() / 1000 + SECONDS_IN_A_YEAR);
@@ -51,6 +52,7 @@ describe("LendingPool", function () {
 
     tokenId = await uvNFT.tokenOfOwnerByIndex(borrower.address, toBN("0"));
 
+    // Approve lendingPool to transfer the UV NFT
     await uvNFT.connect(borrower).approve(lendingPool.address, tokenId);
   });
 
@@ -170,20 +172,43 @@ describe("LendingPool", function () {
 
   describe("NFT transfers", () => {
     const borrowedAmount = toBN("100");
-    it("should transfer a UV NFT when taking out a loan", async () => {
+    it("should transfer a UV NFT to the lending pool when taking out a loan", async () => {
       await lendingPool.connect(borrower).borrow(borrowedAmount, oneYearFromNow, tokenId);
 
       expect(await uvNFT.ownerOf(tokenId)).to.eq(lendingPool.address);
     });
 
-    // it("should transfer the NFT to the contract owner in case of default", async () => {
-    //   const aboutOneMinuteFromNow = Math.ceil((Date.now() + 6000) / 1000);
-    //   const twoMinutes = 120;
-    //   await lendingPool.connect(borrower).borrow(borrowedAmount, aboutOneMinuteFromNow, tokenId);
+    it("should transfer back the NFT when repaying the loan", async () => {
+      await lendingPool.connect(borrower).borrow(borrowedAmount, oneYearFromNow, tokenId);
 
-    //   await increaseEVMTime(twoMinutes);
+      // Prerequisites for repayment
+      // mint more tokens to borrower
+      await assetToken.mint(borrower.address, toBN("2000"));
+      const loan = await lendingPool.loans(borrower.address);
+      const totalAmountDue = loan.totalAmountDue;
+      await assetToken.connect(borrower).approve(lendingPool.address, totalAmountDue);
 
-    //   expect(await lendingPool.hasDefaulted(borrower.address)).to.be.true;
-    // });
+      // Full repayment
+      await lendingPool.connect(borrower).repay(totalAmountDue);
+
+      expect(await uvNFT.ownerOf(tokenId)).to.eq(borrower.address);
+    });
+
+    it("should transfer the NFT to the contract owner in case of default", async () => {
+      const feb262022 = 1645897312;
+      await lendingPool.connect(borrower).borrow(borrowedAmount, feb262022, tokenId);
+
+      await increaseEVMTime(FOUR_WEEKS_IN_SECS);
+
+      // borrower has defaulted
+      expect(await lendingPool.hasDefaulted(borrower.address)).to.be.true;
+      // Lending Pool is still the NFT owner
+      expect(await uvNFT.ownerOf(tokenId)).to.eq(lendingPool.address);
+
+      await lendingPool.connect(owner).unlockIdentityEscrow(borrower.address);
+
+      // Lender has the NFT
+      expect(await uvNFT.ownerOf(tokenId)).to.eq(owner.address);
+    });
   });
 });
