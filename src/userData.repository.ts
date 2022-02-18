@@ -1,4 +1,4 @@
-import { ConflictException } from "@nestjs/common";
+import { ConflictException, NotFoundException } from "@nestjs/common";
 import { EntityRepository, Repository } from "typeorm";
 import { UserData } from "./userData.entity";
 import { UserDataDbDto } from "./userDataDb.dto";
@@ -13,5 +13,13 @@ export class UserDataRepository extends Repository<UserData> {
 
   findOneUserDataById = async (id: string) => {
     return await this.findOneOrFail(id).catch();
+  };
+
+  findOneUserDataByNftId = async (nftId: string) => {
+    return await this.findOneOrFail({ where: { nftId: nftId } }).catch(
+      (err: any) => {
+        throw new NotFoundException(err);
+      },
+    );
   };
 }

@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Req,
+  Query,
   Res,
   Body,
   HttpStatus,
@@ -85,16 +86,18 @@ export class AppController {
     }
   }
 
-  @Get("/api/retrieve")
+  @Get("/api/retrieve?")
   async retrieveUserData(
     @Req() request: Request,
+    @Query("nftId") nftId: string,
     @Res() response: Response,
   ): Promise<Response> {
     try {
       if (!request.session.logged) {
         throw new HttpException("You must login first", HttpStatus.FORBIDDEN);
       }
-      return response.status(HttpStatus.OK).send("");
+      const foundUserData = this.appService.getUserData(nftId);
+      return response.status(HttpStatus.OK).send(foundUserData);
     } catch (e) {
       throw new HttpException("", HttpStatus.BAD_REQUEST);
     }

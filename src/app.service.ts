@@ -40,6 +40,16 @@ export class AppService {
     }
   }
 
+  async getUserData(nftId: string) {
+    try {
+      const foundUserData = await this.userDataRepository.findOneUserDataById(nftId);
+      return foundUserData;
+    } catch (e) {
+      console.log("didn't found nftId on user data table");
+      throw e;
+    }
+  }
+
   async saveSiweLogin(userAddress: string, userNonce: string) {
     const siweLoginDto: SiweLoginDto = {
       userAddress: userAddress,
