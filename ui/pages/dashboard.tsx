@@ -114,7 +114,7 @@ const Dashboard: NextPage = () => {
   };
 
   const onNewLoan = () => {
-    Router.push("/borrow");
+    Router.push("/escrow");
   }
 
   const onOldLoan = () => {

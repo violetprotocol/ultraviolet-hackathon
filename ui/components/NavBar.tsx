@@ -33,9 +33,6 @@ export const Navbar = () => {
 
     return (
         <nav style={{width: '100%'}} className='flex'>
-            <button onClick={onClick}>
-                Open Loans
-            </button>
             <p>
                 DAI Balance: {balance}
             </p>
