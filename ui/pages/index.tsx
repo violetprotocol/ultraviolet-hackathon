@@ -60,6 +60,8 @@ const Home: NextPage = () => {
         const client = new LitJsSdk.LitNodeClient();
         await client.connect();
         console.log(client);
+        const encrypted = await LitJsSdk.zipAndEncryptFiles("test");
+        console.log(encrypted);
         Router.push("/borrow");
       });
       // Should router only after siwe message

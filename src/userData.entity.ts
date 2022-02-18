@@ -13,6 +13,9 @@ export class UserData {
   id: number;
 
   @Column({ unique: true })
+  nftId: string;
+
+  @Column({ unique: true })
   encryptedSymmetricKey: string;
 
   @Column({

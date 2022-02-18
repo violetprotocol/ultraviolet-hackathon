@@ -85,7 +85,7 @@ export class AppController {
     }
   }
 
-  @Post("/api/retrieve")
+  @Get("/api/retrieve")
   async retrieveUserData(
     @Req() request: Request,
     @Body() signedMessageDto: SignedMessageDto,
