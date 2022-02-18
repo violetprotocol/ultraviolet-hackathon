@@ -62,7 +62,7 @@ const Escrow: NextPage = () => {
     const client = new LitJsSdk.LitNodeClient();
     await client.connect();
 
-    const { symmetricKey, encryptedZip } = await LitJsSdk.zipAndEncryptFiles([file])
+    const { symmetricKey, encryptedZip } = await LitJsSdk.zipAndEncryptFiles([file]);
 
     const accessControlConditions = [
       {
@@ -76,22 +76,18 @@ const Escrow: NextPage = () => {
           value: owner
         }
       }
-    ]
+    ];
 
-    const authSig = await LitJsSdk.checkAndSignAuthMessage({chain: networkData.chain?.name.toLowerCase()})
+    const authSig = await LitJsSdk.checkAndSignAuthMessage({chain: networkData.chain?.name.toLowerCase()});
     
     const encryptedSymmetricKey = await window.litNodeClient.saveEncryptionKey({
       accessControlConditions,
       symmetricKey,
       authSig,
       chain: networkData.chain?.name.toLowerCase()
-    })
+    });
 
-    console.log(encryptedSymmetricKey);
-    console.log(encryptedZip);
-
-    const encryptedZipB64 = Buffer.from(encryptedZip).toString('base64');
-    console.log(encryptedZipB64);
+    const encryptedZipB64 = Buffer.from(await encryptedZip.arrayBuffer()).toString('base64');
 
     fetch("http://localhost:8080/api/store", {
       method: "POST",
@@ -109,19 +105,19 @@ const Escrow: NextPage = () => {
     });
   }
 
-  const onReveal = async (id: number) => {
-    // retrieve encryptedZip, encryptedSymmetricKey and accessControlConditions
+  // const onReveal = async (id: number) => {
+  //   // retrieve encryptedZip, encryptedSymmetricKey and accessControlConditions
 
-    const authSig = await LitJsSdk.checkAndSignAuthMessage({chain: networkData.chain?.name.toLowerCase()})
+  //   const authSig = await LitJsSdk.checkAndSignAuthMessage({chain: networkData.chain?.name.toLowerCase()})
 
-    fetch(`http://localhost:8080/api/retrieve/${id}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include" as RequestCredentials
-    }).then(async (response) => {
-      console.log(response.json());
-      Router.push("/borrow");
-    });
+  //   fetch(`http://localhost:8080/api/retrieve/${id}`, {
+  //     method: "GET",
+  //     headers: { "Content-Type": "application/json" },
+  //     credentials: "include" as RequestCredentials
+  //   }).then(async (response) => {
+  //     console.log(response.json());
+  //     Router.push("/borrow");
+  //   });
     
     // const symmetricKey = await window.litNodeClient.getEncryptionKey({
     //   accessControlConditions,
