@@ -30,7 +30,6 @@ export class AppService {
     try {
       const fields: SiweMessage = await receivedMessage.validate(signature);
       if (fields.nonce === nonce) {
-        await this.saveSiweLogin(fields.address, fields.nonce);
         return true;
       }
       return false;
