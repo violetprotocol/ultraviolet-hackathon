@@ -52,8 +52,8 @@ const Escrow: NextPage = () => {
     setSending(true);
     const address = await (await getSigner()).getAddress();
     const index = await contract.callStatic.totalSupply();
-    // const res = await contract.mint(index, address);
-    // await res.wait();
+    const res = await contract.mint(index, address);
+    await res.wait();
 
     await submitPassport(address, index);
 
