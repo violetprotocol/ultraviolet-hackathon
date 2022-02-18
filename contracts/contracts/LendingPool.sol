@@ -7,12 +7,11 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 
 struct Loan {
-    uint256 totalAmountDue;
+    uint256 totalAmountDue; // principle + interests
     uint256 maturity; // as unix timestamp in seconds
     uint256 tokenId; // reference to the NFT token id used to grant access to the user's conditional data vault
 }
 
-// TODO: Add function to withdraw funds as contract owner
 contract LendingPool is Ownable {
     uint256 private SECONDS_IN_A_YEAR = 31556952;
 
@@ -32,6 +31,10 @@ contract LendingPool is Ownable {
         uvNFT = IERC721(uvNFT_);
     }
 
+    function withdrawAllAssets() external onlyOwner {
+        asset.transfer(owner(), asset.balanceOf(address(this)));
+    }
+
     // Convenience function, it returns the balance of tokens this contract has.
     function lendingPoolBalance() public view returns (uint256) {
         return asset.balanceOf(address(this));
@@ -42,6 +45,14 @@ contract LendingPool is Ownable {
     function hasDefaulted(address borrower) public view returns (bool) {
         Loan storage loan = loans[borrower];
         return (loan.totalAmountDue > 0 && block.timestamp > loan.maturity);
+    }
+
+    // Gives access to the lender if the `borrower` has defaulted by transferring the uvNFT
+    function unlockIdentityEscrow(address borrower) external onlyOwner {
+        if(hasDefaulted(borrower)) {
+            Loan storage loan = loans[borrower];
+            uvNFT.safeTransferFrom(address(this), owner(), loan.tokenId);
+        }
     }
 
     function getTotalAmountDue(uint256 amount, uint256 duration) public view returns (uint256) {
