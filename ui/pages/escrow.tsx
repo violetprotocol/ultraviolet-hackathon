@@ -62,7 +62,7 @@ const Escrow: NextPage = () => {
     const client = new LitJsSdk.LitNodeClient();
     await client.connect();
 
-    const { symmetricKey, encryptedZip } = await LitJsSdk.zipAndEncryptFiles([file]);
+    const { symmetricKey, encryptedZip } = await LitJsSdk.zipAndEncryptFiles([file])
 
     const accessControlConditions = [
       {
@@ -76,16 +76,16 @@ const Escrow: NextPage = () => {
           value: owner
         }
       }
-    ];
+    ]
 
-    const authSig = await LitJsSdk.checkAndSignAuthMessage({chain: networkData.chain?.name.toLowerCase()});
+    const authSig = await LitJsSdk.checkAndSignAuthMessage({chain: networkData.chain?.name.toLowerCase()})
     
     const encryptedSymmetricKey = await window.litNodeClient.saveEncryptionKey({
       accessControlConditions,
       symmetricKey,
       authSig,
       chain: networkData.chain?.name.toLowerCase()
-    });
+    })
 
     const encryptedZipB64 = Buffer.from(await encryptedZip.arrayBuffer()).toString('base64');
 
@@ -131,7 +131,7 @@ const Escrow: NextPage = () => {
     //   encryptedZip,
     //   symmetricKey
     // );
-  }
+  // }
 
   return (
     <>

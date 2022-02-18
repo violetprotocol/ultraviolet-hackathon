@@ -63,7 +63,7 @@ const Contract: NextPage = () => {
               type="submit"
               className="btn btn-danger btn-lg mt-3 px-5 py-3"
             >
-              Sign
+              Sign and Escrow ID NFT to draw loan
             </button>
           </div>
         </form>

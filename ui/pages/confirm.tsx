@@ -48,7 +48,7 @@ const Confirm: NextPage = () => {
         className="btn btn-danger btn-lg"
         onClick={() => Router.push("/contract")}
       >
-        Confirm
+        Confirm terms
       </button>
     </>
   );

@@ -101,15 +101,9 @@ const Borrow: NextPage = () => {
           placeholder=""
         />
 
-        <h3>3. Upload your passport.</h3>
-        <p>
-          <input type="file" />
-          <button type="submit">Upload</button>
-        </p>
-
         <div className="centerContent pt-0 mt-0">
           <button type="submit" className="btn btn-primary btn-lg">
-            Submit
+            Confirm
           </button>
         </div>
       </form>
