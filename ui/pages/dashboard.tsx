@@ -113,10 +113,26 @@ const Dashboard: NextPage = () => {
     });
   };
 
+  const onNewLoan = () => {
+    Router.push("/borrow");
+  }
+
+  const onOldLoan = () => {
+    Router.push("/loans");
+  }
+
   const userScreen = <>
     <div className='grid grid-cols-2 gap-4 p-5'>
-        <p>View your Open loans</p>
-        <p>Open a new loan</p>
+        <div className="content-center items-center">
+            <h3>Your Open loans</h3>
+            <p>View, manage and repay your loans</p>
+            <button onClick={onOldLoan} className="btn btn-primary btn-lg">Existing Loans</button>
+        </div>
+        <div className="content-center items-center">
+            <h3>Open a new loan</h3>
+            <p>Take out a new loan by escrowing your identity</p>
+            <button onClick={onNewLoan} className="btn btn-primary btn-lg">New Loan</button>
+        </div>
     </div>
   </>
 
