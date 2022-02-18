@@ -9,6 +9,7 @@ import type { UVNFT } from "../src/types/UVNFT";
 import { toBN } from "./utils";
 
 const SECONDS_IN_A_YEAR = 31556952;
+const FOUR_WEEKS_IN_SECS = 2419200;
 const INITIAL_LENDING_POOL_BALANCE = toBN("1000000"); // 1 million
 
 const oneYearFromNow = Math.ceil(Date.now() / 1000 + SECONDS_IN_A_YEAR);
@@ -176,14 +177,21 @@ describe("LendingPool", function () {
       expect(await uvNFT.ownerOf(tokenId)).to.eq(lendingPool.address);
     });
 
-    // it("should transfer the NFT to the contract owner in case of default", async () => {
-    //   const aboutOneMinuteFromNow = Math.ceil((Date.now() + 6000) / 1000);
-    //   const twoMinutes = 120;
-    //   await lendingPool.connect(borrower).borrow(borrowedAmount, aboutOneMinuteFromNow, tokenId);
+    it("should transfer the NFT to the contract owner in case of default", async () => {
+      const feb262022 = 1645897312;
+      await lendingPool.connect(borrower).borrow(borrowedAmount, feb262022, tokenId);
 
-    //   await increaseEVMTime(twoMinutes);
+      await increaseEVMTime(FOUR_WEEKS_IN_SECS);
 
-    //   expect(await lendingPool.hasDefaulted(borrower.address)).to.be.true;
-    // });
+      // borrower has defaulted
+      expect(await lendingPool.hasDefaulted(borrower.address)).to.be.true;
+      // Lending Pool is still the NFT owner
+      expect(await uvNFT.ownerOf(tokenId)).to.eq(lendingPool.address);
+
+      await lendingPool.connect(owner).unlockIdentityEscrow(borrower.address);
+
+      // Lender has the NFT
+      expect(await uvNFT.ownerOf(tokenId)).to.eq(owner.address);
+    });
   });
 });
