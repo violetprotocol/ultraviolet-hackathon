@@ -2,6 +2,7 @@
 pragma solidity >=0.8.4;
 
 import "./IERC20.sol";
+import "hardhat/console.sol";
 
 struct Loan {
     uint256 totalAmountDue;
@@ -11,6 +12,8 @@ struct Loan {
 // TODO: Add contract owner who will receive permission to access data vault
 // TODO: Add function to withdraw funds as contract owner
 contract LendingPool {
+    uint256 private SECONDS_IN_A_YEAR = 31556952;
+
     IERC20 public asset;
     uint256 public PERCENTAGE_INTEREST = 10; // 10% interest
     uint256 public MAX_LOAN_DURATION = 31556926 * 2; // 2 years
@@ -35,9 +38,11 @@ contract LendingPool {
         return (loan.totalAmountDue > 0 && block.timestamp > loan.maturity);
     }
 
-    // Computes the interest based on the amount of a loan
-    function computeInterests(uint256 amount) public view returns (uint256) {
-        return (PERCENTAGE_INTEREST * amount) / 100;
+    function getTotalAmountDue(uint256 amount, uint256 duration) public view returns (uint256) {
+        uint256 interestOverAYear = mulDiv(amount, PERCENTAGE_INTEREST, 100);
+        uint256 interest = (duration * interestOverAYear) / SECONDS_IN_A_YEAR;
+
+        return amount + interest;
     }
 
     // Take out a loan as `msg.sender` for `amount` to be repaid before `maturity`.
@@ -49,13 +54,15 @@ contract LendingPool {
         address sender = msg.sender;
         Loan storage loan = loans[sender];
         require(loan.totalAmountDue == 0, "Repay your current loan first");
-        require(maturity > block.timestamp, "Maturity must be in the future");
-        require((maturity - block.timestamp) < MAX_LOAN_DURATION, "Loan duration is too long");
 
-        uint256 interests = computeInterests(amount);
+        uint256 loanDuration = maturity - block.timestamp;
+        require(loanDuration > 0, "Maturity must be in the future");
+        require(loanDuration < MAX_LOAN_DURATION, "Loan duration is too long");
 
-        uint256 totaltotalAmountDue = amount + interests;
-        loans[sender] = Loan(totaltotalAmountDue, maturity);
+        uint256 totalAmountDue = getTotalAmountDue(amount, loanDuration);
+
+        loans[sender] = Loan(totalAmountDue, maturity);
+
         asset.transfer(sender, amount);
     }
 
@@ -65,10 +72,28 @@ contract LendingPool {
     // - Can't make a repayment after the loan's maturity.
     function repay(uint256 amount) public {
         address sender = msg.sender;
-        asset.transferFrom(sender, address(this), amount);
+
         Loan storage loan = loans[msg.sender];
         require(loan.maturity > block.timestamp, "You missed the deadline :(");
 
+        if (amount > loan.totalAmountDue) {
+            amount = loan.totalAmountDue;
+        }
+
+        asset.transferFrom(sender, address(this), amount);
         loan.totalAmountDue -= amount;
+    }
+
+    // Returns x * y / z
+    function mulDiv(
+        uint256 x,
+        uint256 y,
+        uint256 z
+    ) private pure returns (uint256) {
+        uint256 a = x / z;
+        uint256 b = x % z; // x = a * z + b
+        uint256 c = y / z;
+        uint256 d = y % z; // y = c * z + d
+        return a * b * z + a * d + b * c + (b * d) / z;
     }
 }
