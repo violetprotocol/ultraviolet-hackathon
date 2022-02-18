@@ -1,7 +1,7 @@
 export interface AccessControlConditions {
   contractAddress: string;
   standardContractType: string;
-  chain: number;
+  chain: string;
   method: string;
   parameters: Array<string>;
   returnValueTest: {

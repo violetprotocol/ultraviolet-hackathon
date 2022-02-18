@@ -12,7 +12,7 @@ export class AccessControlConditions {
   standardContractType: string;
 
   @Column({})
-  chain: number;
+  chain: string;
 
   @Column({})
   method: string;

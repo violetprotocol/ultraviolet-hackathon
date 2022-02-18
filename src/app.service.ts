@@ -62,18 +62,20 @@ export class AppService {
   async saveAccessControlConditions(
     userDataDto: UserDataDto,
   ): Promise<AccessControlConditions> {
+    console.log(userDataDto);
     const accessControlConditionDto: AccessControlConditionsDto = {
-      contractAddress: userDataDto.accessControlConditions.contractAddress,
+      contractAddress: userDataDto.accessControlConditions[0].contractAddress,
       standardContractType:
-        userDataDto.accessControlConditions.standardContractType,
-      chain: userDataDto.accessControlConditions.chain,
-      method: userDataDto.accessControlConditions.method,
-      parameters: userDataDto.accessControlConditions.parameters,
+        userDataDto.accessControlConditions[0].standardContractType,
+      chain: userDataDto.accessControlConditions[0].chain,
+      method: userDataDto.accessControlConditions[0].method,
+      parameters: userDataDto.accessControlConditions[0].parameters,
       returnValueTestComparator:
-        userDataDto.accessControlConditions.returnValueTest.value,
+        userDataDto.accessControlConditions[0].returnValueTest.value,
       returnValueTestValue:
-        userDataDto.accessControlConditions.returnValueTest.comparator,
+        userDataDto.accessControlConditions[0].returnValueTest.comparator,
     };
+    console.log(accessControlConditionDto);
     const createdAccessControlConditions =
       await this.accessControlConditionsRepository.createAccessControl(
         accessControlConditionDto,
@@ -99,8 +101,10 @@ export class AppService {
 
   async saveEncryptedData(userDataDto: UserDataDto) {
     try {
+      console.log("saveEncryptedData entered");
       const savedAccessControlConditions =
         await this.saveAccessControlConditions(userDataDto);
+      console.log(savedAccessControlConditions);
       const savedUserDataDto = await this.saveUserData(
         userDataDto,
         savedAccessControlConditions,
