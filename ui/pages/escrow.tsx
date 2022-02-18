@@ -1,16 +1,13 @@
+import LitJsSdk from "lit-js-sdk";
 import type { NextPage } from "next";
 import Router from "next/router";
-import { useState, useEffect, useContext } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { useContract, useAccount, useSigner, useNetwork } from "wagmi";
-
-import FormData from "../lib/formData";
-import FormInput from "../components/formInput";
-import { LoanContext, PassportContext } from "../lib/context";
+import { useContext, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useContract, useNetwork, useSigner } from "wagmi";
 import contracts from "../constants/contracts";
 import nftABI from "../constants/nftABI.json";
-
-import LitJsSdk from "lit-js-sdk";
+import { LoanContext, PassportContext } from "../lib/context";
+import FormData from "../lib/formData";
 
 const Escrow: NextPage = () => {
   const { loan, setLoan } = useContext(LoanContext);
@@ -24,7 +21,7 @@ const Escrow: NextPage = () => {
   const [{ data, error, loading }, getSigner] = useSigner();
   const contract = useContract({
     addressOrName: contracts.nft,
-    contractInterface: nftABI,
+    contractInterface: nftABI.abi,
     signerOrProvider: data,
   });
 
@@ -52,8 +49,7 @@ const Escrow: NextPage = () => {
     setSending(true);
     const address = await (await getSigner()).getAddress();
     const index = await contract.callStatic.totalSupply();
-    const res = await contract.mint(index, address);
-    await res.wait();
+    await contract.safeMint(address);
 
     await submitPassport(address, index);
 
