@@ -1,20 +1,23 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.4;
 
-import "./IERC20.sol";
-import "hardhat/console.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
 
 struct Loan {
-    uint256 totalAmountDue;
-    uint256 maturity;
+    uint256 totalAmountDue; // principle + interests
+    uint256 maturity; // as unix timestamp in seconds
+    uint256 tokenId; // reference to the NFT token id used to grant access to the user's conditional data vault
 }
 
-// TODO: Add contract owner who will receive permission to access data vault
-// TODO: Add function to withdraw funds as contract owner
-contract LendingPool {
+contract LendingPool is Ownable {
     uint256 private SECONDS_IN_A_YEAR = 31556952;
 
     IERC20 public asset;
+    // NFT contract for access control to identity escrow
+    IERC721 public uvNFT;
     uint256 public PERCENTAGE_INTEREST = 10; // 10% interest
     uint256 public MAX_LOAN_DURATION = 31556926 * 2; // 2 years
 
@@ -22,8 +25,14 @@ contract LendingPool {
 
     // Pass the address of the ERC20 token that will be lent.
     // This contract must be funded with these tokens so they can be lent.
-    constructor(address asset_) {
+    // NFT address on Kovan: 0xb5825059842313F98e82e54Da0186d9771438ab3
+    constructor(address asset_, address uvNFT_) {
         asset = IERC20(asset_);
+        uvNFT = IERC721(uvNFT_);
+    }
+
+    function withdrawAllAssets() external onlyOwner {
+        asset.transfer(owner(), asset.balanceOf(address(this)));
     }
 
     // Convenience function, it returns the balance of tokens this contract has.
@@ -38,6 +47,14 @@ contract LendingPool {
         return (loan.totalAmountDue > 0 && block.timestamp > loan.maturity);
     }
 
+    // Gives access to the lender if the `borrower` has defaulted by transferring the uvNFT
+    function unlockIdentityEscrow(address borrower) external onlyOwner {
+        if(hasDefaulted(borrower)) {
+            Loan storage loan = loans[borrower];
+            uvNFT.safeTransferFrom(address(this), owner(), loan.tokenId);
+        }
+    }
+
     function getTotalAmountDue(uint256 amount, uint256 duration) public view returns (uint256) {
         uint256 interestOverAYear = mulDiv(amount, PERCENTAGE_INTEREST, 100);
         uint256 interest = (duration * interestOverAYear) / SECONDS_IN_A_YEAR;
@@ -50,7 +67,8 @@ contract LendingPool {
     // - This contract must have at least `amount` of tokens
     // - Maturity must be in the future and less than MAX_LOAN_DURATION
     // - The sender must not have a loan already
-    function borrow(uint256 amount, uint256 maturity) public {
+    // - The sender must first approve the transfer of tokenId
+    function borrow(uint256 amount, uint256 maturity, uint256 tokenId) public {
         address sender = msg.sender;
         Loan storage loan = loans[sender];
         require(loan.totalAmountDue == 0, "Repay your current loan first");
@@ -61,9 +79,11 @@ contract LendingPool {
 
         uint256 totalAmountDue = getTotalAmountDue(amount, loanDuration);
 
-        loans[sender] = Loan(totalAmountDue, maturity);
+        loans[sender] = Loan(totalAmountDue, maturity, tokenId);
 
         asset.transfer(sender, amount);
+
+        uvNFT.safeTransferFrom(sender, address(this), tokenId);
     }
 
     // Repays `amount` of your loan as `msg.sender`.
@@ -76,12 +96,18 @@ contract LendingPool {
         Loan storage loan = loans[msg.sender];
         require(loan.maturity > block.timestamp, "You missed the deadline :(");
 
+        // Avoids transferring more that what is owed
         if (amount > loan.totalAmountDue) {
             amount = loan.totalAmountDue;
         }
 
         asset.transferFrom(sender, address(this), amount);
         loan.totalAmountDue -= amount;
+
+        // Loan is fully repaid, transfers back the NFT.
+        if(loan.totalAmountDue == 0) {
+            uvNFT.safeTransferFrom(address(this), sender, loan.tokenId);
+        }
     }
 
     // Returns x * y / z
