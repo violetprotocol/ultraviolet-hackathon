@@ -39,6 +39,14 @@ contract LendingPool is Ownable, IERC721Receiver {
         asset.transfer(owner(), asset.balanceOf(address(this)));
     }
 
+    function setNFTAddress(address newAddress) external onlyOwner {
+        uvNFT = IERC721(newAddress);
+    }
+
+     function setAssetAddress(address newAddress) external onlyOwner {
+        asset = IERC20(newAddress);
+    }
+
     // Convenience function, it returns the balance of tokens this contract has.
     function lendingPoolBalance() public view returns (uint256) {
         return asset.balanceOf(address(this));
