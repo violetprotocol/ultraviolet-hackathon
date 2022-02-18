@@ -16,22 +16,22 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
 
   return (
     <div className="bg-gradient-to-br from-pink-400 to-white-300">
-      <Navbar/>
-      <div className="pt-10 flex justify-center items-center v-screen">
-        <Image src={"/ultraVioletLogo.gif"} width={200} height={50} />
-        {/* <h1 style={{ fontSize: "70px" }}>UltraViolet</h1> */}
-      </div>
-      <div className="main">
-        <Head>
-          <title>Violet</title>
-          <meta name="description" content="Web3 Violet Identity Portal" />
-        </Head>
-        <LoanContext.Provider value={{ loan, setLoan }}>
-          <Provider autoConnect connectors={ConnectorProviders}>
-            <Component {...pageProps} />
-          </Provider>
-        </LoanContext.Provider>
-      </div>
+      <LoanContext.Provider value={{ loan, setLoan }}>
+        <Provider autoConnect connectors={ConnectorProviders}>
+          <Navbar/>
+          <div className="pt-10 flex justify-center items-center v-screen">
+            <Image src={"/ultraVioletLogo.gif"} width={200} height={50} />
+            {/* <h1 style={{ fontSize: "70px" }}>UltraViolet</h1> */}
+          </div>
+          <div className="main">
+            <Head>
+              <title>Violet</title>
+              <meta name="description" content="Web3 Violet Identity Portal" />
+            </Head>
+                <Component {...pageProps} />
+          </div>
+        </Provider>
+      </LoanContext.Provider>
     </div>
   );
 };

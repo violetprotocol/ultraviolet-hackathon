@@ -40,6 +40,10 @@ const Loans: NextPage = () => {
     }
   }, [loan]);
 
+  useEffect(() => {
+
+  }, [contract])
+
   // const onReveal = async (id: number) => {
   //   // retrieve encryptedZip, encryptedSymmetricKey and accessControlConditions
 
