@@ -9,15 +9,17 @@ import "bootstrap/dist/css/bootstrap.css";
 
 import { LoanInterface, LoanContext, InitContextValue } from "../lib/context";
 import ConnectorProviders from "../lib/connectorProviders";
+import { Navbar } from "../components/NavBar";
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
   const [loan, setLoan] = useState<LoanInterface>(InitContextValue);
 
   return (
     <div className="bg-gradient-to-br from-pink-400 to-white-300">
+      <Navbar/>
       <div className="pt-10 flex justify-center items-center v-screen">
-        {/*<Image src={"/ultraVioletLogo.gif"} width={200} height={50} />*/}
-        <h1 style={{ fontSize: "70px" }}>UltraViolet</h1>
+        <Image src={"/ultraVioletLogo.gif"} width={200} height={50} />
+        {/* <h1 style={{ fontSize: "70px" }}>UltraViolet</h1> */}
       </div>
       <div className="main">
         <Head>
