@@ -61,11 +61,11 @@ const Home: NextPage = () => {
         const client = new LitJsSdk.LitNodeClient();
         await client.connect();
         window.litNodeClient = client;
-        Router.push("/escrow");
+        Router.push("/dashboard");
       });
       // Should router only after siwe message
 
-      Router.push("/escrow");
+      Router.push("/dashboard");
     }
   }, [signature]);
 
