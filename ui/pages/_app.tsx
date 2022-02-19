@@ -7,14 +7,16 @@ import { FC, useState } from "react";
 import { Provider } from "wagmi";
 import { Navbar } from "../components/NavBar";
 import ConnectorProviders from "../lib/connectorProviders";
-import { InitContextValue, LoanContext, LoanInterface } from "../lib/context";
+import { BalanceContext, BalanceInterface, InitBalanceContextValue, InitContextValue, LoanContext, LoanInterface } from "../lib/context";
 import "../styles/index.css";
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
   const [loan, setLoan] = useState<LoanInterface>(InitContextValue);
+  const [balance, setBalance] = useState<BalanceInterface>(InitBalanceContextValue);
 
   return (
     <div className="bg-gradient-to-br from-pink-400 to-white-300">
+    <BalanceContext.Provider value={{ balance, setBalance }}>
       <LoanContext.Provider value={{ loan, setLoan }}>
         <Provider autoConnect connectors={ConnectorProviders}>
           <Navbar />
@@ -31,6 +33,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
           </div>
         </Provider>
       </LoanContext.Provider>
+      </BalanceContext.Provider>
     </div>
   );
 };

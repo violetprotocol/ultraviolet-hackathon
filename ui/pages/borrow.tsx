@@ -6,6 +6,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import FormData from "../lib/formData";
 import FormInput from "../components/formInput";
 import { LoanContext } from "../lib/context";
+import { BigNumber } from "ethers";
 
 const Borrow: NextPage = () => {
   const { loan, setLoan } = useContext(LoanContext);
@@ -24,8 +25,9 @@ const Borrow: NextPage = () => {
   } = useForm<FormData>();
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    loan.amount = parseInt(data.amount);
-    loan.maturity = Date.parse(data.maturity);
+    loan.amount = BigNumber.from(data.amount).mul(BigNumber.from("10").pow(18));
+    console.log(Date.parse(data.maturity)/1000);
+    loan.maturity = Date.parse(data.maturity)/1000;
     setLoan(loan);
     Router.push("/confirm");
   };
