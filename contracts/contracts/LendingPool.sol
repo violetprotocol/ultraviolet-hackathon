@@ -31,7 +31,7 @@ contract LendingPool is Ownable, IERC721Receiver {
     // Pass the address of the ERC20 token that will be lent.
     // This contract must be funded with these tokens so they can be lent.
     // NFT address on Kovan: 0xb5825059842313F98e82e54Da0186d9771438ab3
-    constructor(address asset_, address uvNFT_) {
+    constructor(address asset_, address uvNFT_) Ownable() {
         asset = IERC20(asset_);
         uvNFT = IERC721(uvNFT_);
     }
