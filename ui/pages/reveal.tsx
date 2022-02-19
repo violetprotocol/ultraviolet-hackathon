@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { useEffect, useState, FC } from "react";
 import { useContract, useAccount, useSigner, useNetwork } from "wagmi";
 import contracts from "../constants/contracts";
 import nftABI from "../constants/nftABI.json";
@@ -7,7 +7,11 @@ import LitJsSdk from "lit-js-sdk";
 import JSZip from "jszip";
 import FileSaver from "file-saver";
 
-const Reveal: NextPage = () => {
+interface RevealProps {
+  nftId: number;
+}
+
+export const Reveal: FC<RevealProps> = ({ nftId }) => {
   const [{ data, error, loading }, getSigner] = useSigner();
   const [imageFile, setImageFile] = useState<Blob>();
   const [imageUrl, setImgUrl] = useState<string | ArrayBuffer>();
@@ -23,7 +27,7 @@ const Reveal: NextPage = () => {
 
   useEffect(() => {
     console.log("fetch");
-    fetch("http://localhost:8080/api/retrieve?nftId=25", {
+    fetch(`http://localhost:8080/api/retrieve?nftId=${nftId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       credentials: "include" as RequestCredentials,
@@ -60,7 +64,7 @@ const Reveal: NextPage = () => {
         setImgUrl(base64data);
       };
     });
-  }, []);
+  }, [nftId]);
 
   function base64toBlob(base64Data, contentType) {
     contentType = contentType || "";
