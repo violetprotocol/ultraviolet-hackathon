@@ -1,12 +1,14 @@
 import type { NextPage } from "next";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useContract, useAccount, useSigner, useNetwork } from "wagmi";
 import contracts from "../constants/contracts";
 import nftABI from "../constants/nftABI.json";
 import LitJsSdk from "lit-js-sdk";
+import JSZip from "jszip";
 
 const Reveal: NextPage = () => {
   const [{ data, error, loading }, getSigner] = useSigner();
+  const [imageFile, setImageFile] = useState<Blob>();
   const [
     { data: networkData, error: networkError, loading: networkLoading },
     switchNetwork,
@@ -19,7 +21,7 @@ const Reveal: NextPage = () => {
 
   useEffect(() => {
     console.log("fetch");
-    fetch("http://localhost:8080/api/retrieve?nftId=23", {
+    fetch("http://localhost:8080/api/retrieve?nftId=25", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       credentials: "include" as RequestCredentials,
@@ -39,6 +41,18 @@ const Reveal: NextPage = () => {
         authSig: authSignature,
       });
       console.log(symmetricKey);
+      const blobFile = base64toBlob(userDataDto.encryptedFile, "octet-stream");
+      console.log(blobFile);
+      const decryptedFile = await LitJsSdk.decryptZip(blobFile, symmetricKey);
+      console.log(decryptedFile);
+      console.log(decryptedFile["encryptedAssets/128img.jpeg"]);
+      // const zip = new JSZip();
+      // const unzipped = await zip.loadAsync(decryptedFile["encryptedAssets/"]);
+      // console.log(unzipped);
+      // console.log(unzipped.files);
+      const binaryData = [];
+      binaryData.push(decryptedFile["encryptedAssets/128img.jpeg"]);
+      setImageFile(new Blob(binaryData, { type: "application/zip" }));
     });
   }, []);
 
@@ -98,6 +112,17 @@ const Reveal: NextPage = () => {
   //   symmetricKey
   // );
   // }
+
+  if (imageFile) {
+    console.log(imageFile);
+    const imageSrc = URL.createObjectURL(imageFile);
+    return (
+      <>
+        <p> ImageFilePresent </p>
+        <img src={imageSrc} />
+      </>
+    );
+  }
 
   return (
     <>
