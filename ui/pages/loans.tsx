@@ -19,7 +19,7 @@ const mockLoan = normalizeLoan(rawMockLoan, true);
 
 const Loans: NextPage = () => {
   const [{ data: signer, error, loading }] = useSigner();
-  const [currentLoans, setCurrentLoans] = useState<NormalizedLoan[]>();
+  const [currentLoans, setCurrentLoans] = useState<NormalizedLoan[]>([]);
   const [isRepaySectionShown, setIsRepaySectionShown] = useState(false);
   const [lendingPoolAllowance, setLendingPoolAllowance] = useState(null);
   const [isTxPending, setIsTxPending] = useState(false);
