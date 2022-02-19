@@ -59,53 +59,8 @@ const Reveal: NextPage = () => {
         const base64data = reader.result;
         setImgUrl(base64data);
       };
-      // Note: Ie and Edge don't support the new File constructor,
-      // so it's better to construct blobs and use saveAs(blob, filename)
-      // const decryptedImageFile = new File([imageBlob], "doxxedFile.zip", {
-      // type: "application/zip",
-      // });
-      // FileSaver.saveAs(decryptedImageFile);
-      // const file = new File(["Hello, world from File!"], "helloworld.txt", {
-      // type: "text/plain;charset=utf-8",
-      // });
-      // FileSaver.saveAs(file);
-
-      // const blob = new Blob([imageBlob], {
-      // type: "image/jpeg",
-      // });
-      // FileSaver.saveAs(blob, "hello worldBlob.txt");
-      // FileSaver.saveAs(imageBlob, "imageBlob.jpeg");
-      // const decryptedBlob = new Blob([decryptedFile], {
-      //   type: "application/zip",
-      // });
-      // FileSaver.saveAs(decryptedBlob, "doxxedBlob.zip");
-      // FileSaver.saveAs(imageBlob);
-      // setImageFile(decryptedFile);
-      // FileSaver.saveAs(decryptedFile, "doxxedFile.zip");
     });
   }, []);
-
-  function convertBase64ToBlob(base64Image: string) {
-    // Split into two parts
-    const parts = base64Image.split(";base64,");
-
-    // Hold the content type
-    const imageType = parts[0].split(":")[1];
-
-    // Decode Base64 string
-    const decodedData = window.atob(parts[1]);
-
-    // Create UNIT8ARRAY of size same as row data length
-    const uInt8Array = new Uint8Array(decodedData.length);
-
-    // Insert all character code into uInt8Array
-    for (let i = 0; i < decodedData.length; ++i) {
-      uInt8Array[i] = decodedData.charCodeAt(i);
-    }
-
-    // Return BLOB image after conversion
-    return new Blob([uInt8Array], { type: imageType });
-  }
 
   function base64toBlob(base64Data, contentType) {
     contentType = contentType || "";
