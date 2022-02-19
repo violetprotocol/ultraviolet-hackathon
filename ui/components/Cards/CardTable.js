@@ -117,7 +117,8 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                   {loan.defaulted ? <div><i className="fas fa-circle text-red-500 mr-2"></i> default</div>
-                    : <div><i className="fas fa-circle text-green-500 mr-2"></i> active</div>} 
+                    : loan?.totalAmountdue?.toStirng() === "0.0" ? <div><i className="fas fa-circle text-green-500 mr-2"></i> completed </div>
+                    : <div><i className="fas fa-circle text-yellow-500 mr-2"></i> active</div>} 
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                   <div className="flex">
