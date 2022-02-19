@@ -33,9 +33,11 @@ const mockLoan = normalizeLoan(rawMockLoan, true);
 
 const Loans: NextPage = () => {
   const [{ data: signer, error, loading }] = useSigner();
-  const [currentLoan, setCurrentLoan] = useState(null);
+  const [currentLoans, setCurrentLoans] = useState([]);
   const [isRepaySectionShown, setIsRepaySectionShown] = useState(false);
   const [lendingPoolAllowance, setLendingPoolAllowance] = useState(null);
+  const [isTxPending, setIsTxPending] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
 
   const lendingPoolContract = useContract({
     addressOrName: contracts.lendingPool,
@@ -60,7 +62,28 @@ const Loans: NextPage = () => {
     );
     const formattedAllowance = utils.formatUnits(allowance, 18);
     setLendingPoolAllowance(formattedAllowance);
-  }, [daiContract, setLendingPoolAllowance, signer]);
+  }, [daiContract, signer]);
+
+  const getLoans = useCallback(async () => {
+    if (!signer) {
+      return;
+    }
+    setIsFetching(true);
+    const connectedAddress = await signer.getAddress();
+    console.log("connectedAddress", connectedAddress);
+    const loan = await lendingPoolContract.loans(connectedAddress);
+    console.log("loan", loan);
+    if (!loan) {
+      console.log("loan is not defined. loan:", loan);
+      return;
+    }
+    const defaulted = await lendingPoolContract.hasDefaulted(connectedAddress);
+
+    const normalizedLoan = normalizeLoan(loan, defaulted);
+
+    setIsFetching(false);
+    setCurrentLoans([normalizedLoan]);
+  }, [signer, lendingPoolContract]);
 
   useEffect(() => {
     if (!signer) {
@@ -71,26 +94,6 @@ const Loans: NextPage = () => {
   }, [daiContract, signer]);
 
   useEffect(() => {
-    const getLoans = async () => {
-      if (!signer) {
-        return;
-      }
-      const connectedAddress = await signer.getAddress();
-      console.log("connectedAddress", connectedAddress);
-      const loan = await lendingPoolContract.loans(connectedAddress);
-      console.log("loan", loan);
-      if (!loan) {
-        console.log("loan is not defined. loan:", loan);
-        return;
-      }
-      const defaulted = await lendingPoolContract.hasDefaulted(
-        connectedAddress,
-      );
-
-      const normalizedLoan = normalizeLoan(loan, defaulted);
-
-      setCurrentLoan(normalizedLoan);
-    };
     getLoans();
   }, [lendingPoolContract, signer]);
 
@@ -99,16 +102,29 @@ const Loans: NextPage = () => {
   };
 
   const handleRepaySubmit = async (amount) => {
+    console.log(`Processing repayment of ${amount}`);
     const parsedAmount = utils.parseUnits(amount, 18);
-
-    const res = await lendingPoolContract.repay(parsedAmount);
+    let res;
+    try {
+      res = await lendingPoolContract.repay(parsedAmount);
+    } catch (error) {
+      console.error(error);
+      return;
+    }
+    setIsTxPending(true);
     await res.wait();
+    setIsTxPending(false);
+    await getLoans();
   };
 
   const handleApproveSubmit = async (amount) => {
     const parsedAmount = utils.parseUnits(amount, 18);
-
-    const res = await daiContract.approve(contracts.lendingPool, parsedAmount);
+    let res;
+    try {
+      res = await daiContract.approve(contracts.lendingPool, parsedAmount);
+    } catch (error) {
+      console.error(error);
+    }
     await res.wait();
 
     await getAllowance();
@@ -117,9 +133,10 @@ const Loans: NextPage = () => {
     <div style={{ maxWidth: "80%" }}>
       <CardTable
         title={"Your Loans"}
-        loans={currentLoan ? [currentLoan] : []}
+        isFetching={isFetching}
+        loans={currentLoans}
         onButtonClick={onShowRepayClick}
-        buttonText="Repay"
+        buttonText={isTxPending ? "Pending" : "Repay"}
       />
       {isRepaySectionShown && (
         <Modal
