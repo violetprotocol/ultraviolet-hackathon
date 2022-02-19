@@ -32,7 +32,7 @@ const LenderLoans: NextPage = () => {
     signerOrProvider: signer,
   });
 
-  const [loans, setLoans] = useState<NormalizedLoan[]>();
+  const [loans, setLoans] = useState<NormalizedLoan[]>([]);
   const [isTxPending, setIsTxPending] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
 
