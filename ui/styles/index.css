@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  @font-face {
+    font-family: "teletactile";
+    src: local("teletactile"), url(../../public/fonts/teletactile.ttf);
+  }
+}
+
 .container {
   padding: 0 2rem;
 }
@@ -54,7 +61,7 @@
 .title {
   margin: 0;
   line-height: 1.15;
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 .title,

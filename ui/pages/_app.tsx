@@ -24,7 +24,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
   );
 
   return (
-    <div className="bg-gradient-to-br from-black to-violet-900">
+    <div className="text-sky-50 bg-gradient-to-br from-black to-violet-900">
       <BalanceContext.Provider value={{ balance, setBalance }}>
         <LoanContext.Provider value={{ loan, setLoan }}>
           <Provider autoConnect connectors={ConnectorProviders}>
