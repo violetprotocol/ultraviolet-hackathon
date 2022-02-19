@@ -1,10 +1,8 @@
 import PropTypes from "prop-types";
 import React from "react";
-// components
-import TableDropdown from "../Dropdowns/TableDropdown.js";
 
 
-export default function CardTable({ title, color, loans }) {
+export default function CardTable({ title, color, loans, buttonText, onButtonClick, isFetching }) {
   return (
     <>
       <div
@@ -34,7 +32,7 @@ export default function CardTable({ title, color, loans }) {
               <tr>
                 <th
                   className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center " +
                     (color === "light"
                       ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
@@ -44,7 +42,7 @@ export default function CardTable({ title, color, loans }) {
                 </th>
                 <th
                   className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center " +
                     (color === "light"
                       ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
@@ -54,7 +52,7 @@ export default function CardTable({ title, color, loans }) {
                 </th>
                 <th
                   className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center " +
                     (color === "light"
                       ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
@@ -64,7 +62,7 @@ export default function CardTable({ title, color, loans }) {
                 </th>
                 <th
                   className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center " +
                     (color === "light"
                       ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
@@ -74,7 +72,7 @@ export default function CardTable({ title, color, loans }) {
                 </th>
                 <th
                   className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center " +
                     (color === "light"
                       ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
@@ -84,7 +82,7 @@ export default function CardTable({ title, color, loans }) {
                 </th>
                 <th
                   className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center " +
                     (color === "light"
                       ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
@@ -93,13 +91,18 @@ export default function CardTable({ title, color, loans }) {
               </tr>
             </thead>
             <tbody>
-              {loans.length === 0 &&
+              {isFetching && 
+                <tr className="w-full flex justify-center">
+                  <td className="text-center mx-auto">Fetching...</td>
+                </tr>
+              }
+              {!isFetching && loans.length === 0 &&  
                 <tr className="w-full flex justify-center">
                   <td className="text-center mx-auto">No open loans</td>
                 </tr>
               }
-              {loans[0] != null && <tr>
-                <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
+              {!isFetching && loans.length > 0 && loans.map(loan => <tr key={loan.tokenId} >
+                <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
                   <span
                     className={
                       "ml-3 font-bold " +
@@ -110,26 +113,29 @@ export default function CardTable({ title, color, loans }) {
                   </span>
                 </th>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  <div className="text-center">{loans[0]?.totalAmountDue?.toString()}</div>
+                  <div className="text-center">{loan?.totalAmountDue?.toString()}</div>
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  {loans[0].defaulted ? <div><i className="fas fa-circle text-red-500 mr-2"></i> default</div>
+                  {loan.defaulted ? <div><i className="fas fa-circle text-red-500 mr-2"></i> default</div>
                     : <div><i className="fas fa-circle text-green-500 mr-2"></i> active</div>} 
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                   <div className="flex">
-                    {new Date(loans[0].maturity * 1000).toLocaleString()}
+                    {new Date(loan.maturity * 1000).toLocaleString()}
                   </div>
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                   <div className="flex items-center">
-                    <span className="mx-auto">{loans[0].tokenId}</span>
+                    <span className="mx-auto">{loan.tokenId}</span>
                   </div>
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                  <TableDropdown />
+                  <button onClick={onButtonClick} type="submit" className="btn btn-primary btn-lg my-2">
+                    {buttonText}
+                  </button>
                 </td>
-              </tr>}
+              </tr>
+              )}
             </tbody>
           </table>
         </div>
