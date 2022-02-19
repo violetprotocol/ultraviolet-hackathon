@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
+import DoxxModal from "../DoxxModal";
 
 export default function CardTable({ title, color, loans, buttonText, onButtonClick, isFetching, isTxPending, isLender=false }) {
   return (
@@ -139,6 +140,7 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
           </table>
         </div>
       </div>
+      {/* <DoxxModal /> */}
     </>
   );
 }
