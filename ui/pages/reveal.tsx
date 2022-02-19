@@ -7,7 +7,7 @@ import LitJsSdk from "lit-js-sdk";
 import JSZip from "jszip";
 import FileSaver from "file-saver";
 
-interface RevealProps {
+export interface RevealProps {
   nftId: number;
 }
 

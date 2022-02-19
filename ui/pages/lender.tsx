@@ -4,6 +4,7 @@ import Router from "next/router";
 import { useEffect, useState } from "react";
 import { useContract, useSigner } from "wagmi";
 import CardTable from "../components/Cards/CardTable";
+import DoxxModal from "../components/DoxxModal";
 import contracts from "../constants/contracts";
 import lendingPoolABI from "../constants/lendingpool.json";
 import { normalizeLoan } from "../lib/normalizeLoan";
@@ -20,6 +21,7 @@ const LenderLoans: NextPage = () => {
   const [loans, setLoans] = useState<NormalizedLoan[]>([]);
   const [isTxPending, setIsTxPending] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
+  const [isDoxxed, setIsDoxxed] = useState(false);
 
   useEffect(() => {
     getLoans();
