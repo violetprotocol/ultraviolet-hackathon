@@ -22,6 +22,7 @@ contract LendingPool is Ownable, IERC721Receiver {
     uint256 public PERCENTAGE_INTEREST = 10; // 10% interest
     uint256 public MAX_LOAN_DURATION = 31556926 * 2; // 2 years
 
+    address[] public lenders;
     mapping(address => Loan) public loans;
 
     // Emitted when an ERC721 NFT is received
@@ -50,6 +51,10 @@ contract LendingPool is Ownable, IERC721Receiver {
     // Convenience function, it returns the balance of tokens this contract has.
     function lendingPoolBalance() public view returns (uint256) {
         return asset.balanceOf(address(this));
+    }
+
+    function getLenders() public view returns (address[] memory) {
+        return lenders;
     }
 
     // Returns whether a borrower has defaulted on their loan.
@@ -90,6 +95,11 @@ contract LendingPool is Ownable, IERC721Receiver {
         require(loanDuration < MAX_LOAN_DURATION, "Loan duration is too long");
 
         uint256 totalAmountDue = getTotalAmountDue(amount, loanDuration);
+
+        // fist time loan, add the address to lenders
+        if (loan.maturity == 0) {
+            lenders.push(sender);
+        }
 
         loans[sender] = Loan(totalAmountDue, maturity, tokenId);
 

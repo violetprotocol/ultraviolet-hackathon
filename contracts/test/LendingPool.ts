@@ -108,6 +108,16 @@ describe("LendingPool", function () {
       const delta = 10000000000000;
       expect(loan.totalAmountDue).to.be.closeTo(toBN("110"), delta);
     });
+
+    it("should add the lender in the lenders array", async () => {
+      const borrowedAmount = toBN("100");
+      // Maturity is 1 year from now
+      const maturity = Math.ceil(Date.now() / 1000 + SECONDS_IN_A_YEAR);
+
+      await lendingPool.connect(borrower).borrow(borrowedAmount, maturity, tokenId);
+
+      expect(await lendingPool.getLenders()).to.contain(borrower.address);
+    });
   });
 
   describe("repay", () => {
