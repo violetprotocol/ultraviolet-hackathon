@@ -8,6 +8,7 @@ import { resolve } from "path";
 import "solidity-coverage";
 import "./tasks/accounts";
 import "./tasks/deploy";
+import "./tasks/borrow";
 
 dotenvConfig({ path: resolve(__dirname, "./.env") });
 
@@ -44,6 +45,15 @@ function getChainConfig(network: keyof typeof chainIds): NetworkUserConfig {
   };
 }
 
+function getChainConfigWithPrivateKey(network: keyof typeof chainIds): NetworkUserConfig {
+  const url: string = "https://" + network + ".infura.io/v3/" + infuraApiKey;
+  return {
+    accounts: [`0x${process.env.PRIVATE_KEY}`],
+    chainId: chainIds[network],
+    url,
+  };
+}
+
 const config: HardhatUserConfig = {
   defaultNetwork: "hardhat",
   gasReporter: {
@@ -60,7 +70,7 @@ const config: HardhatUserConfig = {
       chainId: chainIds.hardhat,
     },
     // goerli: getChainConfig("goerli"),
-    // kovan: getChainConfig("kovan"),
+    kovan: getChainConfigWithPrivateKey("kovan"),
     // rinkeby: getChainConfig("rinkeby"),
     // ropsten: getChainConfig("ropsten"),
   },

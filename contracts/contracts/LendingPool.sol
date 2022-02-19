@@ -22,7 +22,7 @@ contract LendingPool is Ownable, IERC721Receiver {
     uint256 public PERCENTAGE_INTEREST = 10; // 10% interest
     uint256 public MAX_LOAN_DURATION = 31556926 * 2; // 2 years
 
-    address[] public lenders;
+    address[] public borrowers;
     mapping(address => Loan) public loans;
 
     // Emitted when an ERC721 NFT is received
@@ -31,7 +31,7 @@ contract LendingPool is Ownable, IERC721Receiver {
     // Pass the address of the ERC20 token that will be lent.
     // This contract must be funded with these tokens so they can be lent.
     // NFT address on Kovan: 0xb5825059842313F98e82e54Da0186d9771438ab3
-    constructor(address asset_, address uvNFT_) {
+    constructor(address asset_, address uvNFT_) Ownable() {
         asset = IERC20(asset_);
         uvNFT = IERC721(uvNFT_);
     }
@@ -53,8 +53,8 @@ contract LendingPool is Ownable, IERC721Receiver {
         return asset.balanceOf(address(this));
     }
 
-    function getLenders() public view returns (address[] memory) {
-        return lenders;
+    function getBorrowers() public view returns (address[] memory) {
+        return borrowers;
     }
 
     // Returns whether a borrower has defaulted on their loan.
@@ -98,7 +98,7 @@ contract LendingPool is Ownable, IERC721Receiver {
 
         // fist time loan, add the address to lenders
         if (loan.maturity == 0) {
-            lenders.push(sender);
+            borrowers.push(sender);
         }
 
         loans[sender] = Loan(totalAmountDue, maturity, tokenId);

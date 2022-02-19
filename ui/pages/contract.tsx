@@ -2,13 +2,15 @@ import type { NextPage } from "next";
 import Router from "next/router";
 import { useEffect, useContext } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useContract, useSigner } from "wagmi";
+import { erc20ABI, useContract, useSigner } from "wagmi";
 
 import ContractBullets from "../components/contractBullets";
 import { ErrorDisplay } from "../components/formInput";
 import contracts from "../constants/contracts";
-import { LoanContext } from "../lib/context";
+import { BalanceContext, LoanContext } from "../lib/context";
 import lendingPoolABI from "../constants/lendingpool.json";
+
+import { BigNumber } from "ethers";
 
 const SentenceToType = "I consent to the terms outlined above";
 
@@ -18,6 +20,7 @@ interface ConsentForm {
 
 const Contract: NextPage = () => {
   const { loan } = useContext(LoanContext);
+  const { setBalance } = useContext(BalanceContext);
   const {
     register,
     handleSubmit,
@@ -28,6 +31,11 @@ const Contract: NextPage = () => {
     addressOrName: contracts.lendingPool,
     contractInterface: lendingPoolABI.abi,
     signerOrProvider: data,
+  });
+  const dai = useContract({
+      addressOrName: contracts.dai,
+      contractInterface: erc20ABI,
+      signerOrProvider: data,
   });
 
   useEffect(() => {
@@ -40,12 +48,19 @@ const Contract: NextPage = () => {
   }, [loan]);
 
   const onSubmit: SubmitHandler<ConsentForm> = async () => {
-    console.log(typeof(loan.amount));
-    console.log(loan.maturity);
-    console.log(loan.nftId);
-    const res = await contract.borrow(loan.amount, loan.maturity, loan.nftId);
-    await res.wait();    
+    const res = await contract.borrow(loan.amount, BigNumber.from(loan.maturity), BigNumber.from(loan.nftId));
+    await res.wait();
+
+    await getBalance();
   };
+
+  const getBalance = async () => {
+      if (contract && data) {
+          const bal = await contract.callStatic.balanceOf(await data?.getAddress());
+          const dec = await contract.callStatic.decimals();
+          setBalance({balance: bal, decimals: dec});
+      }
+  }
 
   return (
     <>
