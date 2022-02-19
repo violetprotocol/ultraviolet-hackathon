@@ -48,10 +48,10 @@ const Reveal: NextPage = () => {
       const decryptedFile = await LitJsSdk.decryptZip(blobFile, symmetricKey);
       console.log("file decrypted");
       console.log(decryptedFile);
-      // console.log(decryptedFile["128img.jpeg"].async("text"));
-      const unzipped = await decryptedFile["encryptedAssets/128img.jpeg"].async(
-        "blob",
-      );
+      const keys = Object.keys(decryptedFile);
+      console.log(keys);
+      const imageKey = keys[1];
+      const unzipped = await decryptedFile[imageKey].async("blob");
       setImageFile(unzipped);
       const reader = new FileReader();
       reader.readAsDataURL(unzipped);
