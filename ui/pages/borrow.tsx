@@ -24,9 +24,8 @@ const Borrow: NextPage = () => {
   } = useForm<FormData>();
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    // @TODO: this should: Send a post to the back
     loan.amount = data.amount;
-    loan.maturity = data.maturity;
+    loan.maturity = Date.parse(data.maturity);
     setLoan(loan);
     Router.push("/confirm");
   };

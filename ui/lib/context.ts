@@ -4,7 +4,8 @@ export interface LoanInterface {
   borrowerAddr: string;
   lenderAddr: string;
   amount: number;
-  maturity: string;
+  maturity: number;
+  nftId: number;
 }
 
 export interface PassportInterface {
@@ -25,7 +26,8 @@ export const InitContextValue: LoanInterface = {
   borrowerAddr: "",
   lenderAddr: "0xab16a96d359ec26a11e2c2b3d8f8b8942d5bfcdb",
   amount: 0,
-  maturity: "",
+  maturity: 0,
+  nftId: -1,
 };
 
 export const LoanContext = createContext<LoanContextInterface>({

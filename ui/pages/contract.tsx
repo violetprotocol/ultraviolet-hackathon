@@ -2,10 +2,13 @@ import type { NextPage } from "next";
 import Router from "next/router";
 import { useEffect, useContext } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useContract, useSigner } from "wagmi";
 
 import ContractBullets from "../components/contractBullets";
 import { ErrorDisplay } from "../components/formInput";
+import contracts from "../constants/contracts";
 import { LoanContext } from "../lib/context";
+import lendingPoolABI from "../constants/lendingpool.json";
 
 const SentenceToType = "I consent to the terms outlined above";
 
@@ -20,18 +23,25 @@ const Contract: NextPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<ConsentForm>();
+  const [{ data, error, loading }, getSigner] = useSigner();
+  const contract = useContract({
+    addressOrName: contracts.lendingPool,
+    contractInterface: lendingPoolABI.abi,
+    signerOrProvider: data,
+  });
 
   useEffect(() => {
     if (!loan.maturity) {
       // Go to borrow and force user to connect.
       // Once we have a session, shouldn't need this trick.
-      Router.push("/borrow");
+      Router.push("/");
       return;
     }
   }, [loan]);
 
-  const onSubmit: SubmitHandler<ConsentForm> = () => {
-    console.log("Front flow is done \\o/. Smart contract is pinged?");
+  const onSubmit: SubmitHandler<ConsentForm> = async () => {
+    const res = await contract.borrow(loan.amount, loan.maturity, loan.nftId);
+    await res.wait();    
   };
 
   return (
