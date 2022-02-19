@@ -25,7 +25,7 @@ const Contract: NextPage = () => {
   } = useForm<ConsentForm>();
   const [{ data, error, loading }, getSigner] = useSigner();
   const contract = useContract({
-    addressOrName: contracts.nft,
+    addressOrName: contracts.lendingPool,
     contractInterface: lendingPoolABI.abi,
     signerOrProvider: data,
   });
@@ -41,9 +41,7 @@ const Contract: NextPage = () => {
 
   const onSubmit: SubmitHandler<ConsentForm> = async () => {
     const res = await contract.borrow(loan.amount, loan.maturity, loan.nftId);
-    await res.wait();
-
-    
+    await res.wait();    
   };
 
   return (

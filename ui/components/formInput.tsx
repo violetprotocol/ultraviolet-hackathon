@@ -28,6 +28,7 @@ const FormInput: FC<InputProps> = ({
       <input
         id={inputName}
         type={type ? type : "text"}
+        step={type == "datetime-local" ? 1 : undefined}
         className={`form-control ${error ? "is-invalid" : ""}`}
         {...register(inputName, { required: true })}
         placeholder={placeholder}
