@@ -52,6 +52,8 @@ const Contract: NextPage = () => {
     await res.wait();
 
     await getBalance();
+
+    Router.push("/loans");
   };
 
   const getBalance = async () => {

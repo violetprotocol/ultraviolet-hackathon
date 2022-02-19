@@ -1,8 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-
-export default function CardTable({ title, color, loans, buttonText, onButtonClick, isFetching }) {
+export default function CardTable({ title, color, loans, buttonText, onButtonClick, isFetching, isTxPending, isLender=false }) {
   return (
     <>
       <div
@@ -131,7 +130,7 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
                   <button onClick={onButtonClick} type="submit" className="btn btn-primary btn-lg my-2">
-                    {buttonText}
+                    {isTxPending ? buttonText.pending : buttonText.default}
                   </button>
                 </td>
               </tr>
