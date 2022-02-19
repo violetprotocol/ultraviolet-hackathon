@@ -1,7 +1,7 @@
 import { utils } from "ethers";
 import { NormalizedLoan } from "./types";
 
-export const normalizeLoan = (loan, defaulted): NormalizedLoan => {
+export const normalizeLoan = (loan, defaulted): NormalizedLoan|null => {
     // not a valid loan if maturity is 0
     if (loan.maturity.eq(0)) {
       return null;
