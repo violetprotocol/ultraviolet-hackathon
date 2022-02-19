@@ -5,10 +5,12 @@ import contracts from "../constants/contracts";
 import nftABI from "../constants/nftABI.json";
 import LitJsSdk from "lit-js-sdk";
 import JSZip from "jszip";
+import FileSaver from "file-saver";
 
 const Reveal: NextPage = () => {
   const [{ data, error, loading }, getSigner] = useSigner();
   const [imageFile, setImageFile] = useState<Blob>();
+  const [imageUrl, setImgUrl] = useState<string | ArrayBuffer>();
   const [
     { data: networkData, error: networkError, loading: networkLoading },
     switchNetwork,
@@ -44,39 +46,21 @@ const Reveal: NextPage = () => {
       const blobFile = base64toBlob(userDataDto.encryptedFile, "octet-stream");
       console.log(blobFile);
       const decryptedFile = await LitJsSdk.decryptZip(blobFile, symmetricKey);
+      console.log("file decrypted");
       console.log(decryptedFile);
-      console.log(decryptedFile["128img.jpeg"].async("text"));
-      // const zip = new JSZip();
-      // const unzipped = await zip.loadAsync(decryptedFile["encryptedAssets/"]);
-      // console.log(unzipped);
-      // console.log(unzipped.files);
-      const binaryData = [];
-      binaryData.push(decryptedFile["encryptedAssets/128img.jpeg"]);
-      setImageFile(new Blob(binaryData, { type: "application/zip" }));
+      // console.log(decryptedFile["128img.jpeg"].async("text"));
+      const unzipped = await decryptedFile["encryptedAssets/128img.jpeg"].async(
+        "blob",
+      );
+      setImageFile(unzipped);
+      const reader = new FileReader();
+      reader.readAsDataURL(unzipped);
+      reader.onloadend = () => {
+        const base64data = reader.result;
+        setImgUrl(base64data);
+      };
     });
   }, []);
-
-  function convertBase64ToBlob(base64Image: string) {
-    // Split into two parts
-    const parts = base64Image.split(";base64,");
-
-    // Hold the content type
-    const imageType = parts[0].split(":")[1];
-
-    // Decode Base64 string
-    const decodedData = window.atob(parts[1]);
-
-    // Create UNIT8ARRAY of size same as row data length
-    const uInt8Array = new Uint8Array(decodedData.length);
-
-    // Insert all character code into uInt8Array
-    for (let i = 0; i < decodedData.length; ++i) {
-      uInt8Array[i] = decodedData.charCodeAt(i);
-    }
-
-    // Return BLOB image after conversion
-    return new Blob([uInt8Array], { type: imageType });
-  }
 
   function base64toBlob(base64Data, contentType) {
     contentType = contentType || "";
@@ -99,27 +83,14 @@ const Reveal: NextPage = () => {
     return new Blob(byteArrays, { type: contentType });
   }
 
-  // const symmetricKey = await window.litNodeClient.getEncryptionKey({
-  //   accessControlConditions,
-  //   // Note, below we convert the encryptedSymmetricKey from a UInt8Array to a hex string.  This is because we obtained the encryptedSymmetricKey from "saveEncryptionKey" which returns a UInt8Array.  But the getEncryptionKey method expects a hex string.
-  //   toDecrypt: LitJsSdk.uint8arrayToString(encryptedSymmetricKey, "base16"),
-  //   chain,
-  //   authSig
-  // })
-
-  // const decryptedFile = await LitJsSdk.decryptZip(
-  //   encryptedZip,
-  //   symmetricKey
-  // );
-  // }
-
-  if (imageFile) {
-    console.log(imageFile);
-    const imageSrc = URL.createObjectURL(imageFile);
+  if (imageFile && imageUrl) {
     return (
       <>
         <p> ImageFilePresent </p>
-        <img src={imageSrc} />
+        <button onClick={() => FileSaver.saveAs(imageFile, "doxxedImage.jpeg")}>
+          Download
+        </button>
+        <img src={imageUrl.toString()} alt="" />
       </>
     );
   }
