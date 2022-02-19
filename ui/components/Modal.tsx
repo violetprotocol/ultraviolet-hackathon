@@ -1,29 +1,57 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import FormInput from "../components/formInput";
 
-export default function Example({ onRepay, onCancel }) {
+export default function RepayModal({
+  onApprove,
+  onRepay,
+  onCancel,
+  lendingPoolAllowance,
+}) {
   const [open, setOpen] = useState(true);
+  const [showApprove, setShowApprove] = useState(true);
 
   const cancelButtonRef = useRef(null);
 
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    setOpen(false);
-    const amountToRepay = parseInt(data.amount);
-    if (!amountToRepay) {
-      console.log("No amount to repay, received:", amountToRepay);
-      return;
-    }
-    onRepay(amountToRepay);
-  };
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) => {
+      console.log("value", typeof value.amount);
+      console.log("lendingPoolAllowance", typeof lendingPoolAllowance);
+      if (parseInt(value.amount) > parseInt(lendingPoolAllowance)) {
+        setShowApprove(true);
+      } else {
+        setShowApprove(false);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
+
+  const onSubmit = useCallback(
+    (data) => {
+      const amount = data.amount;
+      if (!amount) {
+        console.log("No amount given, received:", amount);
+        return;
+      }
+      if (showApprove) {
+        onApprove(amount);
+      } else {
+        setOpen(false);
+
+        onRepay(amount);
+      }
+    },
+    [showApprove],
+  );
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -73,7 +101,8 @@ export default function Example({ onRepay, onCancel }) {
                     >
                       How much do you want to repay?
                     </Dialog.Title>
-                    <div className="mt-2 flex justify-center">
+                    <div className="mt-2 flex flex-column justify-center items-center">
+                      <div className="mt-2">{`Current contract allowance: ${lendingPoolAllowance}`}</div>
                       <FormInput
                         register={register}
                         error={errors.amount}
@@ -89,7 +118,7 @@ export default function Example({ onRepay, onCancel }) {
                     type="submit"
                     className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"
                   >
-                    Repay
+                    {showApprove ? "Approve" : "Repay"}
                   </button>
                   <button
                     type="button"

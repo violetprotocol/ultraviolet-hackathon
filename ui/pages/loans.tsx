@@ -1,10 +1,11 @@
 import { BigNumber, utils } from "ethers";
 import type { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useContract, useSigner } from "wagmi";
 import CardTable from "../components/Cards/CardTable";
 import Modal from "../components/Modal";
 import contracts from "../constants/contracts";
+import IERC20Abi from "../constants/erc20.json";
 import lendingPoolABI from "../constants/lendingpool.json";
 
 const normalizeLoan = (loan, defaulted) => {
@@ -34,8 +35,9 @@ const Loans: NextPage = () => {
   const [{ data: signer, error, loading }] = useSigner();
   const [currentLoan, setCurrentLoan] = useState(null);
   const [isRepaySectionShown, setIsRepaySectionShown] = useState(false);
+  const [lendingPoolAllowance, setLendingPoolAllowance] = useState(null);
 
-  const contract = useContract({
+  const lendingPoolContract = useContract({
     addressOrName: contracts.lendingPool,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -43,49 +45,91 @@ const Loans: NextPage = () => {
     signerOrProvider: signer,
   });
 
+  const daiContract = useContract({
+    addressOrName: contracts.dai,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    contractInterface: IERC20Abi,
+    signerOrProvider: signer,
+  });
+
+  const getAllowance = useCallback(async () => {
+    const allowance = await daiContract.allowance(
+      await signer.getAddress(),
+      contracts.lendingPool,
+    );
+    const formattedAllowance = utils.formatUnits(allowance, 18);
+    setLendingPoolAllowance(formattedAllowance);
+  }, [daiContract, setLendingPoolAllowance, signer]);
+
+  useEffect(() => {
+    if (!signer) {
+      return;
+    }
+
+    getAllowance();
+  }, [daiContract, signer]);
+
   useEffect(() => {
     const getLoans = async () => {
       if (!signer) {
         return;
       }
-      const connectedAddress = signer.getAddress();
+      const connectedAddress = await signer.getAddress();
       console.log("connectedAddress", connectedAddress);
-      const loan = await contract.loans(connectedAddress);
+      const loan = await lendingPoolContract.loans(connectedAddress);
       console.log("loan", loan);
       if (!loan) {
+        console.log("loan is not defined. loan:", loan);
         return;
       }
-      const defaulted = await contract.hasDefaulted(connectedAddress);
+      const defaulted = await lendingPoolContract.hasDefaulted(
+        connectedAddress,
+      );
 
       const normalizedLoan = normalizeLoan(loan, defaulted);
 
       setCurrentLoan(normalizedLoan);
     };
     getLoans();
-  }, [contract, signer]);
+  }, [lendingPoolContract, signer]);
 
   const onShowRepayClick = () => {
     setIsRepaySectionShown(true);
   };
 
   const handleRepaySubmit = async (amount) => {
-    console.log(`repay ${amount}`);
+    const parsedAmount = utils.parseUnits(amount, 18);
+
+    const res = await lendingPoolContract.repay(parsedAmount);
+    await res.wait();
+  };
+
+  const handleApproveSubmit = async (amount) => {
+    const parsedAmount = utils.parseUnits(amount, 18);
+
+    const res = await daiContract.approve(contracts.lendingPool, parsedAmount);
+    await res.wait();
+
+    await getAllowance();
   };
   return (
     <div style={{ maxWidth: "80%" }}>
       <CardTable
         title={"Your Loans"}
-        loans={true ? [mockLoan] : []}
+        loans={currentLoan ? [currentLoan] : []}
         onButtonClick={onShowRepayClick}
         buttonText="Repay"
       />
       {isRepaySectionShown && (
         <Modal
+          lendingPoolAllowance={lendingPoolAllowance}
           onCancel={() => setIsRepaySectionShown(false)}
           onRepay={(amount) => {
             setIsRepaySectionShown(false);
             handleRepaySubmit(amount);
           }}
+          onApprove={handleApproveSubmit}
         />
       )}
     </div>
