@@ -67,7 +67,7 @@ const Escrow: NextPage = () => {
     await res.wait();
 
     setNftId(index);
-    setLoan({ ...loan, nftId: index });
+    setLoan({ ...loan, nftId: index.toNumber() });
 
     await submitPassport(address, index);
   };
