@@ -87,11 +87,6 @@ const Escrow: NextPage = () => {
       file,
     ]);
 
-    const base64File = Buffer.from(await file.arrayBuffer()).toString("base64");
-
-    const { stringSymmetricKey, encryptedString } =
-      await LitJsSdk.encryptString(base64File);
-
     const accessControlConditions = [
       {
         contractAddress: contracts.nft,
@@ -117,30 +112,14 @@ const Escrow: NextPage = () => {
       chain: networkData.chain?.name.toLowerCase(),
     });
 
-    const encryptedStringSymmetricKey = await window.litNodeClient.saveEncryptionKey({
-        accessControlConditions,
-        stringSymmetricKey,
-        authSig,
-        chain: networkData.chain?.name.toLowerCase(),
-      });
-
     console.log(encryptedSymmetricKey);
     const hexEncryptedSymmetricKey = LitJsSdk.uint8arrayToString(
       encryptedSymmetricKey,
       "base16",
     );
 
-    const stringHexEncryptedSymmetricKey = LitJsSdk.uint8arrayToString(
-      encryptedStringSymmetricKey,
-      "base16",
-    );
-
     const encryptedZipB64 = Buffer.from(
       await encryptedZip.arrayBuffer(),
-    ).toString("base64");
-
-    const encryptedStringB64 = Buffer.from(
-      await encryptedString.arrayBuffer(),
     ).toString("base64");
 
     fetch("http://localhost:8080/api/store", {
@@ -149,10 +128,8 @@ const Escrow: NextPage = () => {
       credentials: "include" as RequestCredentials,
       body: JSON.stringify({
         nftId: id.toString(),
-        // encryptedFile: encryptedZipB64,
-        encryptedFile: encryptedStringB64,
-        // encryptedSymmetricKey: hexEncryptedSymmetricKey,
-        encryptedSymmetricKey: stringHexEncryptedSymmetricKey,
+        encryptedFile: encryptedZipB64,
+        encryptedSymmetricKey: hexEncryptedSymmetricKey,
         accessControlConditions: accessControlConditions,
       }),
     }).then(async (response) => {
