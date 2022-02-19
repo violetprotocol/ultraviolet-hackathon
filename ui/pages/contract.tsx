@@ -51,7 +51,7 @@ const Contract: NextPage = () => {
     const res = await contract.borrow(loan.amount, BigNumber.from(loan.maturity), BigNumber.from(loan.nftId));
     await res.wait();
 
-    await getBalance
+    await getBalance();
   };
 
   const getBalance = async () => {
