@@ -6,23 +6,8 @@ import { useContract, useSigner } from "wagmi";
 import CardTable from "../components/Cards/CardTable";
 import contracts from "../constants/contracts";
 import lendingPoolABI from "../constants/lendingpool.json";
+import { normalizeLoan } from "../lib/normalizeLoan";
 import { NormalizedLoan } from "../lib/types";
-
-const normalizeLoan = (loan, defaulted): NormalizedLoan => {
-  // not a valid loan if maturity is 0
-  if (loan.maturity.eq(0)) {
-    return null;
-  }
-  const maturity = loan?.maturity?.toString();
-  const tokenId = loan?.tokenId?.toNumber();
-  const totalAmountDue = utils.formatUnits(loan?.totalAmountDue, 18);
-  return {
-    maturity,
-    totalAmountDue,
-    tokenId,
-    defaulted,
-  };
-};
 
 const LenderLoans: NextPage = () => {
   const [{ data: signer, error, loading }, getSigner] = useSigner();
