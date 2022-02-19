@@ -130,9 +130,9 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
                   </div>
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                  <button onClick={onButtonClick} type="submit" className="btn btn-primary btn-lg my-2">
+                  {(!isLender || (isLender && loan.maturity < Date.now()/1000)) && <button onClick={onButtonClick} type="submit" className="btn btn-primary btn-lg my-2">
                     {isTxPending ? buttonText.pending : buttonText.default}
-                  </button>
+                  </button>}
                 </td>
               </tr>
               )}
