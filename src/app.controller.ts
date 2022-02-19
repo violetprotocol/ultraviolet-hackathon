@@ -79,6 +79,7 @@ export class AppController {
       if (!request.session.logged) {
         throw new HttpException("You must login first", HttpStatus.FORBIDDEN);
       }
+      console.log(userDataDto);
       await this.appService.saveEncryptedData(userDataDto);
       return response.status(HttpStatus.OK).send("");
     } catch (e) {

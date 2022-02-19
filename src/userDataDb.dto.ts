@@ -4,5 +4,5 @@ export class UserDataDbDto {
   readonly nftId: string;
   readonly encryptedFile: string;
   readonly encryptedSymmetricKey: string;
-  readonly accessControlConditions: AccessControlConditions;
+  readonly access_control_conditions: AccessControlConditions;
 }

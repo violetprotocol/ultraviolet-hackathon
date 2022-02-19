@@ -10,6 +10,7 @@ import { UserData } from "./userData.entity";
 import { UserDataRepository } from "./userData.repository";
 import { UserDataDbDto } from "./userDataDb.dto";
 import { UserDataDto } from "./userDataDto";
+import { AccessControlConditions as AccessControlConditionsUiDto } from "ui/lib/types";
 
 @Injectable()
 export class AppService {
@@ -43,12 +44,35 @@ export class AppService {
     try {
       const foundUserData =
         await this.userDataRepository.findOneUserDataByNftId(nftId);
-      console.log(foundUserData.access_control_conditions);
-      return foundUserData;
+      const userDataDto = this.transformUserDataIntoDto(foundUserData);
+      return userDataDto;
     } catch (e) {
       console.log("didn't found nftId on user data table");
       throw e;
     }
+  }
+
+  transformUserDataIntoDto(userData: UserData): UserDataDto {
+    const accessControlConditionsDto: AccessControlConditionsUiDto = {
+      contractAddress: userData.access_control_conditions.contractAddress,
+      standardContractType:
+        userData.access_control_conditions.standardContractType,
+      chain: userData.access_control_conditions.chain,
+      method: userData.access_control_conditions.method,
+      parameters: userData.access_control_conditions.parameters,
+      returnValueTest: {
+        comparator:
+          userData.access_control_conditions.returnValueTestComparator,
+        value: userData.access_control_conditions.returnValueTestValue,
+      },
+    };
+    const userDataDto: UserDataDto = {
+      nftId: userData.nftId,
+      encryptedFile: userData.encryptedFile,
+      encryptedSymmetricKey: userData.encryptedSymmetricKey,
+      accessControlConditions: [accessControlConditionsDto],
+    };
+    return userDataDto;
   }
 
   async saveSiweLogin(userAddress: string, userNonce: string) {
@@ -71,9 +95,9 @@ export class AppService {
       method: userDataDto.accessControlConditions[0].method,
       parameters: userDataDto.accessControlConditions[0].parameters,
       returnValueTestComparator:
-        userDataDto.accessControlConditions[0].returnValueTest.value,
-      returnValueTestValue:
         userDataDto.accessControlConditions[0].returnValueTest.comparator,
+      returnValueTestValue:
+        userDataDto.accessControlConditions[0].returnValueTest.value,
     };
     const createdAccessControlConditions =
       await this.accessControlConditionsRepository.createAccessControl(
@@ -90,7 +114,7 @@ export class AppService {
       nftId: userDataDto.nftId,
       encryptedFile: userDataDto.encryptedFile,
       encryptedSymmetricKey: userDataDto.encryptedSymmetricKey,
-      accessControlConditions: accessControl,
+      access_control_conditions: accessControl,
     };
     const createdUserDataDto = await this.userDataRepository.createUserData(
       userDataDtoToSave,
