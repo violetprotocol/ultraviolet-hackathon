@@ -40,6 +40,9 @@ const Contract: NextPage = () => {
   }, [loan]);
 
   const onSubmit: SubmitHandler<ConsentForm> = async () => {
+    console.log(typeof(loan.amount));
+    console.log(loan.maturity);
+    console.log(loan.nftId);
     const res = await contract.borrow(loan.amount, loan.maturity, loan.nftId);
     await res.wait();    
   };

@@ -24,7 +24,7 @@ const Borrow: NextPage = () => {
   } = useForm<FormData>();
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    loan.amount = data.amount;
+    loan.amount = parseInt(data.amount);
     loan.maturity = Date.parse(data.maturity);
     setLoan(loan);
     Router.push("/confirm");

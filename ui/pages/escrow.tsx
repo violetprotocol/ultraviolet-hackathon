@@ -37,13 +37,13 @@ const Escrow: NextPage = () => {
 
   useEffect(() => {
     checkApproval();
-  });
+  })
 
   useEffect(() => {
     if (nftId && !needsApproval) {
       Router.push("/borrow");
     }
-  }, [nftId, needsApproval]);
+  }, [nftId, needsApproval])
 
   useEffect(() => {
     if (!loan.borrowerAddr) {
@@ -58,7 +58,7 @@ const Escrow: NextPage = () => {
       const approved = await contract.callStatic.getApproved(nftId);
       setNeedsApproval(approved != contracts.lendingPool);
     }
-  };
+  }
 
   const onMint = async () => {
     const address = await (await getSigner()).getAddress();
@@ -67,7 +67,7 @@ const Escrow: NextPage = () => {
     await res.wait();
 
     setNftId(index);
-    setLoan({...loan, nftId: index});
+    setLoan({...loan, nftId: index.toNumber()});
 
     await submitPassport(address, index);
   };
@@ -95,8 +95,8 @@ const Escrow: NextPage = () => {
         method: "ownerOf",
         parameters: [id.toString()],
         returnValueTest: {
-          comparator: "=",
-          value: owner.toLowerCase(),
+          comparator: "==",
+          value: owner,
         },
       },
     ];
@@ -112,12 +112,6 @@ const Escrow: NextPage = () => {
       chain: networkData.chain?.name.toLowerCase(),
     });
 
-    console.log(encryptedSymmetricKey);
-    const hexEncryptedSymmetricKey = LitJsSdk.uint8arrayToString(
-      encryptedSymmetricKey,
-      "base16",
-    );
-
     const encryptedZipB64 = Buffer.from(
       await encryptedZip.arrayBuffer(),
     ).toString("base64");
@@ -129,20 +123,12 @@ const Escrow: NextPage = () => {
       body: JSON.stringify({
         nftId: id.toString(),
         encryptedFile: encryptedZipB64,
-        encryptedSymmetricKey: hexEncryptedSymmetricKey,
+        encryptedSymmetricKey: encryptedSymmetricKey.toString(),
         accessControlConditions: accessControlConditions,
       }),
     }).then(async (response) => {
       console.log(response.text());
-      // console.log("STARTING THE ROUNDTRIP TEST");
-      // const symmetricKey = await window.litNodeClient.getEncryptionKey({
-      //   accessControlConditions: accessControlConditions,
-      //   toDecrypt: hexEncryptedSymmetricKey,
-      //   chain: networkData.chain?.name.toLowerCase(),
-      //   authSig: authSig,
-      // });
-      // console.log("FINISHING ROUNDTRIP TEST");
-      // console.log(symmetricKey);
+
     });
   };
 
@@ -161,42 +147,30 @@ const Escrow: NextPage = () => {
       <br />
       <br />
       <br />
-      {!nftId && (
-        <>
-          <h3>Upload your passport.</h3>
-          <div className="centerContent pt-0 mt-0">
-            <input type="file" onChange={handleFile} />
-          </div>
-        </>
-      )}
+      {!nftId && <><h3>Upload your passport.</h3>
+      <div className="centerContent pt-0 mt-0">
+        <input type="file" onChange={handleFile} />
+      </div></>}
 
-      {!nftId && (
-        <div className="centerContent pt-0 mt-0">
-          <button onClick={onMint} className="btn btn-primary btn-lg">
-            Mint ID NFT
-          </button>
-        </div>
-      )}
+      {!nftId && <div className="centerContent pt-0 mt-0">
+        <button onClick={onMint} className="btn btn-primary btn-lg">
+          Mint ID NFT
+        </button>
+      </div>}
 
-      {nftId && (
-        <div className="centerContent pt-0 mt-0">
-          <h3>Minted with ID {nftId.toString()}!</h3>
-        </div>
-      )}
+      {nftId && <div className="centerContent pt-0 mt-0">
+        <h3>Minted with ID {nftId.toString()}!</h3>
+      </div>}
 
-      {nftId && needsApproval && (
-        <div className="centerContent pt-0 mt-0">
-          <button onClick={onApprove} className="btn btn-primary btn-lg">
-            Approve Lending Pool to escrow your NFT
-          </button>
-        </div>
-      )}
+      {nftId && needsApproval && <div className="centerContent pt-0 mt-0">
+        <button onClick={onApprove} className="btn btn-primary btn-lg">
+          Approve Lending Pool to escrow your NFT
+        </button>
+      </div>}
 
-      {nftId && !needsApproval && (
-        <div className="centerContent pt-0 mt-0">
-          <h3>Approved for escrow!</h3>
-        </div>
-      )}
+      {nftId && !needsApproval && <div className="centerContent pt-0 mt-0">
+        <h3>Approved for escrow!</h3>
+      </div>}
     </>
   );
 };

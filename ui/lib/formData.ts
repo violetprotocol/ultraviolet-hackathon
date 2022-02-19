@@ -1,4 +1,4 @@
 export default interface FormData {
-  amount: number;
+  amount: string;
   maturity: string;
 }
