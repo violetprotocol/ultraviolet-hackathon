@@ -95,7 +95,7 @@ const Home: NextPage = () => {
               <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
                 <div className="text-white text-center mb-3 font-bold">
                   <div className="border rounded-lg p-4 bg-gradient-to-r from-pink-300 to-purple-400">
-                    Fully anonymous if paid back in full
+                    Fully pseudonymous if paid back in full
                   </div>
                 </div>
                 <div className="centerContent">
