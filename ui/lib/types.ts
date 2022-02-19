@@ -9,3 +9,10 @@ export interface AccessControlConditions {
     value: string;
   };
 }
+
+export interface NormalizedLoan {
+  maturity: number
+  totalAmountDue: string,
+  tokenId: number,
+  defaulted: boolean
+}

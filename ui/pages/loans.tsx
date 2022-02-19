@@ -7,8 +7,9 @@ import Modal from "../components/Modal";
 import contracts from "../constants/contracts";
 import IERC20Abi from "../constants/erc20.json";
 import lendingPoolABI from "../constants/lendingpool.json";
+import { NormalizedLoan } from "../lib/types";
 
-const normalizeLoan = (loan, defaulted) => {
+const normalizeLoan = (loan, defaulted): NormalizedLoan => {
   // not a valid loan if maturity is 0
   if (loan.maturity.eq(0)) {
     return null;
@@ -33,7 +34,7 @@ const mockLoan = normalizeLoan(rawMockLoan, true);
 
 const Loans: NextPage = () => {
   const [{ data: signer, error, loading }] = useSigner();
-  const [currentLoans, setCurrentLoans] = useState([]);
+  const [currentLoans, setCurrentLoans] = useState<NormalizedLoan[]>();
   const [isRepaySectionShown, setIsRepaySectionShown] = useState(false);
   const [lendingPoolAllowance, setLendingPoolAllowance] = useState(null);
   const [isTxPending, setIsTxPending] = useState(false);
@@ -136,7 +137,8 @@ const Loans: NextPage = () => {
         isFetching={isFetching}
         loans={currentLoans}
         onButtonClick={onShowRepayClick}
-        buttonText={isTxPending ? "Pending" : "Repay"}
+        isTxPending={isTxPending}
+        buttonText={{ pending: "Pending", default: "Repay"}}
       />
       {isRepaySectionShown && (
         <Modal

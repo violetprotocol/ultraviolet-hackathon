@@ -15,10 +15,6 @@ export const Navbar = () => {
         contractInterface: erc20ABI,
         signerOrProvider: data,
     });
-
-    const onClick = () => {
-        Router.push("/loans");
-    }
     
     useEffect(() => {
         getBalance();
