@@ -45,7 +45,7 @@ const Reveal: NextPage = () => {
       console.log(blobFile);
       const decryptedFile = await LitJsSdk.decryptZip(blobFile, symmetricKey);
       console.log(decryptedFile);
-      console.log(decryptedFile["encryptedAssets/128img.jpeg"]);
+      console.log(decryptedFile["128img.jpeg"].async("text"));
       // const zip = new JSZip();
       // const unzipped = await zip.loadAsync(decryptedFile["encryptedAssets/"]);
       // console.log(unzipped);
