@@ -1,10 +1,8 @@
 import PropTypes from "prop-types";
 import React from "react";
-// components
-import TableDropdown from "../Dropdowns/TableDropdown.js";
 
 
-export default function CardTable({ title, color, loans }) {
+export default function CardTable({ title, color, loans, buttonText, onButtonClick }) {
   return (
     <>
       <div
@@ -34,7 +32,7 @@ export default function CardTable({ title, color, loans }) {
               <tr>
                 <th
                   className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center " +
                     (color === "light"
                       ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
@@ -44,7 +42,7 @@ export default function CardTable({ title, color, loans }) {
                 </th>
                 <th
                   className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center " +
                     (color === "light"
                       ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
@@ -54,7 +52,7 @@ export default function CardTable({ title, color, loans }) {
                 </th>
                 <th
                   className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center " +
                     (color === "light"
                       ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
@@ -64,7 +62,7 @@ export default function CardTable({ title, color, loans }) {
                 </th>
                 <th
                   className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center " +
                     (color === "light"
                       ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
@@ -74,7 +72,7 @@ export default function CardTable({ title, color, loans }) {
                 </th>
                 <th
                   className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center " +
                     (color === "light"
                       ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
@@ -84,7 +82,7 @@ export default function CardTable({ title, color, loans }) {
                 </th>
                 <th
                   className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center " +
                     (color === "light"
                       ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
@@ -99,7 +97,7 @@ export default function CardTable({ title, color, loans }) {
                 </tr>
               }
               {loans[0] != null && <tr>
-                <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
+                <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
                   <span
                     className={
                       "ml-3 font-bold " +
@@ -127,7 +125,9 @@ export default function CardTable({ title, color, loans }) {
                   </div>
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                  <TableDropdown />
+                  <button onClick={onButtonClick} type="submit" className="btn btn-primary btn-lg my-2">
+                    {buttonText}
+                  </button>
                 </td>
               </tr>}
             </tbody>
