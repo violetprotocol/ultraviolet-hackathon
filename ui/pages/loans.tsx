@@ -82,8 +82,15 @@ const Loans: NextPage = () => {
 
     const normalizedLoan = normalizeLoan(loan, defaulted);
 
+    let loans;
+    if (normalizedLoan == null) {
+      loans = [];
+    } else {
+      loans = [normalizedLoan];
+    }
+
     setIsFetching(false);
-    setCurrentLoans([normalizedLoan]);
+    setCurrentLoans(loans);
   }, [signer, lendingPoolContract]);
 
   useEffect(() => {
