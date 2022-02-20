@@ -33,17 +33,6 @@ const Dashboard: NextPage = () => {
   };
 
   useEffect(() => {
-    fetch("https://api.pinata.cloud/data/testAuthentication", {
-      method: "GET",
-      headers: { 
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI0NjQ2ZmViZS1iZDQ3LTQyNDAtOTYwMC1kZDRlNTMzOWI1NDAiLCJlbWFpbCI6ImNocmlzQHZpb2xldC5jbyIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImlkIjoiRlJBMSIsImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxfV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2V9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiIxOGQ4ZjRlZjBiNjg4ZjA3ZGIwMiIsInNjb3BlZEtleVNlY3JldCI6IjA3YWZjN2UwZWRiYmM4ZjY1YzQwNDEyY2RhMDg2NDA4NDBhY2M0NDg2NmVjNWY5OWFhNWQ4ZjZkMzQ5ZTAzNGIiLCJpYXQiOjE2NDUzMzQzNDZ9.4k7bf_Lz3ylYMfJ3CCU29ywSm_LYL8YSts6jakZ4kXY" 
-      }
-    }).then(async (response) => {
-      console.log(response.text());
-    });
-  })
-
-  useEffect(() => {
     checkUserIsLender();
   }, [signer]);
 
