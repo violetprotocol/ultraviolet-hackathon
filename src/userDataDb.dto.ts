@@ -5,4 +5,5 @@ export class UserDataDbDto {
   readonly encryptedFile: string;
   readonly encryptedSymmetricKey: string;
   readonly access_control_conditions: AccessControlConditions;
+  readonly ipfsHash: string;
 }

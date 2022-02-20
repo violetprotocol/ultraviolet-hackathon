@@ -32,6 +32,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.0.0",
     "@headlessui/react": "^1.5.0",
+    "@nestjs/axios": "^0.0.5",
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",

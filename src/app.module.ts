@@ -8,6 +8,7 @@ import { AccessControlConditionsRepository } from "./accessControlConditions.rep
 import { AccessControlConditions } from "./accessControlConditions.entity";
 import { UserData } from "./userData.entity";
 import { UserDataRepository } from "./userData.repository";
+import { HttpModule } from "@nestjs/axios";
 
 @Module({
   imports: [
@@ -18,6 +19,9 @@ import { UserDataRepository } from "./userData.repository";
       AccessControlConditionsRepository,
     ]),
     TypeOrmModule.forFeature([UserData, UserDataRepository]),
+    HttpModule.register({
+      timeout: 20000,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

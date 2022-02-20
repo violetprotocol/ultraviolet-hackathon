@@ -21,6 +21,9 @@ export class UserData {
   @Column({})
   encryptedFile: string;
 
+  @Column({ nullable: true })
+  ipfsHash: string;
+
   @OneToOne((type) => AccessControlConditions)
   @JoinColumn({ name: "access_control_conditions" })
   access_control_conditions: AccessControlConditions;

@@ -31,6 +31,18 @@ export class AppController {
     return this.appService.getHello();
   }
 
+  @Get("/axiosTest")
+  async getAxiosTest() {
+    return await this.appService.pushEncryptedB64ToIpfs("chris is a bitch");
+  }
+
+  @Get("/testIpfsFetch")
+  async getIpfsTest() {
+    return await this.appService.getIpfsHashedFile(
+      "QmdQ9NM3vsVZVfCgxEMDvexB3cpY7saNNf4314jQeJqNay",
+    );
+  }
+
   @Get("/nonce")
   async getSiweNonce(
     @Req() request: Request,
