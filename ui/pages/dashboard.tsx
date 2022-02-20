@@ -1,18 +1,14 @@
 import type { NextPage } from "next";
 import Router from "next/router";
-import { useEffect, useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useContract, useSigner } from "wagmi";
-
-import { LoanContext } from "../lib/context";
 import contracts from "../constants/contracts";
 import lendingPoolABI from "../constants/lendingpool.json";
-
-import LitJsSdk from "lit-js-sdk";
-import LenderLoans from "./lender";
+import { LoanContext } from "../lib/context";
 
 const Dashboard: NextPage = () => {
   const { loan, setLoan } = useContext(LoanContext);
-  const [ isLender, setIsLender ] = useState<boolean>(false);
+  const [isLender, setIsLender] = useState<boolean>(false);
   const [{ data: signer, error, loading }, getSigner] = useSigner();
   const contract = useContract({
     addressOrName: contracts.lendingPool,
@@ -30,47 +26,64 @@ const Dashboard: NextPage = () => {
 
   const onNewLoan = () => {
     Router.push("/escrow");
-  }
+  };
 
   const onOldLoan = () => {
     Router.push("/loans");
-  }
-  
+  };
+
   useEffect(() => {
     checkUserIsLender();
-  }, [signer])
+  }, [signer]);
 
   const checkUserIsLender = async () => {
     if (signer) {
       const connectedAddress = await signer.getAddress();
       const owner = await contract.owner();
       console.log(owner);
-  
+
       setIsLender(connectedAddress == owner);
     }
-  }
+  };
 
-  const userScreen = <>
-    <div className='grid grid-cols-2 gap-4 p-5'>
-        {!isLender && <><div className="content-center items-center">
-            <h3>Your Open loans</h3>
-            <p>View, manage and repay your loans</p>
-            <button onClick={onOldLoan} className="btn btn-primary btn-lg">Existing Loans</button>
-        </div>
-        <div className="content-center items-center">
-            <h3>Open a new loan</h3>
-            <p>Take out a new loan by escrowing your identity</p>
-            <button onClick={onNewLoan} className="btn btn-primary btn-lg">New Loan</button>
-        </div></>}
+  useEffect(() => {
+    if (isLender) {
+      Router.push("/lender");
+    }
+  }, [isLender]);
+
+  const userScreen = (
+    <div className="flex p-5 mt-8">
+      {!isLender && (
+        <>
+          <div className="content-center items-center px-4">
+            <button
+              onClick={onOldLoan}
+              className="glowing-button-blue uppercase my-8"
+            >
+              Existing Loans
+            </button>
+            <p className="font-teletactile my-6">
+              View, manage and repay your loans
+            </p>
+          </div>
+          <div className="content-center items-center px-4">
+            <button
+              onClick={onNewLoan}
+              className="glowing-button-pink uppercase my-8"
+            >
+              New Loan
+            </button>
+            <p className="font-teletactile my-6 max-w-md text-center">
+              Take out a new loan by escrowing your identity
+            </p>
+          </div>
+        </>
+      )}
     </div>
-  </>
-
-  return (
-    <>
-      <h1 className="mb-4">Dashboard</h1>
-      {userScreen}
-    </>
   );
+
+  return <>{userScreen}</>;
 };
 
 export default Dashboard;
