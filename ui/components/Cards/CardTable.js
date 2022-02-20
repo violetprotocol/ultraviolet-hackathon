@@ -138,13 +138,15 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
                   </div>
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                  {loan.defaulted 
-                      ?  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-red-600 bg-red-200 uppercase last:mr-0 mr-1">
-                          {'\u2620'}  Rekt  {'\u2620'}
-                        </span>
-                      : (!isLender || (isLender && loan.maturity < Date.now()/1000)) && <button onClick={() => {isLender? handleClick(loan.borrower) : handleClick()}} type="submit" className="btn btn-primary btn-lg my-2">
-                    {isTxPending ? buttonText.pending : loan.defaulted ? "rekt" : buttonText.default}
-                  </button>}
+                  {!isLender && loan.defaulted 
+                    ?  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-red-600 bg-red-200 uppercase last:mr-0 mr-1">
+                        {'\u2620'}  Rekt  {'\u2620'}
+                      </span>
+                    : (!isLender || (isLender && loan.maturity < Date.now()/1000)) && 
+                    <button onClick={() => {isLender? handleClick(loan.borrower) : handleClick()}} type="submit" className="btn btn-primary btn-lg my-2">
+                      {isTxPending ? buttonText.pending : loan.defaulted ? "rekt" : buttonText.default}
+                    </button>
+                  }
                 </td>
                 {isLender && openDoxxModal && <DoxxModal nftId={loan.tokenId} open={openDoxxModal} setOpen={setOpenDoxxModal}/>}
               </tr>

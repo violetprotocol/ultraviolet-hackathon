@@ -50,12 +50,6 @@ const Dashboard: NextPage = () => {
     }
   }
 
-  useEffect(() => {
-    if (isLender) {
-      Router.push("/lender");
-    }
-  }, [isLender])
-
   const userScreen = <>
     <div className='grid grid-cols-2 gap-4 p-5'>
         {!isLender && <><div className="content-center items-center">
