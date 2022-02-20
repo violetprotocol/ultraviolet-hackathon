@@ -57,9 +57,9 @@ const Contract: NextPage = () => {
   };
 
   const getBalance = async () => {
-      if (contract && data) {
-          const bal = await contract.callStatic.balanceOf(await data?.getAddress());
-          const dec = await contract.callStatic.decimals();
+      if (dai && data) {
+          const bal = await dai.balanceOf(await data?.getAddress());
+          const dec = await dai.decimals();
           setBalance({balance: bal, decimals: dec});
       }
   }
