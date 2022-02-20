@@ -66,12 +66,18 @@ const Contract: NextPage = () => {
 
   return (
     <>
-      <h1>Smart Contract Loan</h1>
+      <h1 style={{ fontSize: "30px" }}>
+        <i className="neon-green">Binding Contract Wording</i>
+      </h1>
 
+      <br/>
+      <br/>
       <div style={{ fontSize: "18px", maxWidth: "700px" }}>
         <ContractBullets loan={loan} />
 
-        <p>Please type: "{SentenceToType}"</p>
+        <br/>
+        <br/>
+        <p className="title font-teletactile" style={{fontSize: "13px"}}>Please type: "{SentenceToType}"</p>
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
@@ -91,9 +97,9 @@ const Contract: NextPage = () => {
           <div className="centerContent pt-0 mt-0">
             <button
               type="submit"
-              className="btn btn-danger btn-lg mt-3 px-5 py-3"
+              className="glowing-button-blue uppercase my-8"
             >
-              Sign and Escrow ID NFT to draw loan
+              Sign contract
             </button>
           </div>
         </form>

@@ -29,15 +29,20 @@ const Borrow: NextPage = () => {
     console.log(Date.parse(data.maturity)/1000);
     loan.maturity = Date.parse(data.maturity)/1000;
     setLoan(loan);
-    Router.push("/confirm");
+    Router.push("/contract");
   };
 
   return (
     <>
-      <h1 className="mb-4">Borrow page</h1>
-
+      <h1 style={{ fontSize: "30px" }}>
+        <i className="neon-green">Set your borrowing terms</i>
+      </h1>
+      <br/>
+      <br/>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <h3>1. How much do you want to borrow?</h3>
+        <h2 className="title font-teletactile" style={{ fontSize: "13px" }}>
+          1. How much do you want to borrow?
+        </h2>
         <FormInput
           register={register}
           error={errors.amount}
@@ -46,7 +51,10 @@ const Borrow: NextPage = () => {
           placeholder={0}
         />
 
-        <h3>2. Select the maturity of your loan.</h3>
+        <br/>
+        <h2 className="title font-teletactile" style={{ fontSize: "13px" }}>
+          2. Select the maturity of your loan.
+        </h2>
         <FormInput
           register={register}
           error={errors.maturity}
@@ -56,7 +64,7 @@ const Borrow: NextPage = () => {
         />
 
         <div className="centerContent pt-0 mt-0">
-          <button type="submit" className="btn btn-primary btn-lg">
+          <button type="submit" className="glowing-button-pink uppercase my-8">
             Confirm
           </button>
         </div>
