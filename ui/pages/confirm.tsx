@@ -1,10 +1,9 @@
+import { BigNumber } from "ethers";
 import type { NextPage } from "next";
 import Router from "next/router";
-import { useState, useEffect, useContext } from "react";
-
+import { useContext, useEffect, useState } from "react";
+import { computeDue } from "../lib/computeDue";
 import { LoanContext } from "../lib/context";
-import { isValidDate, computeDue } from "../lib/computeDue";
-import { BigNumber } from "ethers";
 
 const importantTxt = "text-danger font-weight-bold";
 
