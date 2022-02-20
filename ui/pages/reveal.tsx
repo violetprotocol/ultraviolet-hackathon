@@ -2,14 +2,13 @@ import FileSaver from "file-saver";
 import LitJsSdk from "lit-js-sdk";
 import { FC, useEffect, useState } from "react";
 import ReactLoading from "react-loading";
-import { useNetwork, useSigner } from "wagmi";
+import { useNetwork } from "wagmi";
 
 export interface RevealProps {
   nftId: number;
 }
 
 export const Reveal: FC<RevealProps> = ({ nftId }) => {
-  const [{ data }] = useSigner();
   const [imageFile, setImageFile] = useState<Blob>();
   const [imageUrl, setImgUrl] = useState<string | ArrayBuffer>();
   const [{ data: networkData }] = useNetwork();
