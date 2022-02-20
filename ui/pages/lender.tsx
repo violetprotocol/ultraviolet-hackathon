@@ -81,10 +81,12 @@ const LenderLoans: NextPage = () => {
 
   return (
     <>
-    <h1 className="mb-4">Open Loans</h1>
+      <h1 style={{ fontSize: "40px" }}>
+        <i className="neon-green">Open Loans</i>
+      </h1>
       <div style={{ maxWidth: "80%" }}>
         <CardTable 
-          title={"Current Loans"}
+          title={""}
           isFetching={isFetching}
           loans={loans}
           onButtonClick={onDoxx}

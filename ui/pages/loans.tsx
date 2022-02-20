@@ -116,27 +116,33 @@ const Loans: NextPage = () => {
     await getAllowance();
   };
   return (
-    <div style={{ maxWidth: "80%" }}>
-      <CardTable
-        title={"Your Loans"}
-        isFetching={isFetching}
-        loans={currentLoans}
-        onButtonClick={onShowRepayClick}
-        isTxPending={isTxPending}
-        buttonText={{ pending: "Pending", default: "Repay"}}
-      />
-      {isRepaySectionShown && (
-        <Modal
-          lendingPoolAllowance={lendingPoolAllowance}
-          onCancel={() => setIsRepaySectionShown(false)}
-          onRepay={(amount) => {
-            setIsRepaySectionShown(false);
-            handleRepaySubmit(amount);
-          }}
-          onApprove={handleApproveSubmit}
+    <>
+      <h1 style={{ fontSize: "40px" }}>
+        <i className="neon-green">Your Loans</i>
+      </h1>
+
+      <div style={{ maxWidth: "80%" }}>
+        <CardTable
+          title={""}
+          isFetching={isFetching}
+          loans={currentLoans}
+          onButtonClick={onShowRepayClick}
+          isTxPending={isTxPending}
+          buttonText={{ pending: "Pending", default: "Repay"}}
         />
-      )}
-    </div>
+        {isRepaySectionShown && (
+          <Modal
+            lendingPoolAllowance={lendingPoolAllowance}
+            onCancel={() => setIsRepaySectionShown(false)}
+            onRepay={(amount) => {
+              setIsRepaySectionShown(false);
+              handleRepaySubmit(amount);
+            }}
+            onApprove={handleApproveSubmit}
+          />
+        )}
+      </div>
+    </>
   );
 };
 

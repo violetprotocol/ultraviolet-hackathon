@@ -17,6 +17,12 @@
   --neon-glow: hsl(194 100% 40%);
 }
 
+.neon-green {
+  font-family: "neon-tubes-2-regular", sans-serif;
+  --neon: hsl(192 100% 95%);
+  --neon-glow: rgb(133, 204, 0);
+}
+
 h1 > i {
   color: var(--neon);
   text-shadow: 0 0 20px var(--neon-glow), 0 0 2.5vmin var(--neon-glow),
