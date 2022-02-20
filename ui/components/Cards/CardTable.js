@@ -18,8 +18,7 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
     <>
       <div
         className={
-          "relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded " +
-          (color === "dark" ? "bg-white" : "bg-blueGray-700 text-white")
+          "relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-slate-100 text-zinc-800" 
         }
       >
         <div className="rounded-t mb-0 px-4 py-3 border-0">
@@ -27,8 +26,7 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
             <div className="relative w-full px-4 max-w-full flex-grow flex-1">
               <h3
                 className={
-                  "font-semibold text-lg " +
-                  (color === "dark" ? "text-blueGray-700" : "text-white")
+                  "font-semibold text-lg text-violet-700" 
                 }
               >
                {title}
@@ -108,7 +106,8 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
                 </tr>
               }
               {!isFetching && loans.length === 0 &&  
-                <tr className="w-full flex justify-center">
+                
+                <tr className="w-full flex justify-center py-2 pr-2 pl-12">
                   <td className="text-center mx-auto">No open loans</td>
                 </tr>
               }
