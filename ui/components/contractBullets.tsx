@@ -5,7 +5,7 @@ const Point = ({ name, body }) => {
     <li>
       <span
         style={{
-          fontSize: "20px",
+          fontSize: "15px",
           paddingRight: "10px",
           fontFamily: "ui-monospace",
         }}
@@ -28,153 +28,231 @@ const ColorText = ({ text }) => {
 const ContractBullets = ({ loan }) => {
   return (
     <ol className="bg-white rounded p-4">
-      <Point
-        name="Parties"
-        body={
-          <span
-            className="title text-black"
-            style={{
-              width: "100%",
-              fontSize: "13px",
-              fontFamily: "SFMono-Regular",
-            }}
-          >
-            The personal loan agreement made <Today /> between{" "}
-            <ColorText text={loan.lenderAddr} /> ("Party A") and{" "}
-            <ColorText text={loan.borrowerAddr} /> ("Party B").
-            <p className="mt-2">
-              HEREINAFTER, the Borrower and Lender ("Parties") agree to the
-              following:
-            </p>
-          </span>
-        }
-      />
+      
+      <p className="mt-2 title text-black" style={{
+        width: "100%",
+        fontSize: "13px",
+        fontFamily: "SFMono-Regular",
+      }}>
+        The personal loan agreement made <Today /> between{" "}
+        <ColorText text={loan.lenderAddr} /> ("Party A") and{" "}
+        <ColorText text={loan.borrowerAddr} /> ("Party B").
+      </p>
+      <br/>
 
-      <Point
-        name="Loan"
-        body={
-          <span
-            className="title text-back"
-            style={{
-              width: "100%",
-              color: "black",
-              fontSize: "13px",
-              fontFamily: "SFMono-Regular",
-            }}
-          >
-            Party A lends <ColorText text={`${loan.amount} DAI`} /> to Party B.
-          </span>
-        }
-      />
+      <p className="mt-2 title text-black"
+      style={{
+        width: "100%",
+        fontSize: "13px",
+        fontFamily: "SFMono-Regular",
+      }}>
+        HEREINAFTER, the Lender and Borrower ("Party A and Party B respectively") agree to the
+        following:
+      </p>
 
-      <Point
-        name="Interest"
-        body={
-          <span
-            className="title text-black"
-            style={{
-              width: "100%",
-              fontSize: "13px",
-              fontFamily: "ui-monospace",
-            }}
-          >
-            Party B shall pay <ColorText text="10% APY" /> in interest.
-          </span>
-        }
-      />
+      <br/>
+      <table className="items-center w-full bg-transparent border-collapse">
+        <tr>
+          <td>
+            <span
+              style={{
+                fontSize: "15px",
+                paddingRight: "10px",
+                fontFamily: "ui-monospace",
+              }}
+            >
+              <i className="text-black">Loan:</i>
+            </span>
+          </td>
+          <td>
+            <span
+              className="title text-back"
+              style={{
+                width: "100%",
+                color: "black",
+                fontSize: "13px",
+                fontFamily: "SFMono-Regular",
+              }}
+            >
+              Party A lends <ColorText text={`${loan.amount} DAI`} /> to Party B.
+            </span>
+          </td>
+        </tr>
 
-      <br />
-      <Point
-        name="Payment"
-        body={
-          <span
-            className="title text-black"
-            style={{
-              width: "100%",
-              fontSize: "13px",
-              fontFamily: "SFMono-Regular",
-            }}
-          >
-            Party B shall pay{" "}
-            <ColorText text={`${computeDue(loan).toFixed(3)} DAI`} /> to Party A
-            before the loan ends on{" "}
-            <ColorText text={new Date(loan.maturity).toLocaleString()} />.
-          </span>
-        }
-      />
+        <tr>
+          <td>
+            <span
+              style={{
+                fontSize: "15px",
+                paddingRight: "10px",
+                fontFamily: "ui-monospace",
+              }}
+            >
+              <i className="text-black">Interest:</i>
+            </span>
+          </td>
+          <td>
+            <span
+              className="title text-black"
+              style={{
+                width: "100%",
+                fontSize: "13px",
+                fontFamily: "ui-monospace",
+              }}
+            >
+              Party B shall pay <ColorText text="10% APY" /> in interest.
+            </span>
+          </td>
+        </tr>
 
-      <Point
-        name="Payment Instruction"
-        body={
-          <span
-            className="title text-black"
-            style={{
-              width: "100%",
-              fontSize: "13px",
-              fontFamily: "SFMono-Regular",
-            }}
-          >
-            Payment must be made to <ColorText text={loan.lenderAddr} />.
-          </span>
-        }
-      />
+        <tr>
+          <td>
+            <span
+              style={{
+                fontSize: "15px",
+                paddingRight: "10px",
+                fontFamily: "ui-monospace",
+              }}
+            >
+              <i className="text-black">Payment:</i>
+            </span>
+          </td>
+          <td>
+            <span
+              className="title text-black"
+              style={{
+                width: "100%",
+                fontSize: "13px",
+                fontFamily: "SFMono-Regular",
+              }}
+            >
+              Party B shall pay{" "}
+              <ColorText text={`${computeDue(loan).toFixed(3)} DAI`} /> to Party A
+              before the loan ends on{" "}
+              <ColorText text={new Date(loan.maturity).toLocaleString()} />.
+            </span>
+          </td>
+        </tr>
 
-      <Point
-        name="Prepayment"
-        body={
-          <span
-            className="title text-black"
-            style={{
-              width: "100%",
-              fontSize: "13px",
-              fontFamily: "SFMono-Regular",
-            }}
-          >
-            Party B shall be entitled to repay the loan in full at any time
-          </span>
-        }
-      />
+        <tr>
+          <td>
+            <span
+              style={{
+                fontSize: "15px",
+                paddingRight: "10px",
+                fontFamily: "ui-monospace",
+              }}
+            >
+              <i className="text-black">Payment Instruction:</i>
+            </span>
+          </td>
+          <td>
+            <span
+              className="title text-black"
+              style={{
+                width: "100%",
+                fontSize: "13px",
+                fontFamily: "SFMono-Regular",
+              }}
+            >
+              Payment must be made to <ColorText text={loan.lenderAddr} />.
+            </span>
+          </td>
+        </tr>
 
-      <Point
-        name="Identification"
-        body={
-          <span
-            className="title text-black"
-            style={{
-              width: "100%",
-              fontSize: "13px",
-              fontFamily: "SFMono-Regular",
-            }}
-          >
-            Party B shall deposit his/her <ColorText text="Passport" /> in
-            Identity Escrow. In case of default, Party A will be given access to
-            the <ColorText text="Passport" />.
-          </span>
-        }
-      />
+        <tr>
+          <td>
+            <span
+              style={{
+                fontSize: "15px",
+                paddingRight: "10px",
+                fontFamily: "ui-monospace",
+              }}
+            >
+              <i className="text-black">Prepayment:</i>
+            </span>
+          </td>
+          <td>
+            <span
+              className="title text-black"
+              style={{
+                width: "100%",
+                fontSize: "13px",
+                fontFamily: "SFMono-Regular",
+              }}
+            >
+              Party B shall be entitled to repay the loan in full at any time
+            </span>
+          </td>
+        </tr>
 
-      <Point
-        name="Identification"
-        body={
-          <span
-            className="title text-black"
-            style={{
-              width: "100%",
-              fontSize: "13px",
-              fontFamily: "SFMono-Regular",
-            }}
-          >
-            The Parties agree to follow UltraViolet's{" "}
-            <a href="https://violet.co">Privacy Policy</a>.
-            <br />
-            <br />
-            <p>
-              IN WITNESS WHEREOF, the Parties have executes this Agreement as of
-              the undersigned dates written below
-            </p>
-          </span>
-        }
-      />
+        <tr>
+          <td>
+            <span
+              style={{
+                fontSize: "15px",
+                paddingRight: "10px",
+                fontFamily: "ui-monospace",
+              }}
+            >
+              <i className="text-black">Identification:</i>
+            </span>
+          </td>
+          <td>
+            <span
+              className="title text-black"
+              style={{
+                width: "100%",
+                fontSize: "13px",
+                fontFamily: "SFMono-Regular",
+              }}
+            >
+              Party B shall deposit his/her <ColorText text="Passport" /> in
+              Identity Escrow. In case of default, Party A will be given access to
+              the <ColorText text="Passport" />.
+            </span>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <span
+              style={{
+                fontSize: "15px",
+                paddingRight: "10px",
+                fontFamily: "ui-monospace",
+              }}
+            >
+              <i className="text-black">Identification:</i>
+            </span>
+          </td>
+          <td>
+            <span
+              className="title text-black"
+              style={{
+                width: "100%",
+                fontSize: "13px",
+                fontFamily: "SFMono-Regular",
+              }}
+            >
+              The Parties agree to follow UltraViolet's{" "}
+              <a href="https://violet.co">Privacy Policy</a>.
+            </span>
+          </td>
+        </tr>
+      </table>
+
+      <br/>
+      <p className="mt-2 title text-black"
+      style={{
+        width: "100%",
+        fontSize: "13px",
+        fontFamily: "SFMono-Regular",
+      }}>
+        IN WITNESS WHEREOF, the Parties have executes this Agreement as of
+        the undersigned dates written below
+      </p>
+      <br/>
     </ol>
   );
 };
