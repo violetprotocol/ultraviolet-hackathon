@@ -15,6 +15,12 @@ import contracts from "../constants/contracts";
 import lendingPoolABI from "../constants/lendingpool.json";
 import { LoanContext } from "../lib/context";
 
+declare global {
+  interface Window {
+    litNodeClient?: any;
+  }
+}
+
 const Home: NextPage = () => {
   const [{ data, error }, connect] = useConnect();
   const [{ data: accountData }] = useAccount();
