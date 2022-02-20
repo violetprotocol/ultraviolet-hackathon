@@ -50,7 +50,7 @@ const LenderLoans: NextPage = () => {
 
     const loansPromises = borrowers.map(async (borrower) => {
       const loan = await lendingPool.loans(borrower);
-      const defaulted = await lendingPool.hasDefaulted(connectedAddress);
+      const defaulted = await lendingPool.hasDefaulted(borrower);
       const normalizedLoan = normalizeLoan(borrower, loan, defaulted);
       return normalizedLoan;
     })

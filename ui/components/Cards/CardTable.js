@@ -151,8 +151,8 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
                         {'\u2696'}  Paid  {'\u2696'}
                       </span>
                       : (!isLender || (isLender && loan.maturity < Date.now()/1000)) && 
-                    <button onClick={() => {isLender? handleClick(loan) : handleClick()}} type="submit" className="btn btn-primary btn-lg my-2">
-                      {isTxPending ? buttonText.pending : loan.defaulted ? "rekt" : buttonText.default}
+                    <button onClick={() => {isLender? handleClick(loan) : handleClick()}} type="submit" className="glowing-button-pink uppercase my-8">
+                      {isTxPending ? buttonText.pending : (!isLender && loan.defaulted) ? "rekt" : buttonText.default}
                     </button>
                   }
                 </td>
