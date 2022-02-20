@@ -210,8 +210,8 @@ const Escrow: NextPage = () => {
 
       {nftId && needsApproval && (
         <div className="centerContent pt-0 mt-0">
-          <button onClick={onApprove} className="btn btn-primary btn-lg">
-            Approve Lending Pool to escrow your NFT
+          <button onClick={onApprove} className="glowing-button-pink uppercase my-8">
+            Approve Lending Pool
           </button>
         </div>
       )}
