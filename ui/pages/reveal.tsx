@@ -6,6 +6,7 @@ import nftABI from "../constants/nftABI.json";
 import LitJsSdk from "lit-js-sdk";
 import JSZip from "jszip";
 import FileSaver from "file-saver";
+import ReactLoading from "react-loading";
 
 export interface RevealProps {
   nftId: number;
@@ -90,19 +91,32 @@ export const Reveal: FC<RevealProps> = ({ nftId }) => {
   if (imageFile && imageUrl) {
     return (
       <>
-        <p> ImageFilePresent </p>
-        <button onClick={() => FileSaver.saveAs(imageFile, "doxxedImage.jpeg")}>
-          Download
-        </button>
-        <img src={imageUrl.toString()} alt="" />
+        <h2 className="title font-teletactile">Identity decrypted, have fun</h2>
+        <div className="centerContent">
+          <img src={imageUrl.toString()} alt="" />
+        </div>
+        <div className="centerContent">
+          <button
+            className="btn"
+            onClick={() => FileSaver.saveAs(imageFile, "doxxedImage.jpeg")}
+          >
+            Download
+          </button>
+        </div>
       </>
     );
   }
 
   return (
-    <>
-      <h1 className="mb-4">Reveal page</h1>
-    </>
+    <div className="centerContent">
+      <ReactLoading type={"bubbles"} color={"#8f00ff"} />
+      <h2 className="title font-teletactile">
+        Decrypting the identity of a degen
+        <span role="img" aria-label="sheep">
+          🕵️‍♂️
+        </span>
+      </h2>
+    </div>
   );
 };
 
