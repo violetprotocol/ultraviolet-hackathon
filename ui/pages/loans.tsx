@@ -1,4 +1,4 @@
-import { BigNumber, utils } from "ethers";
+import { utils } from "ethers";
 import type { NextPage } from "next";
 import { useCallback, useEffect, useState } from "react";
 import { useContract, useSigner } from "wagmi";
@@ -45,6 +45,7 @@ const Loans: NextPage = () => {
 
   const getLoans = useCallback(async () => {
     if (!signer) {
+      console.log("signer is not defined");
       return;
     }
     setIsFetching(true);
@@ -117,18 +118,18 @@ const Loans: NextPage = () => {
   };
   return (
     <>
-      <h1 style={{ fontSize: "40px" }}>
+      <h1 style={{ fontSize: "40px" }} className="mb-4">
         <i className="neon-green">Your Loans</i>
       </h1>
 
-      <div style={{ maxWidth: "80%" }}>
+      <div style={{ maxWidth: "80%" }} className="backlight">
         <CardTable
           title={""}
           isFetching={isFetching}
           loans={currentLoans}
           onButtonClick={onShowRepayClick}
           isTxPending={isTxPending}
-          buttonText={{ pending: "Pending", default: "Repay"}}
+          buttonText={{ pending: "Pending", default: "Repay" }}
         />
         {isRepaySectionShown && (
           <Modal

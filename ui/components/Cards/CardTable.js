@@ -18,22 +18,9 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
     <>
       <div
         className={
-          "relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-slate-100 text-zinc-800" 
+          "relative flex flex-col min-w-0 break-words w-full shadow-lg rounded bg-transparent text-zinc-100" 
         }
       >
-        <div className="rounded-t mb-0 px-4 py-3 border-0">
-          <div className="flex flex-wrap items-center">
-            <div className="relative w-full px-4 max-w-full flex-grow flex-1">
-              <h3
-                className={
-                  "font-semibold text-lg text-violet-700" 
-                }
-              >
-               {title}
-              </h3>
-            </div>
-          </div>
-        </div>
         <div className="block w-full overflow-x-auto">
           {/* Projects table */}
           <table className="items-center w-full bg-transparent border-collapse">
@@ -107,7 +94,7 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
               }
               {!isFetching && loans.length === 0 &&  
                 
-                <tr className="w-full flex justify-center py-2 pr-2 pl-12">
+                <tr className="w-full flex justify-center p-2">
                   <td className="text-center mx-auto">No open loans</td>
                 </tr>
               }
