@@ -9,6 +9,8 @@
     "prebuild": "rimraf dist",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "build": "nest build",
+    "heroku-postbuild": "cd contracts && yarn compile",
+    "heroku-run-build-script": "cd contracts && yarn compile",
     "migration:generate": "ts-node node_modules/.bin/typeorm migration:generate",
     "migration:run": "ts-node node_modules/.bin/typeorm migration:run",
     "migration:revert": "ts-node node_modules/.bin/typeorm migration:revert",

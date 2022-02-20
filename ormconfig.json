@@ -8,10 +8,11 @@
     "database": "dfv3d06hpor8jm",
     "entities": ["dist/**/*.entity{.ts,.js}"],
     "synchronize": true,
+    "ssl": true,
     "extra": {
-      "ssl": true
+      "ssl": {"rejectUnauthorized": false}
     },
-    "options": {"trustServerCertificate": true, "encrypt": false} ,
+    "options": {"trustServerCertificate": true, "encrypt": false},
     "migrations": [
         "dist/migration/*.{ts,js}"
     ],

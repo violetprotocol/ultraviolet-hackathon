@@ -116,7 +116,7 @@ describe("LendingPool", function () {
 
       await lendingPool.connect(borrower).borrow(borrowedAmount, maturity, tokenId);
 
-      expect(await lendingPool.getLenders()).to.contain(borrower.address);
+      expect(await lendingPool.getBorrowers()).to.contain(borrower.address);
     });
   });
 
