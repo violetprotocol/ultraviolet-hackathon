@@ -194,8 +194,8 @@ const Escrow: NextPage = () => {
 
       {!nftId && (
         <div className="centerContent pt-0 mt-0">
-          <button onClick={onMint} className="btn btn-primary btn-lg">
-            Mint ID NFT
+          <button onClick={onMint} className="glowing-button-blue uppercase my-8">
+            Mint UV NFT
           </button>
         </div>
       )}
