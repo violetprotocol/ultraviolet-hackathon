@@ -28,7 +28,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <div
       className="text-sky-50 bg-gradient-to-br from-black to-violet-900"
-      style={{ minHeight: "100vh" }}
+      style={{ minHeight: "100vh", fontFamily: "teletactile" }}
     >
       <BalanceContext.Provider value={{ balance, setBalance }}>
         <LoanContext.Provider value={{ loan, setLoan }}>
