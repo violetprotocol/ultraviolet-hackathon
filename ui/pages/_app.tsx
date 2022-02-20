@@ -14,6 +14,7 @@ import {
   LoanContext,
   LoanInterface,
 } from "../lib/context";
+import "../styles/backlight.css";
 import "../styles/glowing-button.css";
 import "../styles/index.css";
 import "../styles/neon.css";
