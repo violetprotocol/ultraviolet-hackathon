@@ -14,6 +14,7 @@ import {
   LoanContext,
   LoanInterface,
 } from "../lib/context";
+import "../styles/glowing-button.css";
 import "../styles/index.css";
 import "../styles/neon.css";
 
@@ -24,7 +25,10 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
   );
 
   return (
-    <div className="text-sky-50 bg-gradient-to-br from-black to-violet-900">
+    <div
+      className="text-sky-50 bg-gradient-to-br from-black to-violet-900"
+      style={{ minHeight: "100vh" }}
+    >
       <BalanceContext.Provider value={{ balance, setBalance }}>
         <LoanContext.Provider value={{ loan, setLoan }}>
           <Provider connectors={ConnectorProviders}>
