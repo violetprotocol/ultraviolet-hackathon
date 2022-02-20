@@ -1,14 +1,15 @@
 FROM node:16.13.2-alpine3.15
 
-RUN apk add git
 WORKDIR /app
 
-COPY package.json yarn.lock /app/
-RUN yarn install --ignore-scripts
+COPY package*.json /workspace/
+
+RUN apk add --no-cache bash
+RUN yarn install --ignore-scripts && yarn build:ui
 
 COPY . /app
 
 EXPOSE 3000
 ENV PORT 3000
 
-CMD ["yarn", "dev:ui"]
+CMD ["yarn", "start:ui"]

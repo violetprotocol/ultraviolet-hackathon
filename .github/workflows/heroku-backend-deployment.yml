@@ -1,0 +1,33 @@
+name: Heroku Deployment
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deployEnrollmentDev:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: .
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      - name: 'Copy and rename dockerfile'
+        run: |
+              mv docker/Dockerfile.back ./Dockerfile
+
+      # Runs a single command using the runners shell
+      - name: Deploy to Heroku
+        uses: AkhileshNS/heroku-deploy@v3.8.8
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          heroku_app_name: ${{secrets.HEROKU_BACKEND}}
+          usedocker: true
+          stack: "container"
+

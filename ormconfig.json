@@ -1,12 +1,17 @@
 {
     "type": "postgres",
-    "host": "localhost",
-    "port": 8500,
-    "username": "postgres",
-    "password": "postgres",
-    "database": "postgres",
+    "host": "ec2-23-22-191-232.compute-1.amazonaws.com",
+    "port": 5432,
+    "name": "default",
+    "username": "tmfafgmkdwadpn",
+    "password": "0b6491a485c8e6f85b7d87f65d08986d2f3a73c69a33a9fb0cb9685c5585d40d",
+    "database": "dfv3d06hpor8jm",
     "entities": ["dist/**/*.entity{.ts,.js}"],
     "synchronize": true,
+    "extra": {
+      "ssl": true
+    },
+    "options": {"trustServerCertificate": true, "encrypt": false} ,
     "migrations": [
         "dist/migration/*.{ts,js}"
     ],
