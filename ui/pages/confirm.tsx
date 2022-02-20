@@ -22,16 +22,19 @@ const Confirm: NextPage = () => {
     const dueNumber: number = computeDue(loan);
     setDue(dueNumber.toFixed(3));
   }, [loan]);
-  
+
   return (
     <>
       <h1 className="mb-4">Confirm your loan parameters</h1>
       <div style={{ fontSize: "20px" }}>
         <p>
-          You will borrow <span className={importantTxt}>{loan.amount.div(BigNumber.from("10").pow(18)).toString()}</span>{" "}
+          You will borrow{" "}
+          <span className={importantTxt}>
+            {loan.amount.div(BigNumber.from("10").pow(18)).toString()}
+          </span>{" "}
           until the{" "}
           <span className={importantTxt}>
-            {new Date(loan.maturity).toLocaleString()}
+            {new Date(loan.maturity * 1000).toLocaleString()}
           </span>
           .
         </p>
