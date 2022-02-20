@@ -1,9 +1,7 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Fragment, useRef } from "react";
 import Reveal, { RevealProps } from "../pages/reveal";
-import FormInput from "./formInput";
 
 interface DoxxProps extends RevealProps {
   open: boolean;
