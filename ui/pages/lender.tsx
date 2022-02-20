@@ -88,7 +88,6 @@ const LenderLoans: NextPage = () => {
       </h1>
       <div style={{ maxWidth: "80%" }}>
         <CardTable
-          title={""}
           isFetching={isFetching}
           loans={loans}
           onButtonClick={onDoxx}

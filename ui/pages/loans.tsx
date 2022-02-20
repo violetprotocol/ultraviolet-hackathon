@@ -124,7 +124,6 @@ const Loans: NextPage = () => {
 
       <div style={{ maxWidth: "80%" }} className="backlight">
         <CardTable
-          title={""}
           isFetching={isFetching}
           loans={currentLoans}
           onButtonClick={onShowRepayClick}
