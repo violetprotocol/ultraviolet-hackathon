@@ -72,13 +72,6 @@ export default function RepayModal({
             <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
           </Transition.Child>
 
-          {/* This element is to trick the browser into centering the modal contents. */}
-          <span
-            className="hidden sm:inline-block sm:align-middle sm:h-screen"
-            aria-hidden="true"
-          >
-            &#8203;
-          </span>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -88,19 +81,18 @@ export default function RepayModal({
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
-            <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+            <div className="inline-block align-bottom bg-gray-800 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
-                  <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100"></div>
                   <div className="mt-3 text-center sm:mt-5">
                     <Dialog.Title
                       as="h3"
-                      className="text-lg leading-6 font-medium text-gray-900"
+                      className="font-teletactile text-lg leading-6 font-medium text-gray-100"
                     >
                       How much do you want to repay?
                     </Dialog.Title>
-                    <div className="mt-2 flex flex-column justify-center items-center">
-                      <div className="mt-2">{`Current contract allowance: ${lendingPoolAllowance}`}</div>
+                    <div className="mt-2 flex flex-column justify-center items-center font-teletactile">
+                      <div className="mt-2 text-gray-50 text-sm">{`Current contract allowance: ${lendingPoolAllowance}`}</div>
                       <FormInput
                         register={register}
                         error={errors.amount}
@@ -113,14 +105,8 @@ export default function RepayModal({
                 </div>
                 <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
                   <button
-                    type="submit"
-                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"
-                  >
-                    {showApprove ? "Approve" : "Repay"}
-                  </button>
-                  <button
                     type="button"
-                    className="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm"
+                    className="w-full inline-flex justify-center glowing-button-pink uppercase"
                     onClick={() => {
                       setOpen(false);
                       onCancel();
@@ -128,6 +114,12 @@ export default function RepayModal({
                     ref={cancelButtonRef}
                   >
                     Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="w-full inline-flex justify-center glowing-button-blue uppercase"
+                  >
+                    {showApprove ? "Approve" : "Repay"}
                   </button>
                 </div>
               </form>
