@@ -11,6 +11,7 @@ import contracts from "../constants/contracts";
 import nftABI from "../constants/nftABI.json";
 
 import LitJsSdk from "lit-js-sdk";
+import process from "process";
 
 const Escrow: NextPage = () => {
   const { loan, setLoan } = useContext(LoanContext);
@@ -122,6 +123,25 @@ const Escrow: NextPage = () => {
       await encryptedZip.arrayBuffer(),
     ).toString("base64");
 
+    // fetch("https://api.pinata.cloud/pinning/pinJSONToIPFS", {
+    //   method: "POST",
+    //   headers: { 
+    //     "Authorization": "Bearer ", 
+    //     "Content-Type": "application/json"
+    //   },
+    //   body: JSON.stringify({
+    //     pinataContent: {
+    //       base64EncryptedFile: encryptedZipB64
+    //     }
+    //   })
+    // }).then(async (response) => {
+    //   const result = await response.json();
+    //   const ipfsHash = result.IpfsHash;
+    //   console.log(ipfsHash);
+    // }).catch(async (error) => {
+    //   console.log(error);
+    // })
+
     fetch("http://localhost:8080/api/store", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -134,36 +154,38 @@ const Escrow: NextPage = () => {
       }),
     }).then(async (response) => {
       console.log(response.text());
-      // console.log("STARTING THE ROUNDTRIP TEST");
-      // const symmetricKey = await window.litNodeClient.getEncryptionKey({
-      //   accessControlConditions: accessControlConditions,
-      //   toDecrypt: hexEncryptedSymmetricKey,
-      //   chain: networkData.chain?.name.toLowerCase(),
-      //   authSig: authSig,
-      // });
-      // console.log("FINISHING ROUNDTRIP TEST");
-      // console.log(symmetricKey);
     });
   };
 
   return (
     <>
-      <h1 className="mb-4">Escrow your Identity</h1>
-      <p>
-        Upload your official document identifying you and you will be minted an
-        NFT that grants access to it.
-      </p>
-      <p>
+      <h1 style={{ fontSize: "30px" }}>
+        <i className="neon-green">Escrow your Identity</i>
+      </h1>
+      <br/>
+      <br/>
+      <div className="text-center mb-3" style={{ maxWidth: "60%" }}>
+        <h2 className="title font-teletactile" style={{ fontSize: "13px" }}>
+          Upload your official document identifying you and you will be minted an
+          NFT that grants access to it.
+        </h2>
+
+        <br/>
+        <h2 className="title font-teletactile" style={{ fontSize: "13px" }}>
         Escrow it in your contract with the lender and it is revealed to the
-        lender in case of default.
-      </p>
+          lender in case of default.
+        </h2>
+      </div>
 
       <br />
       <br />
       <br />
       {!nftId && (
         <>
-          <h3>Upload your passport.</h3>
+          <h2 className="title font-teletactile" style={{ fontSize: "20px" }}>
+            Upload your document
+          </h2>
+          <br/>
           <div className="centerContent pt-0 mt-0">
             <input type="file" onChange={handleFile} />
           </div>
@@ -180,7 +202,9 @@ const Escrow: NextPage = () => {
 
       {nftId && (
         <div className="centerContent pt-0 mt-0">
-          <h3>Minted with ID {nftId.toString()}!</h3>
+          <h1 style={{ fontSize: "25px" }}>
+            <i className="neon-blue">Minted with ID {nftId.toString()}!</i>
+          </h1>
         </div>
       )}
 
