@@ -5,7 +5,8 @@ WORKDIR /app
 COPY package*.json /workspace/
 
 RUN apk add --no-cache bash
-RUN yarn install
+RUN apk add --no-cache git
+RUN yarn install --ignore-scripts && yarn build
 
 COPY . /app
 
