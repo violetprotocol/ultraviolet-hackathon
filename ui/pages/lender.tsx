@@ -9,12 +9,18 @@ import contracts from "../constants/contracts";
 import lendingPoolABI from "../constants/lendingpool.json";
 import { normalizeLoan } from "../lib/normalizeLoan";
 import { NormalizedLoan } from "../lib/types";
+import nftABI from "../constants/nftABI.json";
 
 const LenderLoans: NextPage = () => {
   const [{ data: signer, error, loading }, getSigner] = useSigner();
-  const contract = useContract({
+  const lendingPool = useContract({
     addressOrName: contracts.lendingPool,
     contractInterface: lendingPoolABI.abi,
+    signerOrProvider: signer,
+  });
+  const uvnft = useContract({
+    addressOrName: contracts.nft,
+    contractInterface: nftABI.abi,
     signerOrProvider: signer,
   });
 
@@ -25,7 +31,7 @@ const LenderLoans: NextPage = () => {
 
   useEffect(() => {
     getLoans();
-  }, [contract, signer]);
+  }, [lendingPool, signer]);
 
   const getLoans = async () => {
     if (!signer) {
@@ -34,18 +40,18 @@ const LenderLoans: NextPage = () => {
     setIsFetching(true);
 
     const connectedAddress = await signer.getAddress();
-    const owner = await contract.owner();
+    const owner = await lendingPool.owner();
 
     if (connectedAddress != owner) {
       Router.push("/dashboard");
     }
 
-    const borrowers = await contract.getBorrowers();
+    const borrowers = await lendingPool.getBorrowers();
 
     const loansPromises = borrowers.map(async (borrower) => {
-      const loan = await contract.loans(borrower);
-      const defaulted = await contract.hasDefaulted(connectedAddress);
-      const normalizedLoan = normalizeLoan(loan, defaulted);
+      const loan = await lendingPool.loans(borrower);
+      const defaulted = await lendingPool.hasDefaulted(connectedAddress);
+      const normalizedLoan = normalizeLoan(borrower, loan, defaulted);
       return normalizedLoan;
     })
 
@@ -56,12 +62,21 @@ const LenderLoans: NextPage = () => {
     setLoans(fetchedLoans);
   };
 
-  const onDoxx = async () => {
-    setIsTxPending(true);
+  const onDoxx = async (user: string, func: (boolean)=>void, param: boolean) => {
+    // check if the nft has already been sent to lender
+    const loan = await lendingPool.loans(user);
+    const nftId = loan.tokenId;
 
-    
+    console.log(nftId);
+    const nftOwner = await uvnft.ownerOf(nftId);
+    if (signer && nftOwner != await signer.getAddress()) {
+      setIsTxPending(true);
+      const res = await lendingPool.unlockIdentityEscrow(user);
+      await res.wait();
+      setIsTxPending(false);
+    }
 
-    setIsTxPending(false);
+    func(param);
   }
 
   return (

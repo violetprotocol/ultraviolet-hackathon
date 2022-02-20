@@ -5,10 +5,12 @@ import { useForm } from "react-hook-form";
 import Reveal, { RevealProps } from "../pages/reveal";
 import FormInput from "./formInput";
 
-export default function DoxxModal({ nftId }: RevealProps) {
-  const [open, setOpen] = useState(true);
-  const [showApprove, setShowApprove] = useState(true);
+interface DoxxProps extends RevealProps {
+  open: boolean
+  setOpen: (boolean) => void
+}
 
+export default function DoxxModal({ nftId, open, setOpen }: DoxxProps) {
   const cancelButtonRef = useRef(null);
 
   const {
@@ -17,35 +19,6 @@ export default function DoxxModal({ nftId }: RevealProps) {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  useEffect(() => {
-    const subscription = watch((value, { name, type }) => {
-      if (parseInt(value.amount) > parseInt(lendingPoolAllowance)) {
-        setShowApprove(true);
-      } else {
-        setShowApprove(false);
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [watch]);
-
-  const onSubmit = useCallback(
-    (data) => {
-      const amount = data.amount;
-      if (!amount) {
-        console.log("No amount given, received:", amount);
-        return;
-      }
-      if (showApprove) {
-        onApprove(amount);
-      } else {
-        setOpen(false);
-
-        onRepay(amount);
-      }
-    },
-    [showApprove],
-  );
 
   return (
     <Transition.Root show={open} as={Fragment}>

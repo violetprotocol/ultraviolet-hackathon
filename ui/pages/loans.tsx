@@ -10,13 +10,6 @@ import lendingPoolABI from "../constants/lendingpool.json";
 import { normalizeLoan } from "../lib/normalizeLoan";
 import { NormalizedLoan } from "../lib/types";
 
-const rawMockLoan = {
-  maturity: BigNumber.from("1676790455"),
-  totalAmountDue: BigNumber.from("110000000000000000000"),
-  tokenId: BigNumber.from("11"),
-};
-const mockLoan = normalizeLoan(rawMockLoan, true);
-
 const Loans: NextPage = () => {
   const [{ data: signer, error, loading }] = useSigner();
   const [currentLoans, setCurrentLoans] = useState<NormalizedLoan[]>([]);
@@ -65,7 +58,7 @@ const Loans: NextPage = () => {
     }
     const defaulted = await lendingPoolContract.hasDefaulted(connectedAddress);
 
-    const normalizedLoan = normalizeLoan(loan, defaulted);
+    const normalizedLoan = normalizeLoan(connectedAddress, loan, defaulted);
 
     let loans;
     if (normalizedLoan == null) {
