@@ -1,97 +1,61 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
+  <a href="https://twitter.com/violetprotocol" target="blank"><img src="https://pbs.twimg.com/profile_images/1426133232932859906/XJfCacup_400x400.jpg" width="320" alt="Violet Logo" /></a>
 </p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 
 # HACKATON ULTRAVIOLET
 
-WE ARE NOT USING DOCKER, SO IF YOU RUN DOCKER YOU MIGHT GET INTO ERRORS.
-(THE INTERNET ON THE CASTLE SUCKS, SO WE COULDN'T DOWNLOAD THE IMAGES)
+## Description
 
-## Installing
+
+UltraViolet Loans enable Apes without crypto riches (aka "WAGMI Apes") to get secure, personal loans from their Rich Ape friends, without having to provide any collateral.
+
+Loan Setup & Identity Escrow This becomes possible, because a WAGMI Ape borrower verifies his identity first, then signs a legally binding contract and finally puts his identity data into an encrypted, NFT-gated data vault. The NFT gating the vault is held in escrow by the smart contract issuing the loan. UltraViolet calls this new DeFi primitive “Identity Escrow.”
+
+Repayment In case the WAGMI Ape repays his loan successfully, the smart contract sends the NFT back to him. In case the WAGMI Ape does not repay the loan (on time), the NFT is transferred to the lender (or lending pool manager), who is now gaining access to the WAGMI Ape’s identity. It is up to the lender to pursue possible legal recourse against the borrower, since he broke the contract.
+
+Take-Away Introducing an Identity Escrow and pairing it with a smart loan contract plus a legally binding signature enables new primitives such as uncollateralized yet pseudonymous personal loans that bridge the divide between Web3 and the real world. UltraViolet Loans will be especially beneficial for WAGMI Apes, who are new to crypto and cannot afford collateralization.
+
+## Installing and running
 
 On the root directory
 
 ``` yarn install ```
 
-
-The POSTGRES DATABASE IS RUNNING ON DOCKER (THE ONLY ONE)
-
-``` docker-compose up db ```
-
-
 Then to run the backend:
-```yarn start dev```
+
+Cd into the /contracts/ directory and do
+
+```yarn compile```
+
+Then come back to the root directory and do
+
+``` yarn start```
 
 To run the fronend:
 ``` yarn dev:ui  ```
 
 
-## Installation
-
-```bash
-$ npm install
-```
-
 ## Running the app
 
-```bash
-# development
-$ npm run start
+| Component name         | Local URL from docker |
+|------------------------|-----------------------|
+| Front end              | localhost:3000        |
+| BackEnd                | localhost:3002        |
 
-# watch mode
-$ npm run start:dev
+The database is running on the cloud
 
-# production mode
-$ npm run start:prod
-```
+### The database only serves as a backup for ipfs content that might not have replicated
+on multiple nodes yet:
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+The IPFS timeout is currently set at 20 seconds
+In case the timeout is reached, then we read the encrypted file from the database for demo purposes
 
 ## Stay in touch
 
-- Author - [Kamil My≈õliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Gabriel Ferraz - [twitter](https://twitter.com/sudoferraz)
+- Chris Chung - [twitter](https://twitter.com/RaphaelRoullet)
+- Raphael Roulette - [twitter](https://twitter.com0xpApaSmURf)
 
 ## License
 
