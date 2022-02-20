@@ -57,6 +57,8 @@ In case the timeout is reached, then we read the encrypted file from the databas
 - Chris Chung - [twitter](https://twitter.com/RaphaelRoullet)
 - Raphael Roulette - [twitter](https://twitter.com0xpApaSmURf)
 
+[violet](https://violet.co)
+
 ## License
 
 Nest is [MIT licensed](LICENSE).
