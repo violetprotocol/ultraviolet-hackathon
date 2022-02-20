@@ -41,7 +41,7 @@ To run the fronend:
 | Component name         | Local URL from docker |
 |------------------------|-----------------------|
 | Front end              | localhost:3000        |
-| BackEnd                | localhost:3002        |
+| BackEnd                | localhost:8080        |
 
 The database is running on the cloud
 
