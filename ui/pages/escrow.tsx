@@ -1,17 +1,11 @@
+import LitJsSdk from "lit-js-sdk";
 import type { NextPage } from "next";
 import Router from "next/router";
-import { useState, useEffect, useContext } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { useContract, useAccount, useSigner, useNetwork } from "wagmi";
-
-import FormData from "../lib/formData";
-import FormInput from "../components/formInput";
-import { LoanContext, PassportContext } from "../lib/context";
+import { useContext, useEffect, useState } from "react";
+import { useContract, useNetwork, useSigner } from "wagmi";
 import contracts from "../constants/contracts";
 import nftABI from "../constants/nftABI.json";
-
-import LitJsSdk from "lit-js-sdk";
-import process from "process";
+import { LoanContext, PassportContext } from "../lib/context";
 
 const Escrow: NextPage = () => {
   const { loan, setLoan } = useContext(LoanContext);
@@ -70,7 +64,7 @@ const Escrow: NextPage = () => {
 
       setNftId(index);
       setLoan({ ...loan, nftId: index.toNumber() });
-  
+
       await submitPassport(address, index);
     } catch (err) {
       console.log(err);
@@ -129,8 +123,8 @@ const Escrow: NextPage = () => {
 
     // fetch("https://api.pinata.cloud/pinning/pinJSONToIPFS", {
     //   method: "POST",
-    //   headers: { 
-    //     "Authorization": "Bearer ", 
+    //   headers: {
+    //     "Authorization": "Bearer ",
     //     "Content-Type": "application/json"
     //   },
     //   body: JSON.stringify({
@@ -166,17 +160,17 @@ const Escrow: NextPage = () => {
       <h1 style={{ fontSize: "30px" }}>
         <i className="neon-green">Escrow your Identity</i>
       </h1>
-      <br/>
-      <br/>
-      <div className="text-center mb-3" style={{ maxWidth: "60%" }}>
+      <br />
+      <br />
+      <div className="text-center mt-3 mb-8" style={{ maxWidth: "60%" }}>
         <h2 className="title font-teletactile" style={{ fontSize: "13px" }}>
-          Upload your official document identifying you and you will be minted an
-          NFT that grants access to it.
+          Upload your official document identifying you and you will be minted
+          an NFT that grants access to it.
         </h2>
 
-        <br/>
+        <br />
         <h2 className="title font-teletactile" style={{ fontSize: "13px" }}>
-        Escrow it in your contract with the lender and it is revealed to the
+          Escrow it in your contract with the lender and it is revealed to the
           lender in case of default.
         </h2>
       </div>
@@ -185,20 +179,23 @@ const Escrow: NextPage = () => {
       <br />
       <br />
       {!nftId && (
-        <>
+        <div className="mt-8 mb-4">
           <h2 className="title font-teletactile" style={{ fontSize: "20px" }}>
             Upload your document
           </h2>
-          <br/>
+          <br />
           <div className="centerContent pt-0 mt-0">
-            <input type="file" onChange={handleFile} />
+            <input className="text-sm" type="file" onChange={handleFile} />
           </div>
-        </>
+        </div>
       )}
 
       {!nftId && (
         <div className="centerContent pt-0 mt-0">
-          <button onClick={onMint} className="glowing-button-blue uppercase my-8">
+          <button
+            onClick={onMint}
+            className="glowing-button-blue uppercase my-8"
+          >
             Mint UV NFT
           </button>
         </div>
@@ -214,7 +211,10 @@ const Escrow: NextPage = () => {
 
       {nftId && needsApproval && (
         <div className="centerContent pt-0 mt-0">
-          <button onClick={onApprove} className="glowing-button-pink uppercase my-8">
+          <button
+            onClick={onApprove}
+            className="glowing-button-pink uppercase my-8"
+          >
             Approve Lending Pool
           </button>
         </div>
