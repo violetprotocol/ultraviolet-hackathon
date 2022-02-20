@@ -12,14 +12,7 @@ interface DoxxProps extends RevealProps {
 
 export default function DoxxModal({ nftId, open, setOpen }: DoxxProps) {
   const cancelButtonRef = useRef(null);
-
-  const {
-    register,
-    watch,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
+  
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog

@@ -96,7 +96,7 @@ const Escrow: NextPage = () => {
         parameters: [id.toString()],
         returnValueTest: {
           comparator: "=",
-          value: owner.toLowerCase(),
+          value: ":userAddress",
         },
       },
     ];

@@ -4,9 +4,13 @@ import DoxxModal from "../DoxxModal";
 
 export default function CardTable({ title, color, loans, buttonText, onButtonClick, isFetching, isTxPending, isLender=false }) {
   const [openDoxxModal, setOpenDoxxModal] = useState(false);
+  const [doxxedLoan, setDoxxedLoan] = useState();
 
-  const handleClick = async (value) => {
-    if (isLender) onButtonClick(value, setOpenDoxxModal, true);
+  const handleClick = async (loan) => {
+    if (isLender) {
+      setDoxxedLoan(loan);
+      onButtonClick(loan.borrower, setOpenDoxxModal, true);
+    }
     else onButtonClick();
   }
 
@@ -109,7 +113,7 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
                 </tr>
               }
               {!isFetching && loans.length > 0 && loans.map(loan => <tr key={loan.tokenId} >
-                <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+               <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
                   <span
                     className={
                       "ml-3 font-bold " +
@@ -147,16 +151,16 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
                         {'\u2696'}  Paid  {'\u2696'}
                       </span>
                       : (!isLender || (isLender && loan.maturity < Date.now()/1000)) && 
-                    <button onClick={() => {isLender? handleClick(loan.borrower) : handleClick()}} type="submit" className="btn btn-primary btn-lg my-2">
+                    <button onClick={() => {isLender? handleClick(loan) : handleClick()}} type="submit" className="btn btn-primary btn-lg my-2">
                       {isTxPending ? buttonText.pending : loan.defaulted ? "rekt" : buttonText.default}
                     </button>
                   }
                 </td>
-                {isLender && openDoxxModal && <DoxxModal nftId={loan.tokenId} open={openDoxxModal} setOpen={setOpenDoxxModal}/>}
               </tr>
               )}
             </tbody>
           </table>
+          {isLender && openDoxxModal && <DoxxModal nftId={doxxedLoan?.tokenId} open={openDoxxModal} setOpen={setOpenDoxxModal}/>}
         </div>
       </div>
     </>
