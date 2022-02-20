@@ -23,7 +23,7 @@ const Escrow: NextPage = () => {
     signerOrProvider: data,
   });
 
-  const [nftId, setNftId] = useState();
+  const [nftId, setNftId] = useState<number>();
   const [needsApproval, setNeedsApproval] = useState(true);
 
   function handleFile(event) {
