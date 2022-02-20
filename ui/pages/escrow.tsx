@@ -64,13 +64,17 @@ const Escrow: NextPage = () => {
   const onMint = async () => {
     const address = await (await getSigner()).getAddress();
     const index = await contract.callStatic.totalSupply();
-    const res = await contract.safeMint(address);
-    await res.wait();
+    try {
+      const res = await contract.safeMint(address);
+      await res.wait();
 
-    setNftId(index);
-    setLoan({ ...loan, nftId: index.toNumber() });
-
-    await submitPassport(address, index);
+      setNftId(index);
+      setLoan({ ...loan, nftId: index.toNumber() });
+  
+      await submitPassport(address, index);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const onApprove = async () => {
