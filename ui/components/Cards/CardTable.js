@@ -15,7 +15,7 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
       <div
         className={
           "relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded " +
-          (color === "light" ? "bg-white" : "bg-blueGray-700 text-white")
+          (color === "dark" ? "bg-white" : "bg-blueGray-700 text-white")
         }
       >
         <div className="rounded-t mb-0 px-4 py-3 border-0">
@@ -24,7 +24,7 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
               <h3
                 className={
                   "font-semibold text-lg " +
-                  (color === "light" ? "text-blueGray-700" : "text-white")
+                  (color === "dark" ? "text-blueGray-700" : "text-white")
                 }
               >
                {title}
@@ -40,7 +40,7 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
                 <th
                   className={
                     "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center " +
-                    (color === "light"
+                    (color === "dark"
                       ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
                   }
@@ -50,7 +50,7 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
                 <th
                   className={
                     "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center " +
-                    (color === "light"
+                    (color === "dark"
                       ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
                   }
@@ -60,7 +60,7 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
                 <th
                   className={
                     "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center " +
-                    (color === "light"
+                    (color === "dark"
                       ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
                   }
@@ -70,7 +70,7 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
                 <th
                   className={
                     "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center " +
-                    (color === "light"
+                    (color === "dark"
                       ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
                   }
@@ -80,7 +80,7 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
                 <th
                   className={
                     "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center " +
-                    (color === "light"
+                    (color === "dark"
                       ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
                   }
@@ -90,7 +90,7 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
                 <th
                   className={
                     "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center " +
-                    (color === "light"
+                    (color === "dark"
                       ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
                   }
@@ -113,7 +113,7 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
                   <span
                     className={
                       "ml-3 font-bold " +
-                      +(color === "light" ? "text-blueGray-600" : "text-white")
+                      +(color === "dark" ? "text-blueGray-600" : "text-white")
                     }
                   >
                     0
@@ -124,7 +124,7 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                   {loan.defaulted ? <div><i className="fas fa-circle text-red-500 mr-2"></i> default</div>
-                    : loan?.totalAmountdue?.toStirng() === "0.0" ? <div><i className="fas fa-circle text-green-500 mr-2"></i> completed </div>
+                    : loan?.totalAmountdue?.toString() === "0.0" ? <div><i className="fas fa-circle text-green-500 mr-2"></i> completed </div>
                     : <div><i className="fas fa-circle text-yellow-500 mr-2"></i> active</div>} 
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
@@ -138,8 +138,12 @@ export default function CardTable({ title, color, loans, buttonText, onButtonCli
                   </div>
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                  {(!isLender || (isLender && loan.maturity < Date.now()/1000)) && <button onClick={() => {isLender? handleClick(loan.borrower) : handleClick()}} type="submit" className="btn btn-primary btn-lg my-2">
-                    {isTxPending ? buttonText.pending : buttonText.default}
+                  {loan.defaulted 
+                      ?  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-red-600 bg-red-200 uppercase last:mr-0 mr-1">
+                          {'\u2620'}  Rekt  {'\u2620'}
+                        </span>
+                      : (!isLender || (isLender && loan.maturity < Date.now()/1000)) && <button onClick={() => {isLender? handleClick(loan.borrower) : handleClick()}} type="submit" className="btn btn-primary btn-lg my-2">
+                    {isTxPending ? buttonText.pending : loan.defaulted ? "rekt" : buttonText.default}
                   </button>}
                 </td>
                 {isLender && openDoxxModal && <DoxxModal nftId={loan.tokenId} open={openDoxxModal} setOpen={setOpenDoxxModal}/>}
