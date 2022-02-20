@@ -11,7 +11,7 @@ import { normalizeLoan } from "../lib/normalizeLoan";
 import { NormalizedLoan } from "../lib/types";
 
 const Loans: NextPage = () => {
-  const [{ data: signer, error, loading }] = useSigner();
+  const [{ data: signer }] = useSigner();
   const [currentLoans, setCurrentLoans] = useState<NormalizedLoan[]>([]);
   const [isRepaySectionShown, setIsRepaySectionShown] = useState(false);
   const [lendingPoolAllowance, setLendingPoolAllowance] = useState(null);
