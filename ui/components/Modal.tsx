@@ -23,7 +23,7 @@ export default function RepayModal({
   } = useForm();
 
   useEffect(() => {
-    const subscription = watch((value, { name, type }) => {
+    const subscription = watch((value) => {
       if (parseInt(value.amount) > parseInt(lendingPoolAllowance)) {
         setShowApprove(true);
       } else {
