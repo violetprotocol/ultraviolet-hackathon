@@ -6,7 +6,7 @@ import { BalanceContext } from "../lib/context";
 
 export const Navbar = () => {
   const { balance, setBalance } = useContext(BalanceContext);
-  const [{ data, error, loading }, getSigner] = useSigner();
+  const [{ data }] = useSigner();
   const contract = useContract({
     addressOrName: contracts.dai,
     contractInterface: erc20ABI,

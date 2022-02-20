@@ -24,10 +24,10 @@ declare global {
 const Home: NextPage = () => {
   const [{ data, error }, connect] = useConnect();
   const [{ data: accountData }] = useAccount();
-  const [siweNonce, setSiweNonce] = useState<string>();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_siweNonce, setSiweNonce] = useState<string>();
   const [siweMessage, setSiweMessage] = useState<SiweMessage>();
-  const [{ data: signature, error: errorSigning, loading }, signMessage] =
-    useSignMessage();
+  const [{ data: signature }, signMessage] = useSignMessage();
   const { loan, setLoan } = useContext(LoanContext);
   const [{ data: signer }] = useSigner();
   const contract = useContract({

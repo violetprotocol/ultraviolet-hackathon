@@ -1,16 +1,14 @@
+import { BigNumber } from "ethers";
 import type { NextPage } from "next";
 import Router from "next/router";
-import { useEffect, useContext } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useContext, useEffect } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { erc20ABI, useContract, useSigner } from "wagmi";
-
 import ContractBullets from "../components/contractBullets";
 import { ErrorDisplay } from "../components/formInput";
 import contracts from "../constants/contracts";
-import { BalanceContext, LoanContext } from "../lib/context";
 import lendingPoolABI from "../constants/lendingpool.json";
-
-import { BigNumber } from "ethers";
+import { BalanceContext, LoanContext } from "../lib/context";
 
 const SentenceToType = "I consent to the terms outlined above";
 
@@ -26,16 +24,16 @@ const Contract: NextPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<ConsentForm>();
-  const [{ data, error, loading }, getSigner] = useSigner();
+  const [{ data }] = useSigner();
   const contract = useContract({
     addressOrName: contracts.lendingPool,
     contractInterface: lendingPoolABI.abi,
     signerOrProvider: data,
   });
   const dai = useContract({
-      addressOrName: contracts.dai,
-      contractInterface: erc20ABI,
-      signerOrProvider: data,
+    addressOrName: contracts.dai,
+    contractInterface: erc20ABI,
+    signerOrProvider: data,
   });
 
   useEffect(() => {
@@ -48,7 +46,11 @@ const Contract: NextPage = () => {
   }, [loan]);
 
   const onSubmit: SubmitHandler<ConsentForm> = async () => {
-    const res = await contract.borrow(loan.amount, BigNumber.from(loan.maturity), BigNumber.from(loan.nftId));
+    const res = await contract.borrow(
+      loan.amount,
+      BigNumber.from(loan.maturity),
+      BigNumber.from(loan.nftId),
+    );
     await res.wait();
 
     await getBalance();
@@ -57,12 +59,12 @@ const Contract: NextPage = () => {
   };
 
   const getBalance = async () => {
-      if (dai && data) {
-          const bal = await dai.balanceOf(await data?.getAddress());
-          const dec = await dai.decimals();
-          setBalance({balance: bal, decimals: dec});
-      }
-  }
+    if (dai && data) {
+      const bal = await dai.balanceOf(await data?.getAddress());
+      const dec = await dai.decimals();
+      setBalance({ balance: bal, decimals: dec });
+    }
+  };
 
   return (
     <>
@@ -70,14 +72,16 @@ const Contract: NextPage = () => {
         <i className="neon-green">Binding Contract Wording</i>
       </h1>
 
-      <br/>
-      <br/>
+      <br />
+      <br />
       <div style={{ fontSize: "18px", maxWidth: "700px" }}>
         <ContractBullets loan={loan} />
 
-        <br/>
-        <br/>
-        <p className="title font-teletactile" style={{fontSize: "13px"}}>Please type: "{SentenceToType}"</p>
+        <br />
+        <br />
+        <p className="title font-teletactile" style={{ fontSize: "13px" }}>
+          Please type: "{SentenceToType}"
+        </p>
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <input

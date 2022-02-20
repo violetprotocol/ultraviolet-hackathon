@@ -7,9 +7,9 @@ import lendingPoolABI from "../constants/lendingpool.json";
 import { LoanContext } from "../lib/context";
 
 const Dashboard: NextPage = () => {
-  const { loan, setLoan } = useContext(LoanContext);
+  const { loan } = useContext(LoanContext);
   const [isLender, setIsLender] = useState<boolean>(false);
-  const [{ data: signer, error, loading }, getSigner] = useSigner();
+  const [{ data: signer }] = useSigner();
   const contract = useContract({
     addressOrName: contracts.lendingPool,
     contractInterface: lendingPoolABI.abi,

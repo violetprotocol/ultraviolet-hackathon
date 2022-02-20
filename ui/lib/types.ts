@@ -11,9 +11,9 @@ export interface AccessControlConditions {
 }
 
 export interface NormalizedLoan {
-  borrower: string,
-  maturity: number
-  totalAmountDue: string,
-  tokenId: number,
-  defaulted: boolean
+  borrower: string;
+  maturity: number;
+  totalAmountDue: string;
+  tokenId: number;
+  defaulted: boolean;
 }

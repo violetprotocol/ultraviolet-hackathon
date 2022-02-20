@@ -10,12 +10,12 @@ export interface LoanInterface {
 }
 
 export interface PassportInterface {
-  passportFile: Buffer
+  passportFile: Buffer;
 }
 
 export interface BalanceInterface {
-  balance: BigNumber,
-  decimals: BigNumber
+  balance: BigNumber;
+  decimals: BigNumber;
 }
 
 export interface LoanContextInterface {
@@ -41,9 +41,9 @@ export const InitContextValue: LoanInterface = {
   nftId: -1,
 };
 
-export const InitBalanceContextValue: BalanceInterface = { 
+export const InitBalanceContextValue: BalanceInterface = {
   balance: BigNumber.from(0),
-  decimals: BigNumber.from(0)
+  decimals: BigNumber.from(0),
 };
 
 export const LoanContext = createContext<LoanContextInterface>({
@@ -53,7 +53,7 @@ export const LoanContext = createContext<LoanContextInterface>({
 
 export const BalanceContext = createContext<BalanceContextInterface>({
   balance: InitBalanceContextValue,
-  setBalance: null
+  setBalance: null,
 });
 
 export const PassportContext = createContext<PassportContextInterface>({

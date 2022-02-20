@@ -1,10 +1,9 @@
-import React from "react";
-import Link from "next/link";
 // components
-
 import IndexDropdown from "components/Dropdowns/IndexDropdown.js";
+import Link from "next/link";
+import React from "react";
 
-export default function Navbar(props) {
+export default function Navbar() {
   const [navbarOpen, setNavbarOpen] = React.useState(false);
   return (
     <>

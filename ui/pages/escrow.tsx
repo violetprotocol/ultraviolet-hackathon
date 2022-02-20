@@ -5,18 +5,14 @@ import { useContext, useEffect, useState } from "react";
 import { useContract, useNetwork, useSigner } from "wagmi";
 import contracts from "../constants/contracts";
 import nftABI from "../constants/nftABI.json";
-import { LoanContext, PassportContext } from "../lib/context";
+import { LoanContext } from "../lib/context";
 
 const Escrow: NextPage = () => {
   const { loan, setLoan } = useContext(LoanContext);
-  const { passport, setPassport } = useContext(PassportContext);
 
   const [file, setFile] = useState();
-  const [
-    { data: networkData, error: networkError, loading: networkLoading },
-    switchNetwork,
-  ] = useNetwork();
-  const [{ data, error, loading }, getSigner] = useSigner();
+  const [{ data: networkData }] = useNetwork();
+  const [{ data }, getSigner] = useSigner();
   const contract = useContract({
     addressOrName: contracts.nft,
     contractInterface: nftABI.abi,

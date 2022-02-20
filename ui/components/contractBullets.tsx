@@ -1,22 +1,5 @@
 import { computeDue } from "../lib/computeDue";
 
-const Point = ({ name, body }) => {
-  return (
-    <li>
-      <span
-        style={{
-          fontSize: "15px",
-          paddingRight: "10px",
-          fontFamily: "ui-monospace",
-        }}
-      >
-        <i className="text-black">{name}</i>
-      </span>
-      : {body}
-    </li>
-  );
-};
-
 const Today = () => {
   return <span className="text-danger">{new Date().toLocaleDateString()}</span>;
 };
@@ -28,29 +11,33 @@ const ColorText = ({ text }) => {
 const ContractBullets = ({ loan }) => {
   return (
     <ol className="bg-white rounded p-4">
-      
-      <p className="mt-2 title text-black" style={{
-        width: "100%",
-        fontSize: "13px",
-        fontFamily: "SFMono-Regular",
-      }}>
+      <p
+        className="mt-2 title text-black"
+        style={{
+          width: "100%",
+          fontSize: "13px",
+          fontFamily: "SFMono-Regular",
+        }}
+      >
         The personal loan agreement made <Today /> between{" "}
         <ColorText text={loan.lenderAddr} /> ("Party A") and{" "}
         <ColorText text={loan.borrowerAddr} /> ("Party B").
       </p>
-      <br/>
+      <br />
 
-      <p className="mt-2 title text-black"
-      style={{
-        width: "100%",
-        fontSize: "13px",
-        fontFamily: "SFMono-Regular",
-      }}>
-        HEREINAFTER, the Lender and Borrower ("Party A and Party B respectively") agree to the
-        following:
+      <p
+        className="mt-2 title text-black"
+        style={{
+          width: "100%",
+          fontSize: "13px",
+          fontFamily: "SFMono-Regular",
+        }}
+      >
+        HEREINAFTER, the Lender and Borrower ("Party A and Party B
+        respectively") agree to the following:
       </p>
 
-      <br/>
+      <br />
       <table className="items-center w-full bg-transparent border-collapse">
         <tr>
           <td>
@@ -74,7 +61,8 @@ const ContractBullets = ({ loan }) => {
                 fontFamily: "SFMono-Regular",
               }}
             >
-              Party A lends <ColorText text={`${loan.amount} DAI`} /> to Party B.
+              Party A lends <ColorText text={`${loan.amount} DAI`} /> to Party
+              B.
             </span>
           </td>
         </tr>
@@ -127,8 +115,8 @@ const ContractBullets = ({ loan }) => {
               }}
             >
               Party B shall pay{" "}
-              <ColorText text={`${computeDue(loan).toFixed(3)} DAI`} /> to Party A
-              before the loan ends on{" "}
+              <ColorText text={`${computeDue(loan).toFixed(3)} DAI`} /> to Party
+              A before the loan ends on{" "}
               <ColorText text={new Date(loan.maturity).toLocaleString()} />.
             </span>
           </td>
@@ -208,8 +196,8 @@ const ContractBullets = ({ loan }) => {
               }}
             >
               Party B shall deposit his/her <ColorText text="Passport" /> in
-              Identity Escrow. In case of default, Party A will be given access to
-              the <ColorText text="Passport" />.
+              Identity Escrow. In case of default, Party A will be given access
+              to the <ColorText text="Passport" />.
             </span>
           </td>
         </tr>
@@ -242,17 +230,19 @@ const ContractBullets = ({ loan }) => {
         </tr>
       </table>
 
-      <br/>
-      <p className="mt-2 title text-black"
-      style={{
-        width: "100%",
-        fontSize: "13px",
-        fontFamily: "SFMono-Regular",
-      }}>
-        IN WITNESS WHEREOF, the Parties have executes this Agreement as of
-        the undersigned dates written below
+      <br />
+      <p
+        className="mt-2 title text-black"
+        style={{
+          width: "100%",
+          fontSize: "13px",
+          fontFamily: "SFMono-Regular",
+        }}
+      >
+        IN WITNESS WHEREOF, the Parties have executes this Agreement as of the
+        undersigned dates written below
       </p>
-      <br/>
+      <br />
     </ol>
   );
 };

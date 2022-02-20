@@ -1,18 +1,16 @@
-import { BigNumber, utils } from "ethers";
 import type { NextPage } from "next";
 import Router from "next/router";
 import { useEffect, useState } from "react";
 import { useContract, useSigner } from "wagmi";
 import CardTable from "../components/Cards/CardTable";
-import DoxxModal from "../components/DoxxModal";
 import contracts from "../constants/contracts";
 import lendingPoolABI from "../constants/lendingpool.json";
+import nftABI from "../constants/nftABI.json";
 import { normalizeLoan } from "../lib/normalizeLoan";
 import { NormalizedLoan } from "../lib/types";
-import nftABI from "../constants/nftABI.json";
 
 const LenderLoans: NextPage = () => {
-  const [{ data: signer, error, loading }, getSigner] = useSigner();
+  const [{ data: signer }] = useSigner();
   const lendingPool = useContract({
     addressOrName: contracts.lendingPool,
     contractInterface: lendingPoolABI.abi,
@@ -27,7 +25,6 @@ const LenderLoans: NextPage = () => {
   const [loans, setLoans] = useState<NormalizedLoan[]>([]);
   const [isTxPending, setIsTxPending] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
-  const [isDoxxed, setIsDoxxed] = useState(false);
 
   useEffect(() => {
     getLoans();
@@ -53,7 +50,7 @@ const LenderLoans: NextPage = () => {
       const defaulted = await lendingPool.hasDefaulted(borrower);
       const normalizedLoan = normalizeLoan(borrower, loan, defaulted);
       return normalizedLoan;
-    })
+    });
 
     const fetchedLoans = await Promise.all(loansPromises);
     console.log(fetchedLoans);
@@ -62,14 +59,18 @@ const LenderLoans: NextPage = () => {
     setLoans(fetchedLoans);
   };
 
-  const onDoxx = async (user: string, func: (boolean)=>void, param: boolean) => {
+  const onDoxx = async (
+    user: string,
+    func: (boolean) => void,
+    param: boolean,
+  ) => {
     // check if the nft has already been sent to lender
     const loan = await lendingPool.loans(user);
     const nftId = loan.tokenId;
 
     console.log(nftId);
     const nftOwner = await uvnft.ownerOf(nftId);
-    if (signer && nftOwner != await signer.getAddress()) {
+    if (signer && nftOwner != (await signer.getAddress())) {
       setIsTxPending(true);
       const res = await lendingPool.unlockIdentityEscrow(user);
       await res.wait();
@@ -77,7 +78,7 @@ const LenderLoans: NextPage = () => {
     }
 
     func(param);
-  }
+  };
 
   return (
     <>
@@ -85,14 +86,14 @@ const LenderLoans: NextPage = () => {
         <i className="neon-green">Open Loans</i>
       </h1>
       <div style={{ maxWidth: "80%" }}>
-        <CardTable 
-          title={""}
+        <CardTable
           isFetching={isFetching}
           loans={loans}
           onButtonClick={onDoxx}
           isTxPending={isTxPending}
-          buttonText={{pending: "Pending...", default: "Doxx ☠️"}}
-          isLender={true}/>
+          buttonText={{ pending: "Pending...", default: "Doxx ☠️" }}
+          isLender={true}
+        />
       </div>
     </>
   );

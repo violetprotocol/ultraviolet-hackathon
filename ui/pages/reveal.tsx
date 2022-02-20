@@ -1,30 +1,17 @@
-import type { NextPage } from "next";
-import { useEffect, useState, FC } from "react";
-import { useContract, useAccount, useSigner, useNetwork } from "wagmi";
-import contracts from "../constants/contracts";
-import nftABI from "../constants/nftABI.json";
-import LitJsSdk from "lit-js-sdk";
-import JSZip from "jszip";
 import FileSaver from "file-saver";
+import LitJsSdk from "lit-js-sdk";
+import { FC, useEffect, useState } from "react";
 import ReactLoading from "react-loading";
+import { useNetwork } from "wagmi";
 
 export interface RevealProps {
   nftId: number;
 }
 
 export const Reveal: FC<RevealProps> = ({ nftId }) => {
-  const [{ data, error, loading }, getSigner] = useSigner();
   const [imageFile, setImageFile] = useState<Blob>();
   const [imageUrl, setImgUrl] = useState<string | ArrayBuffer>();
-  const [
-    { data: networkData, error: networkError, loading: networkLoading },
-    switchNetwork,
-  ] = useNetwork();
-  const contract = useContract({
-    addressOrName: contracts.nft,
-    contractInterface: nftABI.abi,
-    signerOrProvider: data,
-  });
+  const [{ data: networkData }] = useNetwork();
 
   useEffect(() => {
     console.log("fetch");

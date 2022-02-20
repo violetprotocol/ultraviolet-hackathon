@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React, { useState } from "react";
 import DoxxModal from "../DoxxModal";
 
-export default function CardTable({ title, color, loans, buttonText, onButtonClick, isFetching, isTxPending, isLender=false }) {
+export default function CardTable({ color, loans, buttonText, onButtonClick, isFetching, isTxPending, isLender=false }) {
   const [openDoxxModal, setOpenDoxxModal] = useState(false);
   const [doxxedLoan, setDoxxedLoan] = useState();
 
