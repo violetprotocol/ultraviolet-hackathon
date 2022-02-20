@@ -1,9 +1,9 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
+  Entity,
   JoinColumn,
   OneToOne,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 import { AccessControlConditions } from "./accessControlConditions.entity";
 
@@ -24,7 +24,8 @@ export class UserData {
   @Column({ nullable: true })
   ipfsHash: string;
 
-  @OneToOne((type) => AccessControlConditions)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  @OneToOne((_type) => AccessControlConditions)
   @JoinColumn({ name: "access_control_conditions" })
   access_control_conditions: AccessControlConditions;
 

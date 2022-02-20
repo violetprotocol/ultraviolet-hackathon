@@ -1,6 +1,8 @@
+import { HttpService } from "@nestjs/axios";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { SiweMessage } from "siwe";
+import { AccessControlConditions as AccessControlConditionsUiDto } from "ui/lib/types";
 import { AccessControlConditionsDto } from "./accessControlConditions.dto";
 import { AccessControlConditions } from "./accessControlConditions.entity";
 import { AccessControlConditionsRepository } from "./accessControlConditions.repository";
@@ -10,8 +12,6 @@ import { UserData } from "./userData.entity";
 import { UserDataRepository } from "./userData.repository";
 import { UserDataDbDto } from "./userDataDb.dto";
 import { UserDataDto } from "./userDataDto";
-import { AccessControlConditions as AccessControlConditionsUiDto } from "ui/lib/types";
-import { HttpService } from "@nestjs/axios";
 
 @Injectable()
 export class AppService {
@@ -205,7 +205,4 @@ export class AppService {
   getHello(): string {
     return "Hello World!";
   }
-}
-function AxiosRequestConfig(): import("axios").AxiosRequestConfig<any> {
-  throw new Error("Function not implemented.");
 }
