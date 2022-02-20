@@ -4,8 +4,10 @@ import Image from "next/image";
 import Router from "next/router";
 import { useContext, useEffect, useState } from "react";
 import { SiweMessage } from "siwe";
-import { useAccount, useConnect, useSignMessage } from "wagmi";
+import { useAccount, useConnect, useContract, useSigner, useSignMessage } from "wagmi";
+import contracts from "../constants/contracts";
 import { LoanContext } from "../lib/context";
+import lendingPoolABI from "../constants/lendingpool.json";
 
 const Home: NextPage = () => {
   const [{ data, error }, connect] = useConnect();
@@ -15,6 +17,12 @@ const Home: NextPage = () => {
   const [{ data: signature, error: errorSigning, loading }, signMessage] =
     useSignMessage();
   const { loan, setLoan } = useContext(LoanContext);
+  const [{ data: signer }] = useSigner();
+  const contract = useContract({
+    addressOrName: contracts.lendingPool,
+    contractInterface: lendingPoolABI.abi,
+    signerOrProvider: signer,
+  });
 
   useEffect(() => {
     if (accountData?.address) {
@@ -44,6 +52,20 @@ const Home: NextPage = () => {
     }
   }, [accountData?.address]);
 
+  const nextPage = async () => {
+    if (signer) {
+      const connectedAddress = await signer.getAddress();
+      const owner = await contract.owner();
+      console.log(owner);
+  
+      if (connectedAddress == owner) {
+        Router.push("/lender");
+      } else {
+        Router.push("/dashboard");
+      }
+    }
+  }
+
   useEffect(() => {
     if (signature && siweMessage) {
       fetch("http://localhost:8080/api/sign-in", {
@@ -59,11 +81,9 @@ const Home: NextPage = () => {
         const client = new LitJsSdk.LitNodeClient();
         await client.connect();
         window.litNodeClient = client;
-        Router.push("/dashboard");
+        await nextPage();
       });
       // Should router only after siwe message
-
-      Router.push("/dashboard");
     }
   }, [signature]);
 
