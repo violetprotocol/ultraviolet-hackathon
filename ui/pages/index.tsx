@@ -120,9 +120,9 @@ const Home: NextPage = () => {
                 </div>
                 <div className="centerContent">
                   {data.connectors.map((connector) => (
-                    <button key={connector.id}>
+                    <button className="nes-pointer" key={connector.id}>
                       <Image
-                        className="-webkit-user-select: none;margin: auto;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;"
+                        className="nes-pointer -webkit-user-select: none;margin: auto;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;"
                         onClick={() => connect(connector)}
                         src={
                           "https://raw.githubusercontent.com/spruceid/siwe/main/assets/SIWE_Button_Dark_BG.png"

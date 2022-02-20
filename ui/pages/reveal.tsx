@@ -97,7 +97,7 @@ export const Reveal: FC<RevealProps> = ({ nftId }) => {
         </div>
         <div className="centerContent">
           <button
-            className="btn"
+            className="glowing-button-pink"
             onClick={() => FileSaver.saveAs(imageFile, "doxxedImage.jpeg")}
           >
             Download

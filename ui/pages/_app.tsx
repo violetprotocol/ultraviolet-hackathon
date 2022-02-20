@@ -17,6 +17,7 @@ import {
 import "../styles/glowing-button.css";
 import "../styles/index.css";
 import "../styles/neon.css";
+import "nes.css/css/nes.min.css";
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
   const [loan, setLoan] = useState<LoanInterface>(InitContextValue);
@@ -46,6 +47,10 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
                 <meta
                   name="description"
                   content="Web3 Violet Identity Portal"
+                />
+                <link
+                  rel="stylesheet"
+                  href="./node_modules/nes.css/css/nes.min.css"
                 />
               </Head>
               <Component {...pageProps} />
