@@ -1,6 +1,5 @@
 import LitJsSdk from "lit-js-sdk";
 import type { NextPage } from "next";
-import Image from "next/image";
 import Router from "next/router";
 import { useContext, useEffect, useState } from "react";
 import { SiweMessage } from "siwe";
@@ -112,7 +111,7 @@ const Home: NextPage = () => {
                   </h2>
                 </div>
                 <div className="centerContent">
-                  <Image
+                  <img
                     className="-webkit-user-select: none;margin: auto;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;"
                     src={"/dai.png"}
                     width={50}
@@ -133,7 +132,7 @@ const Home: NextPage = () => {
                 <div className="centerContent">
                   {data.connectors.map((connector) => (
                     <button className="nes-pointer" key={connector.id}>
-                      <Image
+                      <img
                         className="nes-pointer -webkit-user-select: none;margin: auto;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;"
                         onClick={() => connect(connector)}
                         src={

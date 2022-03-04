@@ -23,6 +23,7 @@
     "build:ui": "next build ./ui",
     "start:ui": "next start ./ui -p $PORT",
     "dev:ui": "next dev ./ui",
+    "export:ui": "next export ./ui",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
