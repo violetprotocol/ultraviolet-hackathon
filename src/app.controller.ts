@@ -33,7 +33,7 @@ export class AppController {
 
   @Get("/axiosTest")
   async getAxiosTest() {
-    return await this.appService.pushEncryptedB64ToIpfs("chris is a bitch");
+    return await this.appService.pushEncryptedB64ToIpfs("testing ipfs");
   }
 
   @Get("/testIpfsFetch")
