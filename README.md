@@ -59,6 +59,3 @@ In case the timeout is reached, then we read the encrypted file from the databas
 
 [violet](https://violet.co)
 
-## License
-
-Nest is [MIT licensed](LICENSE).
